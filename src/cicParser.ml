@@ -607,7 +607,7 @@ let end_element ctxt tag =
       let obj_attributes = pop_obj_attributes ctxt in
       push ctxt (Cic_obj
         (match pop_tag_attrs ctxt with
-        | ["id", id; "noParams", noParams; "params", params] ->
+        | ["id", id; "noParams", noParams; "params", params; "univparams", _univparams] ->
             Cic.AInductiveDefinition (id, inductive_types,
               uri_list_of_string params, int_of_string noParams, obj_attributes)
         | _ -> attribute_error ()))
