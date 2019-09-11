@@ -63,9 +63,15 @@ let dkname_of_mutconstr uri tyno constrno =
  let name,_ = List.nth kl (constrno - 1) in
  D.Const (dkmod_of_uri uri, name)
 
+let dkname_of_match uri tyno =
+ let il = getind uri in
+ let name,_,_,_ = List.nth il tyno in
+ D.Const (dkmod_of_uri uri, "match__" ^ name)
+
 let rec of_term names =
  function
-  | Rel n -> D.Var (List.nth names n)
+  | Rel n ->
+     D.Var (List.nth names (n-1))
   | MutInd(uri,tyno,_ens) ->
      dkname_of_mutind uri tyno
   | MutConstruct(uri,tyno,consno,_ens) ->
@@ -125,7 +131,12 @@ let rec of_term names =
       ; dkint_of_int funno
       ])
   | MutCase(uri,tyno,outtype,te,pl) ->
-     D.Const("TODO","CASE")
+     let s = D.Type in (* TODO *)
+     D.App
+      (dkname_of_match uri tyno,
+       [ s ; of_term names outtype ]
+       @ List.map (of_term names) pl
+       @ [of_term names te])
   | Implicit _
   | Meta _ -> assert false (* It will never happen *)
 (*
