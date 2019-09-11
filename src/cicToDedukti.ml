@@ -62,7 +62,7 @@ let dedukti_of_obj =
         None ->
          D.Decl(name,false,of_term [] ty)
       | Some te ->
-         D.Def(name,of_term [] ty,of_term [] te))
+         D.Def(name,Some (of_term [] ty),of_term [] te))
  | CurrentProof _ -> assert false (* It will never happen *)
  | _ -> assert false
 (*
