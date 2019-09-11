@@ -21,7 +21,7 @@ let rec pp_term fmt = function
 
 type entry =
   | Decl of string * bool * term
-  | Def of string * term * term
+  | Def of string * term option * term
   | Rule of string list * term * term
 
 
@@ -31,7 +31,9 @@ let pp_entry fmt = function
       Format.fprintf fmt "def %s : %a." s pp_term t
     else
       Format.fprintf fmt "%s : %a." s pp_term t
-  | Def(s,ty,te) ->
+  | Def(s,Some ty,te) ->
     Format.fprintf fmt "def %s : %a := %a." s pp_term ty pp_term te
+  | Def(s,None,te) ->
+    Format.fprintf fmt "def %s := %a." s pp_term te
   | Rule(ss,ll,lr) ->
     Format.fprintf fmt "[%a] %a --> %a." (Format.pp_print_list ~pp_sep:(fun fmt () -> Format.fprintf fmt ",") (fun fmt var -> Format.fprintf fmt "%s" var)) ss pp_term ll pp_term lr
