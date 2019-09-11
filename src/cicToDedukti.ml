@@ -2,12 +2,18 @@ module D = Dkprint
 open Cic
 
 let dkname_of_name =
+ let n = ref 0 in
  function
-    Name n -> n
-  | Anonymous -> assert false
+    Name s -> s
+  | Anonymous ->
+     incr n ;
+     "xxx" ^ string_of_int !n
 
 let dkmod_of_uri uri =
- Str.global_replace (Str.regexp "/") "_" (UriManager.buri_of_uri uri)
+ let buri = UriManager.buri_of_uri uri in
+ String.sub
+  (Str.global_replace (Str.regexp "/") "_" buri)
+  5 (String.length buri - 5)
 
 let dkname_of_const uri =
  D.Const
@@ -26,7 +32,7 @@ let dkname_of_mutconstr uri tyno constrno =
 
 let rec of_term names =
  function
-  | Rel n -> D.Var (dkname_of_name (List.nth names n))
+  | Rel n -> D.Var (List.nth names n)
   | MutInd(uri,tyno,_ens) ->
      dkname_of_mutind uri tyno
   | MutConstruct(uri,tyno,consno,_ens) ->
@@ -35,16 +41,19 @@ let rec of_term names =
      dkname_of_const uri
   | Sort _ -> D.Type
   | Lambda(name,ty,te) ->
-     D.Lam(dkname_of_name name,of_term names ty,of_term (name::names) te)
+     let name = dkname_of_name name in
+     D.Lam(name,of_term names ty,of_term (name::names) te)
   | Appl (hd::tl) ->
      D.App(of_term names hd, List.map (of_term names) tl)
-  | Prod(name,ty,te) ->
-     D.Prod(dkname_of_name name,of_term names ty,of_term (name::names) te)
+  | Prod(Anonymous,ty,te) ->
+     D.Arr(of_term names ty,of_term ("_"::names) te)
+  | Prod(Name name,ty,te) ->
+     D.Prod(name,of_term names ty,of_term (name::names) te)
   | Cast(te,_) -> of_term names te
   | Fix(funno,funs) ->
-     assert false
+     D.Const("TODO","FIX")
   | MutCase(uri,tyno,outtype,te,pl) ->
-     assert false
+     D.Const("TODO","CASE")
   | Implicit _
   | Meta _ -> assert false (* It will never happen *)
 (*

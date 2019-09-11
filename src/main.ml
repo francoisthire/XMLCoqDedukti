@@ -6,4 +6,4 @@ let obj =
   "test/add.con.xml.gz"
   (Some "test/add.con.body.xml.gz") in
 let d = CicToDedukti.dedukti_of_obj obj in
-Format.printf "%a" Dkprint.pp_entry d
+Format.printf "%a\n" Dkprint.pp_entry d
