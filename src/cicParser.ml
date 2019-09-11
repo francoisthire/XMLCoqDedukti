@@ -134,6 +134,10 @@ let parse_error ctxt msg =
 let attribute_error ctxt tag =
   parse_error ctxt ("wrong attribute set for " ^ tag)
 
+let attribute_error' attrs ctxt tag =
+  parse_error ctxt ("wrong attribute set for " ^ tag ^ " " ^
+   String.concat "," (List.map (function x,y -> x ^ "=" ^ y) attrs ))
+
 (** {2 Parsing context management} *)
 
 let pop ctxt =
@@ -365,6 +369,7 @@ let end_element ctxt tag =
 (*  debug_print (lazy (sprintf "</%s>" tag));*)
 (*  debug_print (lazy (string_of_stack ctxt));*)
   let attribute_error () = attribute_error ctxt tag in
+  let attribute_error' attrs = attribute_error' attrs ctxt tag in
   let parse_error = parse_error ctxt in
   let sort_of_string = sort_of_string ctxt in
   match tag with
@@ -527,15 +532,15 @@ let end_element ctxt tag =
   | "MUTIND" ->
       push ctxt (Cic_term
         (match pop_tag_attrs ctxt with
-        | ["id", id; "noType", noType; "uri", uri] ->
+        | ["id", id; "noType", noType; "univparams", _univparams; "uri", uri] ->
             Cic.AMutInd (id, uri_of_string uri, int_of_string noType, [])
-        | _ -> attribute_error ()));
+        | attrs -> attribute_error' attrs));
   | "MUTCONSTRUCT" ->
       push ctxt (Cic_term
         (match pop_tag_attrs ctxt with
-        | ["id", id; "noConstr", noConstr; "noType", noType; "uri", uri]
+        | ["id", id; "noConstr", noConstr; "noType", noType; "univparams", _univparams; "uri", uri]
         | ["id", id; "noConstr", noConstr; "noType", noType; "sort", _;
-           "uri", uri] ->
+           "univparams", _univparams; "uri", uri ] ->
             Cic.AMutConstruct (id, uri_of_string uri, int_of_string noType,
               int_of_string noConstr, [])
         | _ -> attribute_error ()));
@@ -611,7 +616,7 @@ let end_element ctxt tag =
       let obj_attributes = pop_obj_attributes ctxt in
       push ctxt
         (match pop_tag_attrs ctxt with
-        | ["id", id; "name", name; "params", params] ->
+        | ["id", id; "name", name; "params", params; "univparams", _univparams] ->
             Cic_constant_type (id, name, uri_list_of_string params, typ,
               obj_attributes)
         | _ -> attribute_error ())
@@ -620,7 +625,7 @@ let end_element ctxt tag =
       let obj_attributes = pop_obj_attributes ctxt in
       push ctxt
         (match pop_tag_attrs ctxt with
-        | ["for", for_; "id", id; "params", params] ->
+        | ["for", for_; "id", id; "params", params; "univparams", _univparams] ->
             Cic_constant_body (id, for_, uri_list_of_string params, body,
               obj_attributes)
         | _ -> attribute_error ())

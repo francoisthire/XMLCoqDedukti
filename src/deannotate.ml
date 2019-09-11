@@ -109,6 +109,9 @@ let deannotate_conjectures =
 let type_of_aux' = ref (fun _ _ -> assert false);;
 let lift  = ref (fun _ _ -> assert false);;
 
+(*XXX*)
+let _ = lift := (fun n t -> prerr_endline "randomly implemented lift" ; t)
+
 let rec compute_letin_type context te =
  let module C = Cic in
    match te with
