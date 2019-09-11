@@ -1,4 +1,17 @@
 (executable
         (name main)
         (public_name xmlcoqdk)
+        (libraries camlzip expat str)
         (package xmlcoqdk))
+
+(rule
+ (targets cicUniv.ml)
+ (deps (:source cicUniv.ml4))
+ (mode promote)
+ (action (bash "camlp4o pr_o.cmo -impl %{source} -o %{targets}")))
+
+(rule
+ (targets xml.ml)
+ (deps (:source xml.ml4))
+ (mode promote)
+ (action (bash "camlp4o pr_o.cmo -impl %{source} -o %{targets}")))

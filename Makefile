@@ -3,7 +3,7 @@ all: bin
 
 .PHONY: bin
 bin:
-	@dune build
+	@dune build --profile release
 
 .PHONY: doc
 doc:
