@@ -1,0 +1,6 @@
+ML:
+- Use the annotated tree
+
+Coq -> XML
+- Every type should be annotated by their sort
+- Cast informations
