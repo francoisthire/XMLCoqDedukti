@@ -1,14 +1,14 @@
 (* Copyright (C) 2004-2005, HELM Team.
- * 
+ *
  * This file is part of HELM, an Hypertextual, Electronic
  * Library of Mathematics, developed at the Computer Science
  * Department, University of Bologna, Italy.
- * 
+ *
  * HELM is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * HELM is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -18,7 +18,7 @@
  * along with HELM; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston,
  * MA  02111-1307, USA.
- * 
+ *
  * For details, see the HELM World-Wide-Web page,
  * http://helm.cs.unibo.it/
  *)
@@ -59,7 +59,7 @@ type stack_entry =
   | Cofix_fun of Cic.id * string * Cic.annterm * Cic.annterm
       (* id, name, type, body *)
   | Constructor of string * Cic.annterm   (* name, type *)
-  | Decl of Cic.id * Cic.name * Cic.annterm (* id, binder, source *)
+  | Decl of Cic.id * Cic.name * Cic.annterm * Cic.sort option (* id, binder, source, sort if source is a type *)
   | Def of Cic.id * Cic.name * Cic.annterm * Cic.annterm  (* id, binder, source, type *)
   | Fix_fun of Cic.id * string * int * Cic.annterm * Cic.annterm
       (* id, name, ind. index, type, body *)
@@ -96,7 +96,7 @@ let string_of_stack ctxt =
       | Cic_obj _ -> "Cic_obj"
       | Constructor (name, _) -> "Constructor " ^ name
       | Cofix_fun (id, _, _, _) -> sprintf "Cofix_fun (id=%s)" id
-      | Decl (id, _, _) -> sprintf "Decl (id=%s)" id
+      | Decl (id, _, _, _) -> sprintf "Decl (id=%s)" id
       | Def (id, _, _, _) -> sprintf "Def (id=%s)" id
       | Fix_fun (id, _, _, _, _) -> sprintf "Fix_fun (id=%s)" id
       | Inductive_type (id, name, _, _, _) ->
@@ -305,7 +305,7 @@ let impredicative_set = ref true;;
 let sort_of_string ctxt = function
   | "Prop" -> Cic.Prop
   (* THIS CASE IS HERE ONLY TO ALLOW THE PARSING OF COQ LIBRARY
-   * THIS SHOULD BE REMOVED AS SOON AS univ_maker OR COQ'S EXPORTATION 
+   * THIS SHOULD BE REMOVED AS SOON AS univ_maker OR COQ'S EXPORTATION
    * IS FIXED *)
   | "CProp" -> Cic.CProp (CicUniv.fresh ~uri:ctxt.uri ())
   | "Type" ->  Cic.Type (CicUniv.fresh ~uri:ctxt.uri ())
@@ -313,20 +313,20 @@ let sort_of_string ctxt = function
   | "Set" -> Cic.Type (CicUniv.fresh ~uri:ctxt.uri ())
   | s ->
       let len = String.length s in
-      let sort_len, mk_sort = 
-        if len > 5 && String.sub s 0 5 = "Type:" then 5,fun x -> Cic.Type x 
+      let sort_len, mk_sort =
+        if len > 5 && String.sub s 0 5 = "Type:" then 5,fun x -> Cic.Type x
         else if len > 6 && String.sub s 0 6 = "CProp:" then 6,fun x->Cic.CProp x
         else parse_error ctxt "sort expected"
       in
       let s = String.sub s sort_len (len - sort_len) in
-      let i = String.index s ':' in  
+      let i = String.index s ':' in
       let id =  int_of_string (String.sub s 0 i) in
       let suri = String.sub s (i+1) (len - sort_len - i - 1) in
       let uri = UriManager.uri_of_string suri in
       try mk_sort (CicUniv.fresh ~uri ~id ())
       with
-      | Failure "int_of_string" 
-      | Invalid_argument _ -> parse_error ctxt "sort expected" 
+      | Failure "int_of_string"
+      | Invalid_argument _ -> parse_error ctxt "sort expected"
 
 let patch_subst ctxt subst = function
   | Cic.AConst (id, uri, _) -> Cic.AConst (id, uri, subst)
@@ -411,11 +411,13 @@ let end_element ctxt tag =
       let source = pop_cic ctxt in
       push ctxt
         (match pop_tag_attrs ctxt with
-        | ["binder", binder; "id", id ]
-        | ["binder", binder; "id", id; "type", _] ->
-            Decl (id, Cic.Name binder, source)
-        | ["id", id]
-        | ["id", id; "type", _] -> Decl (id, Cic.Anonymous, source)
+         | ["binder", binder; "id", id ] ->
+            Decl (id, Cic.Name binder, source, None)
+        | ["binder", binder; "id", id; "type", sort] ->
+            Decl (id, Cic.Name binder, source, Some (sort_of_string sort))
+        | ["id", id] ->
+          Decl (id, Cic.Anonymous, source, None)
+        | ["id", id; "type", sort] -> Decl (id, Cic.Anonymous, source, Some (sort_of_string sort))
         | _ -> attribute_error ())
   | "def" ->  (* same as "decl" above *)
       let ty,source =
@@ -457,8 +459,8 @@ let end_element ctxt tag =
   | "PROD" ->
       let target = pop_cic ctxt in
       let rec add_decl target = function
-        | Decl (id, binder, source) :: tl ->
-            add_decl (Cic.AProd (id, binder, source, target)) tl
+        | Decl (id, binder, source, s) :: tl ->
+            add_decl (Cic.AProd (id, binder, source, target, s)) tl
         | tl ->
             ctxt.stack <- tl;
             target
@@ -472,8 +474,8 @@ let end_element ctxt tag =
   | "LAMBDA" ->
       let target = pop_cic ctxt in
       let rec add_decl target = function
-        | Decl (id, binder, source) :: tl ->
-            add_decl (Cic.ALambda (id, binder, source, target)) tl
+        | Decl (id, binder, source,s) :: tl ->
+            add_decl (Cic.ALambda (id, binder, source, target, s)) tl
         | tl ->
             ctxt.stack <- tl;
             target
@@ -684,7 +686,7 @@ let end_element ctxt tag =
         | ["name", name] -> Obj_field name
         | _ -> attribute_error ())
   | "flavour" ->
-      push ctxt 
+      push ctxt
         (match pop_tag_attrs ctxt with
         | [ "value", "definition"] -> Obj_flavour `Definition
         | [ "value", "mutual_definition"] -> Obj_flavour `MutualDefinition
@@ -709,18 +711,18 @@ let end_element ctxt tag =
             let fields =
               List.map
                 (function
-                  | Obj_field name -> 
+                  | Obj_field name ->
                       (match Str.split (Str.regexp " ") name with
                       | [name] -> name, false, 0
                       | [name;"coercion"] -> name,true,0
-                      | [name;"coercion"; n] -> 
-                          let n = 
-                            try int_of_string n 
-                            with Failure _ -> 
+                      | [name;"coercion"; n] ->
+                          let n =
+                            try int_of_string n
+                            with Failure _ ->
                               parse_error "int expected after \"coercion\""
                           in
                           name,true,n
-                      | _ -> 
+                      | _ ->
                           parse_error
                             "wrong \"field\"'s name attribute")
                   | _ ->

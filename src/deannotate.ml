@@ -1,14 +1,14 @@
 (* Copyright (C) 2000, HELM Team.
- * 
+ *
  * This file is part of HELM, an Hypertextual, Electronic
  * Library of Mathematics, developed at the Computer Science
  * Department, University of Bologna, Italy.
- * 
+ *
  * HELM is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * HELM is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -18,7 +18,7 @@
  * along with HELM; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston,
  * MA  02111-1307, USA.
- * 
+ *
  * For details, see the HELM World-Wide-Web page,
  * http://cs.unibo.it/helm/.
  *)
@@ -47,9 +47,9 @@ let rec deannotate_term =
    | C.ASort (_,s) -> C.Sort s
    | C.AImplicit (_, annotation) -> C.Implicit annotation
    | C.ACast (_,va,ty) -> C.Cast (deannotate_term va, deannotate_term ty)
-   | C.AProd (_,name,so,ta) ->
+   | C.AProd (_,name,so,ta,_) ->
       C.Prod (name, deannotate_term so, deannotate_term ta)
-   | C.ALambda (_,name,so,ta) ->
+   | C.ALambda (_,name,so,ta,_) ->
       C.Lambda (name, deannotate_term so, deannotate_term ta)
    | C.ALetIn (_,name,so,ty,ta) ->
       C.LetIn (name, deannotate_term so, deannotate_term ty, deannotate_term ta)
@@ -92,16 +92,16 @@ let deannotate_inductiveType (_, name, isinductive, arity, cons) =
 let deannotate_conjectures =
  let module C = Cic in
   List.map
-   (function 
-     (_,id,acontext,con) -> 
-      let context = 
-       List.map 
-        (function 
+   (function
+     (_,id,acontext,con) ->
+      let context =
+       List.map
+        (function
           | _,Some (n,(C.ADef (ate,aty))) ->
              Some(n,(C.Def(deannotate_term ate,deannotate_term aty)))
           | _,Some (n,(C.ADecl at)) -> Some (n,(C.Decl (deannotate_term at)))
           | _,None -> None)
-        acontext  
+        acontext
       in
        (id,context,deannotate_term con))
 ;;
@@ -149,7 +149,7 @@ let rec compute_letin_type context te =
         compute_letin_type ((Some (name,(C.Def (so,ty))))::context) dest)
     | C.Appl l ->
        C.Appl (List.map (fun x -> compute_letin_type context x) l)
-    | C.Var (uri,exp_named_subst) -> 
+    | C.Var (uri,exp_named_subst) ->
        C.Var (uri,
         List.map (fun (u,x) -> u,compute_letin_type context x) exp_named_subst)
     | C.Const (uri,exp_named_subst) ->

@@ -1,14 +1,14 @@
 (* Copyright (C) 2000, HELM Team.
- * 
+ *
  * This file is part of HELM, an Hypertextual, Electronic
  * Library of Mathematics, developed at the Computer Science
  * Department, University of Bologna, Italy.
- * 
+ *
  * HELM is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * HELM is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -18,7 +18,7 @@
  * along with HELM; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston,
  * MA  02111-1307, USA.
- * 
+ *
  * For details, see the HELM World-Wide-Web page,
  * http://cs.unibo.it/helm/.
  *)
@@ -69,7 +69,7 @@ type object_flavour =
 type object_class =
   [ `Elim of sort   (** elimination principle; if sort is Type, the universe is
                       * not relevant *)
-  | `Record of (string * bool * int) list (** 
+  | `Record of (string * bool * int) list (**
                         inductive type that encodes a record; the arguments are
                         the record fields names and if they are coercions and
                         then the coercion arity *)
@@ -79,7 +79,7 @@ type object_class =
 
 type attribute =
   [ `Class of object_class
-  | `Flavour of object_flavour 
+  | `Flavour of object_flavour
   | `Generated
   ]
 
@@ -121,7 +121,7 @@ and obj =
     term * UriManager.uri list * attribute list   (*  type, parameters        *)
  | InductiveDefinition of inductiveType list *    (* inductive types,         *)
     UriManager.uri list * int * attribute list    (*  params, left params no  *)
-and inductiveType = 
+and inductiveType =
  string * bool * term *                       (* typename, inductive, arity *)
   constructor list                            (*  constructors              *)
 and constructor =
@@ -156,8 +156,10 @@ and annterm =
  | ASort of id * sort                               (* sort *)
  | AImplicit of id * implicit_annotation option     (* *)
  | ACast of id * annterm * annterm                  (* value, type *)
- | AProd of id * name * annterm * annterm           (* binder, source, target *)
- | ALambda of id * name * annterm * annterm         (* binder, source, target *)
+  | AProd of id * name * annterm * annterm          (* binder, source, target *)
+             * sort option
+  | ALambda of id * name * annterm * annterm       (* binder, source, target *)
+               * sort option
  | ALetIn of id * name * annterm * annterm *  annterm (* binder, term, type, target *)
  | AAppl of id * annterm list                       (* arguments *)
  | AConst of id * UriManager.uri *                  (* uri,                   *)
@@ -190,7 +192,7 @@ and annobj =
  | AInductiveDefinition of id *
     anninductiveType list *                         (* inductive types ,      *)
     UriManager.uri list * int * attribute list      (*  parameters,n ind. pars*)
-and anninductiveType = 
+and anninductiveType =
  id * string * bool * annterm *               (* typename, inductive, arity *)
   annconstructor list                         (*  constructors              *)
 and annconstructor =
@@ -237,7 +239,6 @@ module CicHash =
   (struct
     type t = term
     let equal = (==)
-    let hash = Hashtbl.hash_param 100 1000 
+    let hash = Hashtbl.hash_param 100 1000
    end)
 ;;
-

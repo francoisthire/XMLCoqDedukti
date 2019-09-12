@@ -70,27 +70,34 @@ let dkname_of_match uri tyno =
  let name,_,_,_ = List.nth il tyno in
  D.Const (dkmod_of_uri uri, "match__" ^ name)
 
+let of_sort = function
+  | Prop -> meta "prop"
+  | Set -> meta "set"
+  | Type _ -> meta "type 0" (* TODO *)
+  | _ -> assert false
+
+
 let rec of_term : string list -> Cic.annterm -> Dkprint.term = fun ctx ->
  function
   | ARel(_,_,n,_) ->
     D.Var (List.nth ctx (n-1))
   | AVar _ -> failwith "TODO Avar"
   | AMeta _ -> assert false
-  | ASort _ -> D.Type (* TODO *)
+  | ASort(_,s) -> of_sort s
   | AImplicit _ -> assert false
   | ACast(_,te,_) -> of_term ctx te
-  | AProd(_,name,ty,te) ->
+  | AProd(_,name,ty,te,s) ->
      let name = match name with Anonymous -> "_" | Name n -> n in
      let s1 = D.Type in (* TODO *)
      let s2 = D.Type in (* TODO *)
      D.App(meta "prod",
       [ s1 ; s2 ; D.App(meta "rule",[s1;s2]) ; meta "I" ;
         of_term ctx ty ;
-        D.Lam(name, of_type ctx ty, of_term (name::ctx) te)
+        D.Lam(name, of_type ctx None ty, of_term (name::ctx) te)
       ])
-  | ALambda(_,name,ty,te) ->
+  | ALambda(_,name,ty,te,s) ->
      let name = dkname_of_name name in
-     D.Lam(name,of_type ctx ty,of_term (name::ctx) te)
+     D.Lam(name,of_type ctx s ty,of_term (name::ctx) te)
   | ALetIn _ -> failwith "TODO LetIn"
   | AAppl(_,[]) -> assert false
   | AAppl(_,(hd::tl)) ->
@@ -146,9 +153,12 @@ let rec of_term : string list -> Cic.annterm -> Dkprint.term = fun ctx ->
       ])
   | ACoFix _ -> failwith "TODO cofix"
 
-and of_type names ty =
- let s = D.Type (* TODO *) in
- D.App(meta "T", [s; of_term names ty])
+and of_type names sort ty =
+  match sort with
+  | None ->
+    Format.eprintf "[WARNING] Handle sorts@.";
+    D.App(meta "Term", [meta "Set"; of_term names ty])
+  | Some s -> D.App(meta "Term", [of_sort s; of_term names ty])
 
 let dedukti_of_obj =
  function
