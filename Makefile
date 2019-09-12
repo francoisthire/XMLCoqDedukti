@@ -12,10 +12,20 @@ doc:
 xmlcoqdk:
 	@ln -s _build/install/default/bin/xmlcoqdk xmlcoqdk || true
 
+OUTPUT=/tmp/dkout
+FILES=Coq/Init/Nat/add.con
+XMLCOQDK = $(shell readlink -f _build/install/default/bin/xmlcoqdk)
+
+$(OUTPUT):
+	@mkdir $(OUTPUT)
+	$(XMLCOQDK) -o $(OUTPUT) $(FILES)
+
+.PHONY: test
+test: $(OUTPUT)
+
+
 .PHONY: debug
 debug:
-
-	echo $(DEP)
 
 .PHONY: clean
 clean:
