@@ -5,7 +5,7 @@ let output_directory = ref None
 
 let do_obj uri =
  let obj =
-  CicParser.obj_of_xml uri
+  CicParser.annobj_of_xml uri
    (conpathname uri) (Some (conbodypathname uri)) in
  let d = dedukti_of_obj obj in
  Format.printf "%a\n" Dkprint.pp_entry d

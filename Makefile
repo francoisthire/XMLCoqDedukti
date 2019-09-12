@@ -18,11 +18,10 @@ XMLCOQDK = $(shell readlink -f _build/install/default/bin/xmlcoqdk)
 
 $(OUTPUT):
 	@mkdir $(OUTPUT)
-	$(XMLCOQDK) -o $(OUTPUT) $(FILES)
 
 .PHONY: test
-test: $(OUTPUT)
-
+test: bin $(OUTPUT)
+	$(XMLCOQDK) -o $(OUTPUT) $(FILES) | dkcheck --beautify --stdin foo
 
 .PHONY: debug
 debug:
