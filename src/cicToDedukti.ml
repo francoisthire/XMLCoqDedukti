@@ -22,7 +22,7 @@ let indpathname uri =
 let getind uri =
  let obj = CicParser.annobj_of_xml uri (indpathname uri) None in
  match obj with
- | AInductiveDefinition(_,il,_params,_,_) -> il
+ | AInductiveDefinition(_,il,_params,_,_,_) -> il
  | _ -> assert false
 
 (*** Translation ***)
@@ -70,12 +70,16 @@ let dkname_of_match uri tyno =
  let _,name,_,_,_ = List.nth il tyno in
  D.Const (dkmod_of_uri uri, "match__" ^ name)
 
+let coq_Nat = meta "Nat"
+
+let add_univ_params uparams typ =
+  List.fold_right (function u -> D.pie (u, coq_Nat)) uparams
+
 let of_sort = function
   | Prop -> meta "prop"
   | Set -> meta "set"
   | Type _ -> meta "type 0" (* TODO *)
   | _ -> assert false
-
 
 let rec of_term : string list -> Cic.annterm -> Dkprint.term = fun ctx ->
  function
@@ -159,7 +163,7 @@ and of_type names sort ty =
 
 let dedukti_of_obj =
  function
- | AConstant(_,_,name,bo,ty,_vars,_) ->
+ | AConstant(_,_,name,bo,ty,_vars,univs,_) ->
     (match bo with
         None ->
          D.Declaration (false,name,of_term [] ty)

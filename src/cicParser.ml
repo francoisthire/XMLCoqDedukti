@@ -607,11 +607,12 @@ let end_element ctxt tag =
   | "InductiveDefinition" ->
       let inductive_types = pop_inductive_types ctxt in
       let obj_attributes = pop_obj_attributes ctxt in
+      let sort_list = assert false in
       push ctxt (Cic_obj
         (match pop_tag_attrs ctxt with
         | ["id", id; "noParams", noParams; "params", params; "univparams", _univparams] ->
             Cic.AInductiveDefinition (id, inductive_types,
-              uri_list_of_string params, int_of_string noParams, obj_attributes)
+              uri_list_of_string params, sort_list, int_of_string noParams, obj_attributes)
         | _ -> attribute_error ()))
   | "ConstantType" ->
       let typ = pop_cic ctxt in
@@ -640,11 +641,12 @@ let end_element ctxt tag =
         | _ -> parse_error "wrong content for \"Variable\""
       in
       let obj_attributes = pop_obj_attributes ctxt in
+      let univ_list = assert false in
       push ctxt (Cic_obj
         (match pop_tag_attrs ctxt with
         | ["id", id; "name", name; "params", params] ->
             Cic.AVariable (id, name, body, typ, uri_list_of_string params,
-              obj_attributes)
+              univ_list, obj_attributes)
         | _ -> attribute_error ()))
   | "arg" ->
       let term = pop_cic ctxt in
@@ -796,14 +798,17 @@ let annobj_of_xml uri filename filenamebody =
   | None ->
       (match parse uri filename with
       | Cic_constant_type (id, name, params, typ, obj_attributes) ->
-          Cic.AConstant (id, None, name, None, typ, params, obj_attributes)
+        let univ_list = assert false in
+        Cic.AConstant (id, None, name, None, typ, params, univ_list, obj_attributes)
       | Cic_obj obj -> obj
       | _ -> raise (Parser_failure ("no object found in " ^ filename)))
   | Some filenamebody ->
-      (match parse uri filename, parse uri filenamebody with
-      | Cic_constant_type (type_id, name, params, typ, obj_attributes),
-        Cic_constant_body (body_id, _, _, body, _) ->
-          Cic.AConstant (type_id, Some body_id, name, Some body, typ, params,obj_attributes)
-      | _ ->
-          raise (Parser_failure (sprintf "no constant found in %s, %s"
-            filename filenamebody)))
+    (match parse uri filename, parse uri filenamebody with
+     | Cic_constant_type (type_id, name, params, typ, obj_attributes),
+       Cic_constant_body (body_id, _, _, body, _) ->
+       let univ_list = assert false in
+       Cic.AConstant (type_id, Some body_id, name, Some body, typ,
+                      params, univ_list, obj_attributes)
+     | _ ->
+       raise (Parser_failure (sprintf "no constant found in %s, %s"
+                                filename filenamebody)))
