@@ -128,11 +128,14 @@ let rec of_term : string list -> Cic.annterm -> Dkprint.term = fun ctx ->
   | AAppl(_,[]) -> assert false
   | AAppl(_,(hd::tl)) ->
     D.apps (of_term ctx hd) (List.map (of_term ctx) tl)
-  | AConst(_,uri,_ens) ->
+  | AConst(_,uri,_ens,_univs) ->
+     prerr_endline "[TODO] AConst ens univs";
      dkname_of_const uri
-  | AMutInd(_,uri,tyno,_ens) ->
+  | AMutInd(_,uri,tyno,_ens,_univs) ->
+     prerr_endline "[TODO] AMutInd ens univs";
      dkname_of_mutind uri tyno
-  | AMutConstruct(_,uri,tyno,consno,_ens) ->
+  | AMutConstruct(_,uri,tyno,consno,_ens,_univs) ->
+     prerr_endline "[TODO] AMutConstruct ens univs";
     dkname_of_mutconstr uri tyno consno
   | AMutCase(_,uri,tyno,outtype,te,pl) ->
      let s = D.Type in (* TODO *)
