@@ -169,7 +169,6 @@ let dedukti_of_obj =
          D.Declaration (false,name,of_term [] ty)
       | Some te ->
          D.Definition(false,name,of_term [] ty,of_term [] te))
- | ACurrentProof _ -> assert false (* It will never happen *)
  | _ -> assert false
 (*
  | Variable of string * term option * term *      (* name, body, type         *)
