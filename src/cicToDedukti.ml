@@ -123,7 +123,7 @@ let rec of_term : string list -> Cic.annterm -> Dkprint.term = fun ctx ->
     D.Var (List.nth ctx (n-1))
   | AVar _ -> failwith "TODO Avar"
   | AMeta _ -> assert false
-  | ASort(_,_) -> fake_sort
+  | ASort(_,_) -> D.apps (meta "univ") [fake_sort;fake_sort; meta "I"]
   | AImplicit _ -> assert false
   | ACast(_,te,_) -> of_term ctx te
   | AProd(_,name,ty,te,s) ->
