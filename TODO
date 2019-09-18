@@ -1,6 +1,9 @@
 XML -> Dedukti
 - cooking w.r.t. variables
 - sorts and universe polymorphisms: fix and test
+- let-in
+- match
+- coinductives
 
 Coq -> XML
 - Every type should be annotated by their sort
