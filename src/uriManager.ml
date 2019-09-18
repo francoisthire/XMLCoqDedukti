@@ -134,9 +134,9 @@ let is_malformed suri =
           if xptr = _xpointer8 then
             false
           else
-            true
-        with Not_found -> true
-  with Invalid_argument _ -> true
+            false (* TODO: ALL THIS CRAP ABOVE IS NONSENSE *)
+        with Not_found -> false (* TODO: ALL THIS CRAP ABOVE IS NONSENSE *)
+  with Invalid_argument _ -> false (* TODO: ALL THIS CRAP ABOVE IS NONSENSE *)
     
 (* hash conses an uri *)
 let uri_of_string suri =

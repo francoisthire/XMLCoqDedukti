@@ -1,21 +1,39 @@
-include CicParser
-
 let output_directory = ref None
 
-let file_of_uri uri =
- "test/Dedukti/" ^ (CicToDedukti.dkmod_of_uri uri) ^ ".dk"
+let dkfile_of_file fn =
+ let fn =
+  CicToDedukti.sanitize_mod_name
+   (Filename.chop_suffix fn ".theory.xml" ^ ".dk") in
+ match !output_directory with
+    None -> failwith "Output directory mandatory"
+  | Some s -> s ^ Filename.dir_sep ^ fn
 
-let do_obj uri =
+let do_theory filename =
+ let requires,objs = CicParser.Theories.theory_of_xml ("test/" ^ filename) in 
  let objs =
-  match CicToDedukti.nonvar_pathnames uri with
-     None -> []
-   | Some (p1,p2) ->
-      let obj = CicParser.annobj_of_xml uri p1 p2 in
-      CicToDedukti.dedukti_of_obj obj in
- let file = file_of_uri uri in
+  List.fold_left
+   (fun res uri ->
+     match CicToDedukti.nonvar_pathnames uri with
+       None -> res
+     | Some (p1,p2) ->
+        let obj = CicParser.annobj_of_xml uri p1 p2 in
+        (try
+         CicToDedukti.dedukti_of_obj obj
+        with
+         Failure msg ->
+          prerr_endline ("[FAILURE] " ^ msg);
+          [])
+        @ res
+   ) [] objs in
+ let file = dkfile_of_file filename in
  let oc = open_out file in
  let fmt = Format.formatter_of_out_channel oc in
- List.iter (Format.fprintf fmt "%a\n" Dkprint.print) objs;
+ List.iter
+  (fun uri -> Format.fprintf fmt "#REQUIRE %s.@."
+    (CicToDedukti.dkmod_of_theory_uri uri)
+  ) requires;
+ Format.fprintf fmt "@.";
+ List.iter (Format.fprintf fmt "%a@.@." Dkprint.print) objs;
  close_out oc
 
 let cmd_options = [
@@ -39,10 +57,9 @@ let _ =
       check_options ();
       List.rev !files
     in
-    let uri_of_file f = UriManager.uri_of_string ("cic:/" ^ f) in
     match files with
     | [] -> Format.eprintf "[Warning] No input files"
-    | l -> List.iter do_obj (List.map uri_of_file l)
+    | l -> List.iter do_theory l
   with
   | NoOutputDirectory -> Format.eprintf "[ERRROR] No output directory specified"
 
