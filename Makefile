@@ -21,7 +21,8 @@ $(OUTPUT):
 
 .PHONY: test
 test: bin $(OUTPUT)
-	@$(XMLCOQDK) -o $(OUTPUT) $(FILES) | dkcheck --beautify --stdin foo
+	@$(XMLCOQDK) -o $(OUTPUT) $(FILES)
+	make -C test dedukti
 
 .PHONY: debug
 debug:

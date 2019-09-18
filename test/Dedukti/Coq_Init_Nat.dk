@@ -1,0 +1,35 @@
+def add :
+  Coq.Term Coq.star
+    (Coq.prod Coq.star Coq.star (Coq.rule Coq.star Coq.star) Coq.I
+       Coq_Init_Datatypes.nat
+       (_ : Coq.Term Coq.star Coq_Init_Datatypes.nat =>
+        Coq.prod Coq.star Coq.star (Coq.rule Coq.star Coq.star) Coq.I
+          Coq_Init_Datatypes.nat
+          (_ : Coq.Term Coq.star Coq_Init_Datatypes.nat =>
+           Coq_Init_Datatypes.nat)))
+
+:= Coq.fixproj Coq.star Coq.1
+     (_1 =>
+      _1
+        (Coq.SA Coq.0 Coq.star
+           (Coq.prod Coq.star Coq.star (Coq.rule Coq.star Coq.star) Coq.I
+              Coq_Init_Datatypes.nat
+              (_ : Coq.Term Coq.star Coq_Init_Datatypes.nat =>
+               Coq.prod Coq.star Coq.star (Coq.rule Coq.star Coq.star) Coq.I
+                 Coq_Init_Datatypes.nat
+                 (_ : Coq.Term Coq.star Coq_Init_Datatypes.nat =>
+                  Coq_Init_Datatypes.nat)))))
+     (_1 =>
+      _1
+        (add =>
+         n : Coq.Term Coq.star Coq_Init_Datatypes.nat =>
+         m : Coq.Term Coq.star Coq_Init_Datatypes.nat =>
+         Coq_Init_Datatypes.match__nat Coq.star
+           (n0 : Coq.Term Coq.star Coq_Init_Datatypes.nat =>
+            Coq_Init_Datatypes.nat)
+           m
+           (p : Coq.Term Coq.star Coq_Init_Datatypes.nat =>
+            Coq_Init_Datatypes.S (add p m))
+           n))
+     Coq.0.
+

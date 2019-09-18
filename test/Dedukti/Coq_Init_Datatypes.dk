@@ -1,0 +1,15 @@
+def S :
+  Coq.Term Coq.star
+    (Coq.prod Coq.star Coq.star (Coq.rule Coq.star Coq.star) Coq.I
+       Coq_Init_Datatypes.nat
+       (_ : Coq.Term Coq.star Coq_Init_Datatypes.nat =>
+        Coq_Init_Datatypes.nat)).
+
+
+def O :
+   Coq.Term Coq.star Coq_Init_Datatypes.nat.
+
+
+def nat :
+   Coq.Term Coq.star (Coq.univ Coq.star Coq.star Coq.I).
+
