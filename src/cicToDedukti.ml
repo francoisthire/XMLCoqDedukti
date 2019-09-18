@@ -74,14 +74,16 @@ let locate_theory buri =
   function
      [] -> assert false
    | hd::tl ->
-      let p = prefix ^ hd in
+      let p = prefix @ [hd] in
       try
-       ignore (Unix.stat p) ;
-       p, String.concat "_" tl
+       let fn = library ^ String.concat "/" p ^ ".theory.xml" in
+       ignore (Unix.stat fn) ;
+       p, tl
       with
-       Unix.Unix_error _ -> aux (prefix ^ "_" ^ hd) tl
+       Unix.Unix_error _ -> aux p tl
  in
-  aux library (String.split_on_char '/' buri)
+ let modpath,constname = aux [] (String.split_on_char '/' buri) in
+ String.concat "_" modpath, String.concat "_" constname
 
 let sanitize_mod_name md = Str.global_replace (Str.regexp "/") "_" md
 
@@ -90,7 +92,8 @@ let dkmod_of_uri uri =
  let relpath = String.sub uri 5 (String.length uri - 5) in
  locate_theory relpath
 
-let dkmod_of_theory_uri uri = dkmod_of_uri uri
+let dkmod_of_theory_uri uri =
+ dkmod_of_uri (UriManager.uri_of_string (UriManager.string_of_uri uri ^ "/dummy"))
 
 let (^^) s1 s2 = if s1 = "" then s2 else s1 ^ "_" ^ s2
 
