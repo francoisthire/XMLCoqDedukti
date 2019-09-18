@@ -207,6 +207,38 @@ let map_some f l =
     | [] -> List.rev acc in
   aux [] l
 
+let translate_constructor add uparams (consname, typ) =
+  let typ' = of_type [] None typ in
+  let upoly_params (uri,ut) = match ut with
+    | Template -> None
+    | _ -> match snd uri with
+      | Some uri -> Some (dkmod_of_uri uri)
+      | _ -> assert false
+  in
+  let typ' = add_sort_params (map_some upoly_params uparams) typ' in
+  add (D.Declaration (true,consname,typ'))
+
+let translate_inductive types vars uparams nind =
+      let res = ref [] in
+      let add d = res := d :: !res in
+      let of_inductive_type (_,name,ind,arity,cons) =
+        assert ind;
+        let arity' = of_type [] None arity in
+        let template_params = function
+          | (_, Some name), Template -> Some (dkmod_of_uri name)
+          | _ -> None in
+        let arity' = add_sort_params (map_some template_params uparams) arity' in
+        add (D.Declaration (true,name,arity'));
+        List.iter (translate_constructor add uparams) cons
+      in
+      List.iter (function
+          | (_, Some name), Template ->
+            add (D.Declaration (true,dkmod_of_uri name,coq_Sort))
+          | _ -> ()
+        ) uparams;
+      List.iter of_inductive_type types;
+      List.rev !res
+
 let dedukti_of_obj annobj =
   let _ = flush_global() in
   let inst =
@@ -216,29 +248,6 @@ let dedukti_of_obj annobj =
        | None    -> [ D.Declaration (false,name,of_type [] None ty) ]
        | Some te -> [ D.Definition  (false,name,of_type [] None ty,of_term [] te) ] )
     | AInductiveDefinition (_,types,vars,uparams,nind,_) ->
-
-      let template_names = function
-        | (_, Some name), Template -> Some (dkmod_of_uri name)
-        | _ -> None in
-
-      let res = ref [] in
-      let add d = res := d :: !res in
-      let of_inductive_type (_,name,ind,arity,cons) =
-        assert ind;
-        let arity' = of_type [] None arity in
-        let arity' = add_sort_params (map_some template_names uparams) arity' in
-        add (D.Declaration (true,name,arity'));
-        List.iter
-          (function (consname,typ) ->
-             add (D.Declaration (true,consname,of_type [] None typ)))
-          cons
-      in
-      List.iter (function
-          | (_, Some name), Template ->
-            add (D.Declaration (true,dkmod_of_uri name,coq_Sort))
-          | _ -> ()
-        ) uparams;
-      List.iter of_inductive_type types;
-      !res
+      translate_inductive types vars uparams nind
     | AVariable _ -> assert false in
   add_global_univ_decl inst
