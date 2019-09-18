@@ -30,7 +30,6 @@ let do_theory filename =
  let fmt = Format.formatter_of_out_channel oc in
  List.iter
   (fun uri ->
-prerr_endline ("UUU " ^ UriManager.string_of_uri uri);
     let modpath,innermodpath = CicToDedukti.dkmod_of_theory_uri uri in
     if innermodpath = "" then
      Format.fprintf fmt "#REQUIRE %s.@." modpath
