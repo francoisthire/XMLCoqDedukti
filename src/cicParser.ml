@@ -30,16 +30,6 @@ let debug_print s = if debug then prerr_endline (Lazy.force s)
 
 open Printf
 
-(* ZACK TODO element from the DTD still to be handled:
-   <!ELEMENT CurrentProof (Conjecture*,body)>
-   <!ELEMENT Sequent %sequent;>
-   <!ELEMENT Conjecture %sequent;>
-   <!ELEMENT Decl %term;>
-   <!ELEMENT Def %term;>
-   <!ELEMENT Hidden EMPTY>
-   <!ELEMENT Goal %term;>
-*)
-
 exception Getter_failure of string * string
 exception Parser_failure of string
 
