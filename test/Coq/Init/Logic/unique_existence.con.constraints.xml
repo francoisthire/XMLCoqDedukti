@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="latin1"?>
+<CONSTRAINTS>
+ <CONSTRAINT lhs="Coq.Init.Logic.109" rel="le" rhs="Coq.Init.Logic.4"/>
+ <CONSTRAINT lhs="Coq.Init.Logic.109" rel="le" rhs="Coq.Init.Logic.10"/>
+ <CONSTRAINT lhs="Coq.Init.Logic.109" rel="le" rhs="Coq.Init.Logic.105"/>
+ <CONSTRAINT lhs="Coq.Init.Logic.109" rel="le" rhs="Coq.Init.Logic.106"/>
+</CONSTRAINTS>

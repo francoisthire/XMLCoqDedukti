@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="latin1"?>
+<CONSTRAINTS>
+ <CONSTRAINT lhs="Coq.Init.Logic.99" rel="le" rhs="Coq.Init.Logic.8"/>
+ <CONSTRAINT lhs="Coq.Init.Specif.142" rel="le" rhs="Coq.Init.Logic.8"/>
+ <CONSTRAINT lhs="Coq.Init.Specif.142" rel="le" rhs="Coq.Init.Logic.99"/>
+ <CONSTRAINT lhs="Coq.Init.Specif.142" rel="le" rhs="Coq.Init.Specif.7"/>
+ <CONSTRAINT lhs="Coq.Init.Specif.142" rel="le" rhs="Coq.Init.Specif.22"/>
+ <CONSTRAINT lhs="Coq.Init.Specif.142" rel="le" rhs="Coq.Init.Specif.89"/>
+ <CONSTRAINT lhs="Coq.Init.Specif.143" rel="le" rhs="Coq.Init.Logic.8"/>
+ <CONSTRAINT lhs="Coq.Init.Specif.143" rel="le" rhs="Coq.Init.Logic.9"/>
+ <CONSTRAINT lhs="Coq.Init.Specif.143" rel="le" rhs="Coq.Init.Logic.10"/>
+ <CONSTRAINT lhs="Coq.Init.Specif.143" rel="le" rhs="Coq.Init.Logic.100"/>
+ <CONSTRAINT lhs="Coq.Init.Specif.143" rel="le" rhs="Coq.Init.Specif.8"/>
+ <CONSTRAINT lhs="Coq.Init.Specif.143" rel="le" rhs="Coq.Init.Specif.23"/>
+ <CONSTRAINT lhs="Coq.Init.Specif.143" rel="le" rhs="Coq.Init.Specif.90"/>
+</CONSTRAINTS>

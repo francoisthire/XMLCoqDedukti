@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="latin1"?>
+<CONSTRAINTS>
+ <CONSTRAINT lhs="Coq.Init.Wf.3" rel="le" rhs="Coq.Init.Wf.2"/>
+</CONSTRAINTS>

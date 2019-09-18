@@ -1,0 +1,5 @@
+DIGEST 4f76e4799a8a05b1a37a287de5fe9eea
+FCoq.Init.Notations
+mod 4582:4592 <> IfNotations
+not 4605:4605 IfNotations :::'if'_x_'is'_x_'then'_x_'else'_x
+R4726:4736 Coq.Init.Notations IfNotations <> mod

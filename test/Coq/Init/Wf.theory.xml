@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="latin1"?>
+
+ <!-- <!DOCTYPE html [
+<!ENTITY % xhtml-lat1.ent    SYSTEM "http://helm.cs.unibo.it/dtd/xhtml-lat1.ent">
+<!ENTITY % xhtml-special.ent SYSTEM "http://helm.cs.unibo.it/dtd/xhtml-special.ent">
+<!ENTITY % xhtml-symbol.ent  SYSTEM "http://helm.cs.unibo.it/dtd/xhtml-symbol.ent">
+
+%xhtml-lat1.ent;
+%xhtml-special.ent;
+%xhtml-symbol.ent;
+]> -->
+
+
+ <html xmlns="http://www.w3.org/1999/xhtml" xmlns:ht="http://www.cs.unibo.it/helm/namespaces/helm-theory" xmlns:helm="http://www.cs.unibo.it/helm">
+
+ <head></head>
+<body>
+
+ <ht:TYPESYSTEM impredicative_set="false" check_guarded="true" check_universes="true"/>
+
+
+<br/>
+<a name="lab1"></a><h1 class="section">This module proves the validity of</h1>
+
+<ul class="doclist">
+<li> well-founded recursion (also known as course of values)
+
+</li>
+<li> well-founded induction
+
+</li>
+</ul>
+    from a well-founded ordering on a given set  <ht:REQUIRE uri="cic:/Coq/Init/Notations"/>
+ <ht:REQUIRE uri="cic:/Coq/Init/Logic"/>
+ <ht:REQUIRE uri="cic:/Coq/Init/Datatypes"/>
+ Well-founded induction principle on <span class="inlinecode"><span class="id" title="keyword">Prop</span></span>  <ht:SECTION uri="cic:/Coq/Init/Wf/Well_founded" line="24">
+ <ht:VARIABLE uri="cic:/Coq/Init/Wf/Well_founded/A.var" as="Assumption" line="26"/>
+
+ <ht:VARIABLE uri="cic:/Coq/Init/Wf/Well_founded/R.var" as="Assumption" line="27"/>
+
+ The accessibility predicate is defined to be non-informative  (Acc_rect is automatically defined because Acc is a singleton type)  <ht:DEFINITION uri="cic:/Coq/Init/Wf/Acc.ind" as="Inductive" line="32"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Wf/Acc_rect.con" as="Scheme" line="32"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Wf/Acc_ind.con" as="Scheme" line="32"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Wf/Acc_rec.con" as="Scheme" line="32"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Wf/Acc_inv.con" as="Lemma" line="37"/>
+
+ A relation is well-founded if every element is accessible  <ht:DEFINITION uri="cic:/Coq/Init/Wf/well_founded.con" as="Definition" line="43"/>
+
+ Well-founded induction on <span class="inlinecode"><span class="id" title="keyword">Set</span></span> and <span class="inlinecode"><span class="id" title="keyword">Prop</span></span>  <ht:VARIABLE uri="cic:/Coq/Init/Wf/Well_founded/Rwf.var" as="Hypothesis" line="47"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Wf/well_founded_induction_type.con" as="Theorem" line="54"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Wf/well_founded_induction.con" as="Theorem" line="61"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Wf/well_founded_ind.con" as="Theorem" line="68"/>
+
+ Well-founded fixpoints  <ht:SECTION uri="cic:/Coq/Init/Wf/Well_founded/FixPoint" line="72">
+ <ht:VARIABLE uri="cic:/Coq/Init/Wf/Well_founded/FixPoint/P.var" as="Assumption" line="74"/>
+
+ <ht:VARIABLE uri="cic:/Coq/Init/Wf/Well_founded/FixPoint/F.var" as="Assumption" line="75"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Wf/Fix_F.con" as="Fixpoint" line="77"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Wf/Acc_inv_dep.con" as="Scheme" line="80"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Wf/Fix_F_eq.con" as="Lemma" line="87"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Wf/Fix.con" as="Definition" line="89"/>
+
+ Proof that <span class="inlinecode"><span class="id" title="var">well_founded_induction</span></span> satisfies the fixpoint equation.
+      It requires an extra property of the functional  <ht:VARIABLE uri="cic:/Coq/Init/Wf/Well_founded/FixPoint/F_ext.var" as="Hypothesis" line="94"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Wf/Fix_F_inv.con" as="Lemma" line="104"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Wf/Fix_eq.con" as="Lemma" line="112"/>
+
+ </ht:SECTION>
+ </ht:SECTION>
+ Well-founded fixpoints over pairs  <ht:SECTION uri="cic:/Coq/Init/Wf/Well_founded_2" line="120">
+ <ht:VARIABLE uri="cic:/Coq/Init/Wf/Well_founded_2/A.var" as="Assumption" line="122"/>
+
+ <ht:VARIABLE uri="cic:/Coq/Init/Wf/Well_founded_2/B.var" as="Assumption" line="122"/>
+
+ <ht:VARIABLE uri="cic:/Coq/Init/Wf/Well_founded_2/R.var" as="Assumption" line="123"/>
+
+ <ht:VARIABLE uri="cic:/Coq/Init/Wf/Well_founded_2/P.var" as="Assumption" line="125"/>
+
+ <ht:SECTION uri="cic:/Coq/Init/Wf/Well_founded_2/FixPoint_2" line="127">
+ <ht:VARIABLE uri="cic:/Coq/Init/Wf/Well_founded_2/FixPoint_2/F.var" as="Assumption" line="129"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Wf/Fix_F_2.con" as="Fixpoint" line="134"/>
+
+ </ht:SECTION>
+ <ht:VARIABLE uri="cic:/Coq/Init/Wf/Well_founded_2/Rwf.var" as="Hypothesis" line="141"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Wf/well_founded_induction_type_2.con" as="Theorem" line="149"/>
+
+ </ht:SECTION>
+
+<br/>
+<ht:SECTION uri="cic:/Coq/Init/Wf/Acc_generator" line="159">
+ <ht:VARIABLE uri="cic:/Coq/Init/Wf/Acc_generator/A.var" as="Assumption" line="160"/>
+
+ <ht:VARIABLE uri="cic:/Coq/Init/Wf/Acc_generator/R.var" as="Assumption" line="161"/>
+
+<ht:DEFINITION uri="cic:/Coq/Init/Wf/Acc_intro_generator.con" as="Fixpoint" line="167"/>
+
+ </ht:SECTION>
+ </body>
+</html>
+

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="latin1"?>
+
+ <!-- <!DOCTYPE html [
+<!ENTITY % xhtml-lat1.ent    SYSTEM "http://helm.cs.unibo.it/dtd/xhtml-lat1.ent">
+<!ENTITY % xhtml-special.ent SYSTEM "http://helm.cs.unibo.it/dtd/xhtml-special.ent">
+<!ENTITY % xhtml-symbol.ent  SYSTEM "http://helm.cs.unibo.it/dtd/xhtml-symbol.ent">
+
+%xhtml-lat1.ent;
+%xhtml-special.ent;
+%xhtml-symbol.ent;
+]> -->
+
+
+ <html xmlns="http://www.w3.org/1999/xhtml" xmlns:ht="http://www.cs.unibo.it/helm/namespaces/helm-theory" xmlns:helm="http://www.cs.unibo.it/helm">
+
+ <head></head>
+<body>
+
+ <ht:TYPESYSTEM impredicative_set="false" check_guarded="true" check_universes="true"/>
+
+<ht:REQUIRE uri="cic:/Coq/Init/Notations"/>
+ <ht:REQUIRE uri="cic:/Coq/Init/Logic"/>
+ <ht:REQUIRE uri="cic:/Coq/Init/Specif"/>
+<a name="lab1"></a><h1 class="section">Useful tactics</h1>
+
+<div class="paragraph"> </div>
+
+ Ex falso quodlibet : a tactic for proving False instead of the current goal.
+    This is just a nicer name for tactics such as <span class="inlinecode"><span class="id" title="tactic">elimtype</span></span> <span class="inlinecode"><span class="id" title="var">False</span></span>
+    and other <span class="inlinecode"><span class="id" title="tactic">cut</span></span> <span class="inlinecode"><span class="id" title="var">False</span></span>.  A tactic for proof by contradiction. With contradict H,
+<ul class="doclist">
+<li>   H:~A |-  B    gives       |-  A
+
+</li>
+<li>   H:~A |- ~B    gives  H: B |-  A
+
+</li>
+<li>   H: A |-  B    gives       |- ~A
+
+</li>
+<li>   H: A |- ~B    gives  H: B |- ~A
+
+</li>
+<li>   H:False leads to a resolved subgoal.
+
+</li>
+</ul>
+   Moreover, negations may be in unfolded forms,
+   and A or B may live in Type Break every hypothesis of a certain type Tactics for applying equivalences.
+
+<div class="paragraph"> </div>
+
+The following code provides tactics "apply -&gt; t", "apply &lt;- t",
+"apply -&gt; t in H" and "apply &lt;- t in H". Here t is a term whose type
+consists of nested dependent and nondependent products with an
+equivalence A &lt;-&gt; B as the conclusion. The tactics with "-&gt;" in their
+names apply A -&gt; B while those with "&lt;-" in the name apply B -&gt; A. 
+<br/>
+An experimental tactic simpler than auto that is useful for ending
+    proofs "in one step"  Slightly more than <span class="inlinecode"><span class="id" title="var">easy</span></span> A tactic to document or check what is proved at some point of a script  Support for rewriting decidability statements  <ht:THEOREM uri="cic:/Coq/Init/Tactics/decide_left.con" as="Lemma" line="206"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Tactics/decide_right.con" as="Lemma" line="212"/>
+
+ Clear an hypothesis and its dependencies  Revert an hypothesis and its dependencies :
+    this is actually generalize dependent...  Provide an error message for dependent induction that reports an import is
+required to use it. Importing Coq.Program.Equality will shadow this notation
+with the actual <span class="inlinecode"><span class="id" title="tactic">dependent</span></span> <span class="inlinecode"><span class="id" title="tactic">induction</span></span> tactic. <a name="lab2"></a><h3 class="section"><span class="inlinecode"><span class="id" title="var">inversion_sigma</span></span></h3>
+ The built-in <span class="inlinecode"><span class="id" title="tactic">inversion</span></span> will frequently leave equalities of
+    dependent pairs.  When the first type in the pair is an hProp or
+    otherwise simplifies, <span class="inlinecode"><span class="id" title="var">inversion_sigma</span></span> is useful; it will replace
+    the equality of pairs with a pair of equalities, one involving a
+    term casted along the other.  This might also prove useful for
+    writing a version of <span class="inlinecode"><span class="id" title="tactic">inversion</span></span> / <span class="inlinecode"><span class="id" title="tactic">dependent</span></span> <span class="inlinecode"><span class="id" title="tactic">destruction</span></span> which
+    does not lose information, i.e., does not turn a goal which is
+    provable into one which requires axiom K / UIP.   A version of <span class="inlinecode"><span class="id" title="var">time</span></span> that works for constrs  Useful combinators  </body>
+</html>
+

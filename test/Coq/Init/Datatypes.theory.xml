@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="latin1"?>
+
+ <!-- <!DOCTYPE html [
+<!ENTITY % xhtml-lat1.ent    SYSTEM "http://helm.cs.unibo.it/dtd/xhtml-lat1.ent">
+<!ENTITY % xhtml-special.ent SYSTEM "http://helm.cs.unibo.it/dtd/xhtml-special.ent">
+<!ENTITY % xhtml-symbol.ent  SYSTEM "http://helm.cs.unibo.it/dtd/xhtml-symbol.ent">
+
+%xhtml-lat1.ent;
+%xhtml-special.ent;
+%xhtml-symbol.ent;
+]> -->
+
+
+ <html xmlns="http://www.w3.org/1999/xhtml" xmlns:ht="http://www.cs.unibo.it/helm/namespaces/helm-theory" xmlns:helm="http://www.cs.unibo.it/helm">
+
+ <head></head>
+<body>
+
+ <ht:TYPESYSTEM impredicative_set="false" check_guarded="true" check_universes="true"/>
+
+
+<br/>
+<ht:REQUIRE uri="cic:/Coq/Init/Notations"/>
+
+<div class="paragraph"> </div>
+
+ <ht:REQUIRE uri="cic:/Coq/Init/Logic"/>
+<a name="lab1"></a><h1 class="section">Datatypes with zero and one element</h1>
+
+<div class="paragraph"> </div>
+
+ <span class="inlinecode"><span class="id" title="var">Empty_set</span></span> is a datatype with no inhabitant  <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/Empty_set.ind" as="Inductive" line="21"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/Empty_set_rect.con" as="Scheme" line="21"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/Empty_set_ind.con" as="Scheme" line="21"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/Empty_set_rec.con" as="Scheme" line="21"/>
+
+ <span class="inlinecode"><span class="id" title="var">unit</span></span> is a singleton datatype with sole inhabitant <span class="inlinecode"><span class="id" title="var">tt</span></span>  <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/unit.ind" as="Inductive" line="25"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/unit_rect.con" as="Scheme" line="25"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/unit_ind.con" as="Scheme" line="25"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/unit_rec.con" as="Scheme" line="25"/>
+
+<a name="lab2"></a><h1 class="section">The boolean datatype</h1>
+
+<div class="paragraph"> </div>
+
+ <span class="inlinecode"><span class="id" title="var">bool</span></span> is the datatype of the boolean values <span class="inlinecode"><span class="id" title="var">true</span></span> and <span class="inlinecode"><span class="id" title="var">false</span></span>  <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/bool.ind" as="Inductive" line="34"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/bool_rect.con" as="Scheme" line="34"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/bool_ind.con" as="Scheme" line="34"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/bool_rec.con" as="Scheme" line="34"/>
+
+
+<div class="paragraph"> </div>
+
+ Basic boolean operators  <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/andb.con" as="Definition" line="46"/>
+
+
+<div class="paragraph"> </div>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/orb.con" as="Definition" line="48"/>
+
+
+<div class="paragraph"> </div>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/implb.con" as="Definition" line="50"/>
+
+
+<div class="paragraph"> </div>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/xorb.con" as="Definition" line="52"/>
+
+
+<div class="paragraph"> </div>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/negb.con" as="Definition" line="60"/>
+
+
+<div class="paragraph"> </div>
+
+ Basic properties of <span class="inlinecode"><span class="id" title="var">andb</span></span> 
+<div class="paragraph"> </div>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Datatypes/andb_prop.con" as="Lemma" line="70"/>
+
+
+<div class="paragraph"> </div>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Datatypes/andb_true_intro.con" as="Lemma" line="77"/>
+
+
+<div class="paragraph"> </div>
+
+ Interpretation of booleans as propositions  <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/eq_true.ind" as="Inductive" line="82"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/eq_true_rect.con" as="Scheme" line="82"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/eq_true_ind.con" as="Scheme" line="82"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/eq_true_rec.con" as="Scheme" line="82"/>
+
+
+<div class="paragraph"> </div>
+
+ Another way of interpreting booleans as propositions  <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/is_true.con" as="Definition" line="88"/>
+
+ <span class="inlinecode"><span class="id" title="var">is_true</span></span> can be activated as a coercion by
+   (<span class="inlinecode"><span class="id" title="keyword">Local</span></span>) <span class="inlinecode"><span class="id" title="keyword">Coercion</span></span> <span class="inlinecode"><span class="id" title="var">is_true</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">bool</span></span> <span class="inlinecode">&gt;-&gt;</span> <span class="inlinecode"><span class="id" title="var">Sortclass</span></span>.
+
+<div class="paragraph"> </div>
+
+ Additional rewriting lemmas about <span class="inlinecode"><span class="id" title="var">eq_true</span></span> 
+<div class="paragraph"> </div>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Datatypes/eq_true_ind_r.con" as="Lemma" line="100"/>
+
+
+<div class="paragraph"> </div>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Datatypes/eq_true_rec_r.con" as="Lemma" line="106"/>
+
+
+<div class="paragraph"> </div>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Datatypes/eq_true_rect_r.con" as="Lemma" line="112"/>
+
+ The <span class="inlinecode"><span class="id" title="var">BoolSpec</span></span> inductive will be used to relate a <span class="inlinecode"><span class="id" title="var">boolean</span></span> value
+    and two propositions corresponding respectively to the <span class="inlinecode"><span class="id" title="var">true</span></span>
+    case and the <span class="inlinecode"><span class="id" title="var">false</span></span> case.
+    Interest: <span class="inlinecode"><span class="id" title="var">BoolSpec</span></span> behave nicely with <span class="inlinecode"><span class="id" title="tactic">case</span></span> and <span class="inlinecode"><span class="id" title="tactic">destruct</span></span>.
+    See also <span class="inlinecode"><span class="id" title="var">Bool.reflect</span></span> when <span class="inlinecode"><span class="id" title="var">Q</span></span> <span class="inlinecode">=</span> <span class="inlinecode">~<span class="id" title="var">P</span></span>.
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/BoolSpec.ind" as="Inductive" line="121"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/BoolSpec_ind.con" as="Scheme" line="121"/>
+
+
+<div class="paragraph"> </div>
+
+<a name="lab3"></a><h1 class="section">Peano natural numbers</h1>
+
+<div class="paragraph"> </div>
+
+ <span class="inlinecode"><span class="id" title="var">nat</span></span> is the datatype of natural numbers built from <span class="inlinecode"><span class="id" title="var">O</span></span> and successor <span class="inlinecode"><span class="id" title="var">S</span></span>;
+    note that the constructor name is the letter O.
+    Numbers in <span class="inlinecode"><span class="id" title="var">nat</span></span> can be denoted using a decimal notation;
+    e.g. <span class="inlinecode">3%<span class="id" title="var">nat</span></span> abbreviates <span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode">(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">O</span>))</span>  <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/nat.ind" as="Inductive" line="135"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/nat_rect.con" as="Scheme" line="135"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/nat_ind.con" as="Scheme" line="135"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/nat_rec.con" as="Scheme" line="135"/>
+
+
+<div class="paragraph"> </div>
+
+<a name="lab4"></a><h1 class="section">Container datatypes</h1>
+
+<br/>
+
+<br/>
+<span class="inlinecode"><span class="id" title="var">option</span></span> <span class="inlinecode"><span class="id" title="var">A</span></span> is the extension of <span class="inlinecode"><span class="id" title="var">A</span></span> with an extra element <span class="inlinecode"><span class="id" title="var">None</span></span>  <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/option.ind" as="Inductive" line="151"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/option_rect.con" as="Scheme" line="151"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/option_ind.con" as="Scheme" line="151"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/option_rec.con" as="Scheme" line="151"/>
+
+
+<div class="paragraph"> </div>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/option_map.con" as="Definition" line="158"/>
+
+ <span class="inlinecode"><span class="id" title="var">sum</span></span> <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode"><span class="id" title="var">B</span></span>, written <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">+</span> <span class="inlinecode"><span class="id" title="var">B</span></span>, is the disjoint sum of <span class="inlinecode"><span class="id" title="var">A</span></span> and <span class="inlinecode"><span class="id" title="var">B</span></span>  <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/sum.ind" as="Inductive" line="166"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/sum_rect.con" as="Scheme" line="166"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/sum_ind.con" as="Scheme" line="166"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/sum_rec.con" as="Scheme" line="166"/>
+
+
+<div class="paragraph"> </div>
+
+ <span class="inlinecode"><span class="id" title="var">prod</span></span> <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode"><span class="id" title="var">B</span></span>, written <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">*</span> <span class="inlinecode"><span class="id" title="var">B</span></span>, is the product of <span class="inlinecode"><span class="id" title="var">A</span></span> and <span class="inlinecode"><span class="id" title="var">B</span></span>;
+    the pair <span class="inlinecode"><span class="id" title="var">pair</span></span> <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode"><span class="id" title="var">B</span></span> <span class="inlinecode"><span class="id" title="var">a</span></span> <span class="inlinecode"><span class="id" title="var">b</span></span> of <span class="inlinecode"><span class="id" title="var">a</span></span> and <span class="inlinecode"><span class="id" title="var">b</span></span> is abbreviated <span class="inlinecode">(<span class="id" title="var">a</span>,<span class="id" title="var">b</span>)</span>  <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/prod.ind" as="Inductive" line="178"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/prod_rect.con" as="Scheme" line="178"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/prod_ind.con" as="Scheme" line="178"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/prod_rec.con" as="Scheme" line="178"/>
+
+
+<div class="paragraph"> </div>
+
+ <ht:SECTION uri="cic:/Coq/Init/Datatypes/projections" line="188">
+
+<div class="paragraph"> </div>
+
+ <ht:VARIABLE uri="cic:/Coq/Init/Datatypes/projections/A.var" as="Assumption" line="189"/>
+
+ <ht:VARIABLE uri="cic:/Coq/Init/Datatypes/projections/B.var" as="Assumption" line="189"/>
+
+
+<div class="paragraph"> </div>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/fst.con" as="Definition" line="191"/>
+
+
+<div class="paragraph"> </div>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/snd.con" as="Definition" line="194"/>
+
+
+<div class="paragraph"> </div>
+
+ </ht:SECTION>
+
+<div class="paragraph"> </div>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Datatypes/surjective_pairing.con" as="Lemma" line="205"/>
+
+
+<div class="paragraph"> </div>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Datatypes/injective_projections.con" as="Lemma" line="213"/>
+
+
+<div class="paragraph"> </div>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/prod_uncurry.con" as="Definition" line="215"/>
+
+
+<div class="paragraph"> </div>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/prod_curry.con" as="Definition" line="218"/>
+
+ Polymorphic lists and some operations  <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/list.ind" as="Inductive" line="225"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/list_rect.con" as="Scheme" line="225"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/list_ind.con" as="Scheme" line="225"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/list_rec.con" as="Scheme" line="225"/>
+
+
+<div class="paragraph"> </div>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/length.con" as="Definition" line="237"/>
+
+ Concatenation of two lists  <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/app.con" as="Definition" line="246"/>
+
+
+<br/>
+
+<br/>
+<a name="lab5"></a><h1 class="section">The comparison datatype</h1>
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/comparison.ind" as="Inductive" line="261"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/comparison_rect.con" as="Scheme" line="261"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/comparison_ind.con" as="Scheme" line="261"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/comparison_rec.con" as="Scheme" line="261"/>
+
+
+<div class="paragraph"> </div>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Datatypes/comparison_eq_stable.con" as="Lemma" line="269"/>
+
+
+<div class="paragraph"> </div>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/CompOpp.con" as="Definition" line="271"/>
+
+
+<div class="paragraph"> </div>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Datatypes/CompOpp_involutive.con" as="Lemma" line="281"/>
+
+
+<div class="paragraph"> </div>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Datatypes/CompOpp_inj.con" as="Lemma" line="286"/>
+
+
+<div class="paragraph"> </div>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Datatypes/CompOpp_iff.con" as="Lemma" line="291"/>
+
+ The <span class="inlinecode"><span class="id" title="var">CompareSpec</span></span> inductive relates a <span class="inlinecode"><span class="id" title="var">comparison</span></span> value with three
+   propositions, one for each possible case. Typically, it can be used to
+   specify a comparison function via some equality and order predicates.
+   Interest: <span class="inlinecode"><span class="id" title="var">CompareSpec</span></span> behave nicely with <span class="inlinecode"><span class="id" title="tactic">case</span></span> and <span class="inlinecode"><span class="id" title="tactic">destruct</span></span>.  <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/CompareSpec.ind" as="Inductive" line="298"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/CompareSpec_ind.con" as="Scheme" line="298"/>
+
+
+<div class="paragraph"> </div>
+
+ For having clean interfaces after extraction, <span class="inlinecode"><span class="id" title="var">CompareSpec</span></span> is declared
+    in Prop. For some situations, it is nonetheless useful to have a
+    version in Type. Interestingly, these two versions are equivalent.  <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/CompareSpecT.ind" as="Inductive" line="308"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/CompareSpecT_rect.con" as="Scheme" line="308"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/CompareSpecT_ind.con" as="Scheme" line="308"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/CompareSpecT_rec.con" as="Scheme" line="308"/>
+
+
+<div class="paragraph"> </div>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Datatypes/CompareSpec2Type.con" as="Lemma" line="318"/>
+
+ As an alternate formulation, one may also directly refer to predicates
+ <span class="inlinecode"><span class="id" title="var">eq</span></span> and <span class="inlinecode"><span class="id" title="var">lt</span></span> for specifying a comparison, rather that fully-applied
+ propositions. This <span class="inlinecode"><span class="id" title="var">CompSpec</span></span> is now a particular case of <span class="inlinecode"><span class="id" title="var">CompareSpec</span></span>.  <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/CompSpec.con" as="Definition" line="324"/>
+
+
+<div class="paragraph"> </div>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/CompSpecT.con" as="Definition" line="327"/>
+
+
+<div class="paragraph"> </div>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Datatypes/CompSpec2Type.con" as="Lemma" line="333"/>
+
+<a name="lab6"></a><h1 class="section">Misc Other Datatypes</h1>
+
+<div class="paragraph"> </div>
+
+ <span class="inlinecode"><span class="id" title="var">identity</span></span> <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode"><span class="id" title="var">a</span></span> is the family of datatypes on <span class="inlinecode"><span class="id" title="var">A</span></span> whose sole non-empty
+    member is the singleton datatype <span class="inlinecode"><span class="id" title="var">identity</span></span> <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode"><span class="id" title="var">a</span></span> <span class="inlinecode"><span class="id" title="var">a</span></span> whose
+    sole inhabitant is denoted <span class="inlinecode"><span class="id" title="var">identity_refl</span></span> <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode"><span class="id" title="var">a</span></span>  <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/identity.ind" as="Inductive" line="342"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/identity_rect.con" as="Scheme" line="342"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/identity_ind.con" as="Scheme" line="342"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/identity_rec.con" as="Scheme" line="342"/>
+
+
+<div class="paragraph"> </div>
+
+ Identity type  <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/ID.con" as="Definition" line="352"/>
+
+
+<div class="paragraph"> </div>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/id.con" as="Definition" line="353"/>
+
+
+<div class="paragraph"> </div>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/IDProp.con" as="Definition" line="355"/>
+
+
+<div class="paragraph"> </div>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Datatypes/idProp.con" as="Definition" line="356"/>
+
+</body>
+</html>
+

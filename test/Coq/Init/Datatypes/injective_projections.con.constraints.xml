@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="latin1"?>
+<CONSTRAINTS>
+ <CONSTRAINT lhs="Coq.Init.Datatypes.35" rel="le" rhs="Coq.Init.Logic.8"/>
+ <CONSTRAINT lhs="Coq.Init.Datatypes.35" rel="le" rhs="Coq.Init.Logic.11"/>
+ <CONSTRAINT lhs="Coq.Init.Datatypes.35" rel="le" rhs="Coq.Init.Datatypes.23"/>
+ <CONSTRAINT lhs="Coq.Init.Datatypes.35" rel="le" rhs="Coq.Init.Datatypes.27"/>
+ <CONSTRAINT lhs="Coq.Init.Datatypes.36" rel="le" rhs="Coq.Init.Logic.8"/>
+ <CONSTRAINT lhs="Coq.Init.Datatypes.36" rel="le" rhs="Coq.Init.Logic.11"/>
+ <CONSTRAINT lhs="Coq.Init.Datatypes.36" rel="le" rhs="Coq.Init.Datatypes.24"/>
+ <CONSTRAINT lhs="Coq.Init.Datatypes.36" rel="le" rhs="Coq.Init.Datatypes.28"/>
+</CONSTRAINTS>

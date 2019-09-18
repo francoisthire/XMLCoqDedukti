@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="latin1"?>
+<CONSTRAINTS>
+ <CONSTRAINT lhs="Coq.Init.Wf.5" rel="le" rhs="Coq.Init.Wf.1"/>
+ <CONSTRAINT lhs="Coq.Init.Wf.5" rel="le" rhs="Coq.Init.Datatypes.23"/>
+ <CONSTRAINT lhs="Coq.Init.Wf.5" rel="le" rhs="Coq.Init.Datatypes.24"/>
+</CONSTRAINTS>
