@@ -55,6 +55,12 @@ type name =
  | Name of string
  | Anonymous
 
+type univ_type =
+   | Invariant
+   | Template
+   | Irrelevant
+   | Covariant
+
 type object_flavour =
   [ `Definition
   | `MutualDefinition
@@ -178,20 +184,33 @@ and annterm =
     annterm list                                    (*  patterns             *)
  | AFix of id * int * anninductiveFun list          (* funno, functions *)
  | ACoFix of id * int * anncoInductiveFun list      (* funno, functions *)
+
 and annobj =
-   AConstant of id * id option * string *           (* name,         *)
-    annterm option * annterm *                      (*  body, type,  *)
-    UriManager.uri list * attribute list            (*  parameters   *)
- | AVariable of id *
-    string * annterm option * annterm *             (* name, body, type *)
-    UriManager.uri list * attribute list            (*  parameters      *)
- | ACurrentProof of id * id *
-    string * annmetasenv *                          (*  name, conjectures,    *)
-    annterm * annterm * UriManager.uri list *       (*  body,type,parameters  *)
-    attribute list
- | AInductiveDefinition of id *
-    anninductiveType list *                         (* inductive types ,      *)
-    UriManager.uri list * int * attribute list      (*  parameters,n ind. pars*)
+    AConstant of
+      id * id option * string *               (*  name  *)
+      annterm option * annterm *              (*  body, type,  *)
+      UriManager.uri list *                   (*  section variables parameters  *)
+      sort list *                             (*  universe parameters *)
+      attribute list                          (*  parameters   *)
+  | AVariable of
+      id * string * annterm option *          (*  name, body  *)
+      annterm *                               (*  type  *)
+      UriManager.uri list *                   (*  section variables parameters  *)
+      CicUniv.universe list *                 (*  universe parameters *)
+      attribute list                          (*  parameters      *)
+  | ACurrentProof of
+      id * id *
+      string * annmetasenv *                  (*  name, conjectures,    *)
+      annterm * annterm *                     (*  body,type *)
+      UriManager.uri list *                   (*  section variables parameters  *)
+      CicUniv.universe list *                 (*  universe parameters *)
+      attribute list                          (*  parameters   *)
+  | AInductiveDefinition of
+      id * anninductiveType list *            (*  inductive types ,   *)
+      UriManager.uri list *                   (*  section variables parameters  *)
+      (CicUniv.universe * univ_type) list *   (*  universe paramters *)
+      int *                                   (*  n ind. pars*)
+      attribute list                          (*  parameters   *)
 and anninductiveType =
  id * string * bool * annterm *               (* typename, inductive, arity *)
   annconstructor list                         (*  constructors              *)
