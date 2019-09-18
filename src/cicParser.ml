@@ -807,6 +807,3 @@ let annobj_of_xml uri filename filenamebody =
       | _ ->
           raise (Parser_failure (sprintf "no constant found in %s, %s"
             filename filenamebody)))
-
-let obj_of_xml uri filename filenamebody =
- Deannotate.deannotate_obj (annobj_of_xml uri filename filenamebody)

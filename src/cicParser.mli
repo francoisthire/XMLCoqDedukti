@@ -38,10 +38,4 @@ exception Parser_failure of string
    * Both files are assumed to be gzipped. *)
 val annobj_of_xml: UriManager.uri -> string -> string option -> Cic.annobj
 
-  (* given the filename of an xml file of a cic object, it returns its internal
-   * logical representation. In the case of constants (whose type is splitted
-   * from the body), a second xml file (for the body) must be provided.
-   * Both files are assumed to be gzipped. *)
-val obj_of_xml : UriManager.uri -> string -> string option -> Cic.obj
-
 val impredicative_set : bool ref
