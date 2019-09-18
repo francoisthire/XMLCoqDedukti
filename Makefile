@@ -12,8 +12,8 @@ doc:
 xmlcoqdk:
 	@ln -s _build/install/default/bin/xmlcoqdk xmlcoqdk || true
 
-OUTPUT=/tmp/dkout
-FILES=Coq/Init/Datatypes/nat.ind Coq/Init/Nat/add.con
+OUTPUT=test/Dedukti
+FILES=Coq/Init/Datatypes.theory.xml Coq/Init/Nat.theory.xml
 XMLCOQDK = $(shell readlink -f _build/install/default/bin/xmlcoqdk)
 
 $(OUTPUT):
@@ -21,7 +21,8 @@ $(OUTPUT):
 
 .PHONY: test
 test: bin $(OUTPUT)
-	@$(XMLCOQDK) -o $(OUTPUT) $(FILES) | dkcheck --beautify --stdin foo
+	@$(XMLCOQDK) -o $(OUTPUT) $(FILES)
+	make -C test dedukti
 
 .PHONY: debug
 debug:

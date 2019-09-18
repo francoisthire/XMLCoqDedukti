@@ -11,7 +11,7 @@ _build/
 .depend
 experiments/**/output/*.dk
 meta/**/*.dk
-
+test/Dedukti/Coq_*.dk
 
 # Editor temporary files.
 *~

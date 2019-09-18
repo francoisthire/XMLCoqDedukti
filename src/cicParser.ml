@@ -302,21 +302,10 @@ let sort_of_string ctxt = function
   | "Set" when !impredicative_set -> Cic.Set
   | "Set" -> Cic.Type (CicUniv.fresh ~uri:ctxt.uri ())
   | s ->
-      let len = String.length s in
-      let sort_len, mk_sort =
-        if len > 5 && String.sub s 0 5 = "Type:" then 5,fun x -> Cic.Type x
-        else if len > 6 && String.sub s 0 6 = "CProp:" then 6,fun x->Cic.CProp x
-        else parse_error ctxt "sort expected"
-      in
-      let s = String.sub s sort_len (len - sort_len) in
-      let i = String.index s ':' in
-      let id =  int_of_string (String.sub s 0 i) in
-      let suri = String.sub s (i+1) (len - sort_len - i - 1) in
-      let uri = UriManager.uri_of_string suri in
-      try mk_sort (CicUniv.fresh ~uri ~id ())
-      with
-      | Failure "int_of_string"
-      | Invalid_argument _ -> parse_error ctxt "sort expected"
+      (* TODO: FIXME *)
+      let uri = "cic:/" ^ Str.global_replace (Str.regexp ".") "/" s in
+      let uri = UriManager.uri_of_string uri in
+      Cic.Type(CicUniv.fresh ~uri ~id:777 ())
 
 let patch_subst ctxt subst = function
   | Cic.AConst (id, uri, _, univs) -> Cic.AConst (id, uri, subst, univs)
@@ -389,9 +378,9 @@ let end_element ctxt tag =
   | "CONST" ->
       push ctxt (Cic_term
         (match pop_tag_attrs ctxt with
-        | ["id", id; "uri", uri]
-        | ["id", id; "sort", _; "uri", uri] ->
-            let univs = mk_univs () in
+        | ["id", id; "univparams", univparams; "uri", uri]
+        | ["id", id; "sort", _; "univparams", univparams; "uri", uri] ->
+            let univs = mk_univs univparams in
             Cic.AConst (id, uri_of_string uri, [], univs)
         | _ -> attribute_error ()))
   | "SORT" ->
@@ -812,3 +801,28 @@ let annobj_of_xml uri filename filenamebody =
      | _ ->
        raise (Parser_failure (sprintf "no constant found in %s, %s"
                                 filename filenamebody)))
+
+module Theories = struct
+ let start_element_get_parsed () =
+  let requires = ref [] in
+  let uris = ref [] in
+  let start_element tag attrs =
+   match tag,sort_attrs attrs with
+      "ht:REQUIRE",["uri",uri] ->
+        requires := UriManager.uri_of_string uri::!requires
+    | ("ht:DEFINITION" | "ht:THEOREM"),["as",_ ; "line",_ ; "uri",uri] ->
+        uris := UriManager.uri_of_string uri::!uris
+    | _,_ -> prerr_endline ("[IGNORED ELEMENT] " ^ tag ^ String.concat " " (List.map (fun (x,y) -> " " ^ x ^ "=" ^ y) attrs))
+  in
+   start_element,fun () -> List.rev !requires, List.rev !uris
+
+ let theory_of_xml filename =
+  let start_element,get_parsed = start_element_get_parsed () in 
+  let callbacks =
+   {XmlPushParser.default_callbacks
+    with start_element = Some(start_element) } in
+  let parse = XmlPushParser.create_parser callbacks in
+  XmlPushParser.parse parse (`File filename) ;
+  get_parsed ()
+  
+end

@@ -28,11 +28,11 @@ let indpathname uri =
 let varpathname uri =
  basepathname uri ^ "/" ^ UriManager.name_of_uri uri ^ ".var.xml.gz"
 
-let pathnames uri =
+let nonvar_pathnames uri =
  match UriManager.ext_of_uri uri with
-    ".con" -> conpathname uri, Some (conbodypathname uri)
-  | ".var" -> varpathname uri, None
-  | ".ind" -> indpathname uri, None
+    ".con" -> Some (conpathname uri, Some (conbodypathname uri))
+  | ".var" -> None
+  | ".ind" -> Some (indpathname uri, None)
   | _ -> assert false
 
 (*** Loading ***)
@@ -41,6 +41,12 @@ let getind uri =
  let obj = CicParser.annobj_of_xml uri (indpathname uri) None in
  match obj with
  | AInductiveDefinition(_,il,_params,_,_,_) -> il
+ | _ -> assert false
+
+let getvar uri =
+ let obj = CicParser.annobj_of_xml uri (varpathname uri) None in
+ match obj with
+ | AVariable(_,name,body,typ,params,univparams,_) -> (name,body,typ,params,univparams)
  | _ -> assert false
 
 (*** Translation ***)
@@ -66,6 +72,10 @@ let sanitize_mod_name md = Str.global_replace (Str.regexp "/") "_" md
 let dkmod_of_uri uri =
  let buri = UriManager.buri_of_uri uri in
  String.sub (sanitize_mod_name buri) 5 (String.length buri - 5)
+
+let dkmod_of_theory_uri uri =
+ let uri = UriManager.string_of_uri uri in
+ String.sub (sanitize_mod_name uri) 5 (String.length uri - 5)
 
 let dkname_of_const uri =
  D.Const(dkmod_of_uri uri, UriManager.name_of_uri uri)
@@ -125,9 +135,8 @@ let fake_sort = meta "star"
 
 let rec of_term : string list -> Cic.annterm -> Dkprint.term = fun ctx ->
  function
-  | ARel(_,_,n,_) ->
-    D.Var (List.nth ctx (n-1))
-  | AVar _ -> failwith "TODO Avar"
+  | ARel(_,_,n,_) -> D.Var (List.nth ctx (n-1))
+  | AVar(_,uri,_ens) -> D.Var (UriManager.name_of_uri uri) (* TODO ens *)
   | AMeta _ -> assert false
   | ASort(_,_) -> D.apps (meta "univ") [fake_sort;fake_sort; meta "I"]
   | AImplicit _ -> assert false
@@ -144,7 +153,9 @@ let rec of_term : string list -> Cic.annterm -> Dkprint.term = fun ctx ->
   | ALambda(_,name,ty,te,s) ->
      let name = dkname_of_name name in
      D.lam (name,of_type ctx s ty) (of_term (name::ctx) te)
-  | ALetIn _ -> failwith "TODO LetIn"
+  | ALetIn(_,name,ty,a,b) -> (* TODO: FALSE LET IN *)
+    let name' = dkname_of_name name in
+    LetIn( (name', of_term ctx ty, of_term ctx a), of_term (name'::ctx) b)
   | AAppl(_,[]) -> assert false
   | AAppl(_,(hd::tl)) ->
     D.apps (of_term ctx hd) (List.map (of_term ctx) tl)
