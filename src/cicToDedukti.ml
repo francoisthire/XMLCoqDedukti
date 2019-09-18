@@ -82,8 +82,8 @@ let locate_theory buri =
       with
        Unix.Unix_error _ -> aux p tl
  in
-  let modpath,constname = aux [] (String.split_on_char '/' buri) in
-  String.concat "_" modpath, String.concat "_" constname
+ let modpath,constname = aux [] (String.split_on_char '/' buri) in
+ String.concat "_" modpath, String.concat "_" constname
 
 let sanitize_mod_name md = Str.global_replace (Str.regexp "/") "_" md
 
