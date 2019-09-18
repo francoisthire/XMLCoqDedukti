@@ -12,9 +12,11 @@ let process_global f = List.iter f !global_univs
 
 (*** Disk mapping ***)
 
+let library = "test/"
+
 let basepathname uri =
  let buri = UriManager.buri_of_uri uri in
- "test/" ^ String.sub buri 5 (String.length buri - 5)
+ library ^ String.sub buri 5 (String.length buri - 5)
 
 let conpathname uri =
  basepathname uri ^ "/" ^ UriManager.name_of_uri uri ^ ".con.xml.gz"
@@ -67,46 +69,65 @@ let dkname_of_name =
     incr n ;
     "_" ^ string_of_int !n
 
+let locate_theory buri =
+ let rec aux prefix =
+  function
+     [] -> assert false
+   | hd::tl ->
+      let p = prefix ^ hd in
+      try
+       ignore (Unix.stat p) ;
+       p, String.concat "_" tl
+      with
+       Unix.Unix_error _ -> aux (prefix ^ "_" ^ hd) tl
+ in
+  aux library (String.split_on_char '/' buri)
+
 let sanitize_mod_name md = Str.global_replace (Str.regexp "/") "_" md
 
 let dkmod_of_uri uri =
- let buri = UriManager.buri_of_uri uri in
- String.sub (sanitize_mod_name buri) 5 (String.length buri - 5)
+ let uri = UriManager.buri_of_uri uri in
+ let relpath = String.sub uri 5 (String.length uri - 5) in
+ locate_theory relpath
 
-let dkmod_of_theory_uri uri =
- let uri = UriManager.string_of_uri uri in
- String.sub (sanitize_mod_name uri) 5 (String.length uri - 5)
+let dkmod_of_theory_uri uri = dkmod_of_uri uri
+
+let (^^) s1 s2 = if s1 = "" then s2 else s1 ^ "_" ^ s2
 
 let dkname_of_const uri =
- D.Const(dkmod_of_uri uri, UriManager.name_of_uri uri)
+ let modname,constname = dkmod_of_uri uri in
+ D.Const(modname,constname ^^ UriManager.name_of_uri uri)
 
 (* name of the tyno^{th} inductive type *)
 let dkname_of_mutind uri tyno =
  let il = getind uri in
  let _,name,_,_,_ = List.nth il tyno in
- D.Const (dkmod_of_uri uri, name)
+ let modname,constname = dkmod_of_uri uri in
+ D.Const (modname,constname ^^ name)
 
 (* constrno^{th} constructor name of the tyno^{th} inductive type *)
 let dkname_of_mutconstr uri tyno constrno =
  let il = getind uri in
  let _,_,_,_,kl = List.nth il tyno in
  let name,_ = List.nth kl (constrno - 1) in
- D.Const (dkmod_of_uri uri, name)
+ let modname,constname = dkmod_of_uri uri in
+ D.Const (modname,constname ^^ name)
 
 let name_of_match name = "match__" ^ name
 
 let dkname_of_match uri tyno =
  let il = getind uri in
  let _,name,_,_,_ = List.nth il tyno in
- D.Const (dkmod_of_uri uri, name_of_match name)
-
-let dkname_of_univ = function
-  | _, Some uri -> D.var (dkmod_of_uri uri)
-  | i, None -> dkint_of_int i
+ let name = name_of_match name in
+ let modname,constname = dkmod_of_uri uri in
+ D.Const (modname,constname ^^ name)
 
 let name_of_univ = function
-  | _, Some uri -> dkmod_of_uri uri
-  | i, None -> assert false
+  | j, Some uri -> UriManager.string_of_uri uri ^ string_of_int j
+  | i, None -> string_of_int i
+
+let dkname_of_univ u =
+ D.var (name_of_univ u)
 
 let coq_Nat = meta "Nat"
 let coq_Sort = meta "Sort"
@@ -119,9 +140,7 @@ let add_sort_params uparams =
 
 let add_global_univ_decl inst =
   List.fold_left
-    (fun decls u -> match snd u with
-       | Some u -> D.Declaration (false,dkmod_of_uri u,coq_Sort) :: decls
-       | _ -> assert false)
+    (fun decls u -> D.Declaration (false,name_of_univ u,coq_Sort) :: decls)
     inst
     !global_univs
 
@@ -228,14 +247,12 @@ let translate_constructor add uparams (consname, typ) =
   let typ' = of_type [] None typ in
   let upoly_params (uri,ut) = match ut with
     | Template -> None
-    | _ -> match snd uri with
-      | Some uri -> Some (dkmod_of_uri uri)
-      | _ -> assert false
+    | _ -> Some (name_of_univ uri)
   in
   (consname, add_sort_params (map_some upoly_params uparams) typ')
 
 let template_params = function
-  | (_, Some name), Template -> Some (dkmod_of_uri name)
+  | name, Template -> Some (name_of_univ name)
   | _ -> None
 
 let translate_match add uparams name params ind_args ind_sort cons =
