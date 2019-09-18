@@ -1,5 +1,7 @@
 let output_directory = ref None
 
+let fail = ref false
+
 let dkfile_of_file fn =
  let fn =
   CicToDedukti.sanitize_mod_name
@@ -21,8 +23,8 @@ let do_theory filename =
          CicToDedukti.dedukti_of_obj obj
         with
          exn ->
-          Format.eprintf "[EXCEPTION] %s" (Printexc.to_string exn);
-          [])
+          Log.error "[FAILURE] %s" (Printexc.to_string exn);
+          if !fail then assert false else [])
         @ res
    ) [] (List.rev objs) in
  let file = dkfile_of_file filename in
@@ -42,7 +44,11 @@ let cmd_options = [
   ( "-o"
     , Arg.String (fun s -> output_directory := Some s)
     , " (MANDATORY) Set the output directory" )
+  ; ( "--fail"
+    , Arg.Set fail
+    , " Fail after the first error" )
 ]
+
 
 let _ =
   let exception NoOutputDirectory in
@@ -60,9 +66,9 @@ let _ =
       List.rev !files
     in
     match files with
-    | [] -> Format.eprintf "[Warning] No input files"
+    | [] -> Log.warn "[Warning] No input files"
     | l -> List.iter do_theory l
   with
-  | NoOutputDirectory -> Format.eprintf "[ERRROR] No output directory specified"
+  | NoOutputDirectory -> Log.error "[ERRROR] No output directory specified"
 
 (* do_obj (UriManager.uri_of_string "cic:/Coq/Init/Nat/add.con") *)

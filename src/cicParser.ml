@@ -345,11 +345,11 @@ let start_element ctxt tag attrs =
   push ctxt (Tag (tag, attrs))
 
 let mk_univparams _ =
- prerr_endline "[TODO] univparams" ;
+ Log.todo "univparams" ;
  []
 
 let mk_univs _ =
- prerr_endline "[TODO] univ substitution" ;
+ Log.todo "univ substitution" ;
  []
 
 let end_element ctxt tag =
@@ -817,12 +817,12 @@ module Theories = struct
    start_element,fun () -> List.rev !requires, List.rev !uris
 
  let theory_of_xml filename =
-  let start_element,get_parsed = start_element_get_parsed () in 
+  let start_element,get_parsed = start_element_get_parsed () in
   let callbacks =
    {XmlPushParser.default_callbacks
     with start_element = Some(start_element) } in
   let parse = XmlPushParser.create_parser callbacks in
   XmlPushParser.parse parse (`File filename) ;
   get_parsed ()
-  
+
 end

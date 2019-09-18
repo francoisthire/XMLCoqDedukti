@@ -194,13 +194,13 @@ let rec of_term : string list -> Cic.annterm -> Dkprint.term = fun ctx ->
   | AAppl(_,(hd::tl)) ->
     D.apps (of_term ctx hd) (List.map (of_term ctx) tl)
   | AConst(_,uri,_ens,_univs) ->
-     prerr_endline "[TODO] AConst ens univs";
+     Log.todo "AConst ens univs";
      dkname_of_const uri
   | AMutInd(_,uri,tyno,_ens,_univs) ->
-     prerr_endline "[TODO] AMutInd ens univs";
+     Log.todo "AMutInd ens univs";
      dkname_of_mutind uri tyno
   | AMutConstruct(_,uri,tyno,consno,_ens,_univs) ->
-     prerr_endline "[TODO] AMutConstruct ens univs";
+     Log.todo "AMutConstruct ens univs";
     dkname_of_mutconstr uri tyno consno
   | AMutCase(_,uri,tyno,outtype,te,pl) ->
      let s = fake_sort in
@@ -247,7 +247,7 @@ let rec of_term : string list -> Cic.annterm -> Dkprint.term = fun ctx ->
 and of_type names sort ty =
   match sort with
   | None ->
-    Format.eprintf "[WARNING] Handle sorts@.";
+    Log.todo "Handle sorts@.";
     D.apps (meta "Term") [fake_sort ; of_term names ty]
   | Some _ -> D.apps (meta "Term") [fake_sort; of_term names ty]
 

@@ -1,3 +1,5 @@
+OPT=
+
 .PHONY: all
 all: bin
 
@@ -20,7 +22,7 @@ $(OUTPUT):
 
 .PHONY: test
 test: bin $(OUTPUT)
-	@$(XMLCOQDK) -o $(OUTPUT) `(cd test && find Coq -name "*.theory.xml")`
+	@$(XMLCOQDK) $(OPT) -o $(OUTPUT) `(cd test && find Coq -name "*.theory.xml")`
 	make -C test dedukti
 
 .PHONY: debug
