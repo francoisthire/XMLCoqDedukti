@@ -115,19 +115,21 @@ let of_sort = function
   | Type u -> D.app (meta "type") (dkname_of_univ u)
   | _ -> assert false
 
+let fake_sort = meta "star"
+
 let rec of_term : string list -> Cic.annterm -> Dkprint.term = fun ctx ->
  function
   | ARel(_,_,n,_) ->
     D.Var (List.nth ctx (n-1))
   | AVar _ -> failwith "TODO Avar"
   | AMeta _ -> assert false
-  | ASort(_,s) -> of_sort s
+  | ASort(_,_) -> D.apps (meta "univ") [fake_sort;fake_sort; meta "I"]
   | AImplicit _ -> assert false
   | ACast(_,te,_) -> of_term ctx te
   | AProd(_,name,ty,te,s) ->
      let name = match name with Anonymous -> "_" | Name n -> n in
-     let s1 = D.Type in (* TODO *)
-     let s2 = D.Type in (* TODO *)
+     let s1 = fake_sort in
+     let s2 = fake_sort in
      D.apps (meta "prod")
       [ s1 ; s2 ; D.apps (meta "rule") [s1;s2] ; meta "I" ;
         of_term ctx ty ;
@@ -150,7 +152,7 @@ let rec of_term : string list -> Cic.annterm -> Dkprint.term = fun ctx ->
      prerr_endline "[TODO] AMutConstruct ens univs";
     dkname_of_mutconstr uri tyno consno
   | AMutCase(_,uri,tyno,outtype,te,pl) ->
-     let s = D.Type in (* TODO *)
+     let s = fake_sort in
      D.apps
       (dkname_of_match uri tyno)
       ( [ s ; of_term ctx outtype ]
@@ -160,7 +162,7 @@ let rec of_term : string list -> Cic.annterm -> Dkprint.term = fun ctx ->
      let tyl =
       List.map
        (fun (_,_name,recno,ty,_bo) ->
-         let s = D.Type in (* TODO *)
+         let s = fake_sort in
          D.apps (meta "SA")
           [ dkint_of_int recno
           ; s
@@ -173,19 +175,19 @@ let rec of_term : string list -> Cic.annterm -> Dkprint.term = fun ctx ->
           function
              [] -> of_term (List.rev newnamesrev @ ctx) bo
            | (_,name,_,_,_)::tl ->
-             D.lam (name, D.Type) (* ??? *)
+             D.ulam name
               (aux (name::newnamesrev) tl)
          in
           aux [] funs
        ) funs in
-     let s = D.Type in (* TODO *)
+     let s = fake_sort in
      let c = dkname_of_name Anonymous in
      D.apps (meta "fixproj")
       [ s
       ; dkint_of_int (List.length funs)
-      ; D.lam(c, D.Type) (* ??? *)
+      ; D.ulam c
          (D.apps (D.Var c) tyl)
-      ; D.lam(c,D.Type) (* ??? *)
+      ; D.ulam c
          (D.apps (D.Var c) bol)
       ; dkint_of_int funno
       ]
@@ -195,8 +197,8 @@ and of_type names sort ty =
   match sort with
   | None ->
     Format.eprintf "[WARNING] Handle sorts@.";
-    D.apps (meta "Term") [meta "Set"; of_term names ty]
-  | Some s -> D.apps (meta "Term") [of_sort s; of_term names ty]
+    D.apps (meta "Term") [fake_sort ; of_term names ty]
+  | Some _ -> D.apps (meta "Term") [fake_sort; of_term names ty]
 
 let map_some f l =
   let rec aux acc = function
