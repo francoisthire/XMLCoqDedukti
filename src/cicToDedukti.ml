@@ -85,6 +85,18 @@ let locate_theory buri =
  let modpath,constname = aux [] (String.split_on_char '/' buri) in
  String.concat "_" modpath, String.concat "_" constname
 
+let locate_theory =
+ let module Map = Map.Make(String) in
+ let tbl = ref Map.empty in
+ function buri ->
+  try
+   Map.find buri !tbl
+  with
+   Not_found ->
+    let res = locate_theory buri in
+    tbl := Map.add buri res !tbl ;
+    res
+
 let sanitize_mod_name md = Str.global_replace (Str.regexp "/") "_" md
 
 let dkmod_of_uri uri =
