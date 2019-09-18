@@ -22,7 +22,7 @@ let do_theory filename =
         with
          exn ->
           Format.eprintf "[EXCEPTION] %s" (Printexc.to_string exn);
-          assert false)
+          [])
         @ res
    ) [] (List.rev objs) in
  let file = dkfile_of_file filename in

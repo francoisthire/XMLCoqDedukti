@@ -350,12 +350,16 @@ let pp_entry fmt = function
     Format.fprintf fmt "[%a] %a --> %a." (Format.pp_print_list ~pp_sep:(fun fmt () -> Format.fprintf fmt ",") (fun fmt var -> Format.fprintf fmt "%s" var)) ss pp_term ll pp_term lr
 *)
 
-
+let type_of_term t =
+  app (app (var "Term") (var "star")) t
 let dest_prod_n n t =
   let rec aux acc t n =
     if n <= 0 then (List.rev acc, t)
     else match t with
-      | Pie ((x,t'),u) -> aux ((x,t')::acc) u (n-1)
+      | Pie ((x,a),b) ->
+        aux ((x,a)::acc) b (n-1)
+      | App (_,App(App(_,a),Lam ((x,_),b))) ->
+        aux ((x,type_of_term a)::acc) (type_of_term b) (n-1)
       | _ -> failwith (Format.asprintf "%a" pp_term t)
   in aux [] t n
 
