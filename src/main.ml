@@ -5,7 +5,7 @@ let dkfile_of_file fn =
   CicToDedukti.sanitize_mod_name
    (Filename.chop_suffix fn ".theory.xml" ^ ".dk") in
  match !output_directory with
-    None -> failwith "Output directory mandatory"
+    None -> assert false
   | Some s -> s ^ Filename.dir_sep ^ fn
 
 let do_theory filename =
@@ -33,7 +33,7 @@ let do_theory filename =
     (CicToDedukti.dkmod_of_theory_uri uri)
   ) requires;
  Format.fprintf fmt "@.";
- List.iter (Format.fprintf fmt "%a@.@." Dkprint.print) objs;
+ List.iter (Format.fprintf fmt "%a@.@." Dkprint.print) (List.rev objs);
  close_out oc
 
 let cmd_options = [
