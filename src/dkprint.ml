@@ -78,21 +78,6 @@ let typed_rewrite (context, left, right) = rewrite (List.map fst context, left, 
 let apply_context a context = apps a (List.map var (List.map fst context))
 
 
-let dest_prod_n n t =
-  let rec aux acc t n =
-    if n = 0 then (List.rev acc, t)
-    else match t with
-      | Pie ((x,t'),u) -> aux ((x,t')::acc) u (n-1)
-      | _ -> assert false
-  in aux [] t n
-
-let dest_prod t =
-  let rec aux acc = function
-    | Pie ((x,t'),u) -> aux ((x,t')::acc) u
-    | _ -> (List.rev acc, t)
-  in aux [] t
-
-
 (** Print anonymous variables as "__". The name "_" is not accepted by Dedukti. *)
 let print_var out = function
   | ""    -> Format.fprintf out "__"
@@ -364,3 +349,18 @@ let pp_entry fmt = function
   | Rule(ss,ll,lr) ->
     Format.fprintf fmt "[%a] %a --> %a." (Format.pp_print_list ~pp_sep:(fun fmt () -> Format.fprintf fmt ",") (fun fmt var -> Format.fprintf fmt "%s" var)) ss pp_term ll pp_term lr
 *)
+
+
+let dest_prod_n n t =
+  let rec aux acc t n =
+    if n <= 0 then (List.rev acc, t)
+    else match t with
+      | Pie ((x,t'),u) -> aux ((x,t')::acc) u (n-1)
+      | _ -> failwith (Format.asprintf "%a" pp_term t)
+  in aux [] t n
+
+let dest_prod t =
+  let rec aux acc = function
+    | Pie ((x,t'),u) -> aux ((x,t')::acc) u
+    | _ -> (List.rev acc, t)
+  in aux [] t
