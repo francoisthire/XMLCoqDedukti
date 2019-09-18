@@ -20,8 +20,8 @@ let do_theory filename =
         (try
          CicToDedukti.dedukti_of_obj obj
         with
-         Failure msg ->
-          prerr_endline ("[FAILURE] " ^ msg);
+         exn ->
+          prerr_endline ("[EXCEPTION] " ^ Printexc.to_string exn);
           [])
         @ res
    ) [] objs in
