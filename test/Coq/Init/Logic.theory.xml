@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="latin1"?>
+
+ <!-- <!DOCTYPE html [
+<!ENTITY % xhtml-lat1.ent    SYSTEM "http://helm.cs.unibo.it/dtd/xhtml-lat1.ent">
+<!ENTITY % xhtml-special.ent SYSTEM "http://helm.cs.unibo.it/dtd/xhtml-special.ent">
+<!ENTITY % xhtml-symbol.ent  SYSTEM "http://helm.cs.unibo.it/dtd/xhtml-symbol.ent">
+
+%xhtml-lat1.ent;
+%xhtml-special.ent;
+%xhtml-symbol.ent;
+]> -->
+
+
+ <html xmlns="http://www.w3.org/1999/xhtml" xmlns:ht="http://www.cs.unibo.it/helm/namespaces/helm-theory" xmlns:helm="http://www.cs.unibo.it/helm">
+
+ <head></head>
+<body>
+
+ <ht:TYPESYSTEM impredicative_set="false" check_guarded="true" check_universes="true"/>
+
+<ht:REQUIRE uri="cic:/Coq/Init/Notations"/>
+<a name="lab1"></a><h1 class="section">Propositional connectives</h1>
+
+<div class="paragraph"> </div>
+
+ <span class="inlinecode"><span class="id" title="var">True</span></span> is the always true proposition  <ht:DEFINITION uri="cic:/Coq/Init/Logic/True.ind" as="Inductive" line="21"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Logic/True_rect.con" as="Scheme" line="21"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Logic/True_ind.con" as="Scheme" line="21"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Logic/True_rec.con" as="Scheme" line="21"/>
+
+ <span class="inlinecode"><span class="id" title="var">False</span></span> is the always false proposition  <ht:DEFINITION uri="cic:/Coq/Init/Logic/False.ind" as="Inductive" line="25"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Logic/False_rect.con" as="Scheme" line="25"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Logic/False_ind.con" as="Scheme" line="25"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Logic/False_rec.con" as="Scheme" line="25"/>
+
+ <span class="inlinecode"><span class="id" title="var">not</span></span> <span class="inlinecode"><span class="id" title="var">A</span></span>, written <span class="inlinecode">~<span class="id" title="var">A</span></span>, is the negation of <span class="inlinecode"><span class="id" title="var">A</span></span>  <ht:DEFINITION uri="cic:/Coq/Init/Logic/not.con" as="Definition" line="28"/>
+
+ Create the "core" hint database, and set its transparent state for
+  variables and constants explicitely.  <span class="inlinecode"><span class="id" title="var">and</span></span> <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode"><span class="id" title="var">B</span></span>, written <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">/\</span> <span class="inlinecode"><span class="id" title="var">B</span></span>, is the conjunction of <span class="inlinecode"><span class="id" title="var">A</span></span> and <span class="inlinecode"><span class="id" title="var">B</span></span>
+
+<div class="paragraph"> </div>
+
+      <span class="inlinecode"><span class="id" title="var">conj</span></span> <span class="inlinecode"><span class="id" title="var">p</span></span> <span class="inlinecode"><span class="id" title="var">q</span></span> is a proof of <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">/\</span> <span class="inlinecode"><span class="id" title="var">B</span></span> as soon as
+      <span class="inlinecode"><span class="id" title="var">p</span></span> is a proof of <span class="inlinecode"><span class="id" title="var">A</span></span> and <span class="inlinecode"><span class="id" title="var">q</span></span> a proof of <span class="inlinecode"><span class="id" title="var">B</span></span>
+
+<div class="paragraph"> </div>
+
+      <span class="inlinecode"><span class="id" title="var">proj1</span></span> and <span class="inlinecode"><span class="id" title="var">proj2</span></span> are first and second projections of a conjunction  <ht:DEFINITION uri="cic:/Coq/Init/Logic/and.ind" as="Inductive" line="48"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Logic/and_rect.con" as="Scheme" line="48"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Logic/and_ind.con" as="Scheme" line="48"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Logic/and_rec.con" as="Scheme" line="48"/>
+
+ <ht:SECTION uri="cic:/Coq/Init/Logic/Conjunction" line="53">
+ <ht:VARIABLE uri="cic:/Coq/Init/Logic/Conjunction/A.var" as="Assumption" line="55"/>
+
+ <ht:VARIABLE uri="cic:/Coq/Init/Logic/Conjunction/B.var" as="Assumption" line="55"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/proj1.con" as="Theorem" line="60"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/proj2.con" as="Theorem" line="65"/>
+
+ </ht:SECTION>
+ <span class="inlinecode"><span class="id" title="var">or</span></span> <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode"><span class="id" title="var">B</span></span>, written <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">\/</span> <span class="inlinecode"><span class="id" title="var">B</span></span>, is the disjunction of <span class="inlinecode"><span class="id" title="var">A</span></span> and <span class="inlinecode"><span class="id" title="var">B</span></span>  <ht:DEFINITION uri="cic:/Coq/Init/Logic/or.ind" as="Inductive" line="71"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Logic/or_ind.con" as="Scheme" line="71"/>
+
+ <span class="inlinecode"><span class="id" title="var">iff</span></span> <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode"><span class="id" title="var">B</span></span>, written <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">&lt;-&gt;</span> <span class="inlinecode"><span class="id" title="var">B</span></span>, expresses the equivalence of <span class="inlinecode"><span class="id" title="var">A</span></span> and <span class="inlinecode"><span class="id" title="var">B</span></span>  <ht:DEFINITION uri="cic:/Coq/Init/Logic/iff.con" as="Definition" line="82"/>
+
+ <ht:SECTION uri="cic:/Coq/Init/Logic/Equivalence" line="86">
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/iff_refl.con" as="Theorem" line="91"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/iff_trans.con" as="Theorem" line="96"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/iff_sym.con" as="Theorem" line="101"/>
+
+ </ht:SECTION>
+ Backward direction of the equivalences above does not need assumptions  <ht:THEOREM uri="cic:/Coq/Init/Logic/and_iff_compat_l.con" as="Theorem" line="114"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/and_iff_compat_r.con" as="Theorem" line="121"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/or_iff_compat_l.con" as="Theorem" line="128"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/or_iff_compat_r.con" as="Theorem" line="135"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/imp_iff_compat_l.con" as="Theorem" line="141"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/imp_iff_compat_r.con" as="Theorem" line="147"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/not_iff_compat.con" as="Theorem" line="153"/>
+
+ Some equivalences  <ht:THEOREM uri="cic:/Coq/Init/Logic/neg_false.con" as="Theorem" line="163"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/and_cancel_l.con" as="Theorem" line="172"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/and_cancel_r.con" as="Theorem" line="181"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/and_comm.con" as="Theorem" line="186"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/and_assoc.con" as="Theorem" line="191"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/or_cancel_l.con" as="Theorem" line="199"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/or_cancel_r.con" as="Theorem" line="207"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/or_comm.con" as="Theorem" line="212"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/or_assoc.con" as="Theorem" line="223"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/iff_and.con" as="Lemma" line="227"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/iff_to_and.con" as="Lemma" line="232"/>
+
+ <span class="inlinecode">(<span class="id" title="var">IF_then_else</span></span> <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">Q</span></span> <span class="inlinecode"><span class="id" title="var">R</span>)</span>, written <span class="inlinecode"><span class="id" title="var">IF</span></span> <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="keyword">then</span></span> <span class="inlinecode"><span class="id" title="var">Q</span></span> <span class="inlinecode"><span class="id" title="keyword">else</span></span> <span class="inlinecode"><span class="id" title="var">R</span></span> denotes
+    either <span class="inlinecode"><span class="id" title="var">P</span></span> and <span class="inlinecode"><span class="id" title="var">Q</span></span>, or <span class="inlinecode">~<span class="id" title="var">P</span></span> and <span class="inlinecode"><span class="id" title="var">R</span></span>  <ht:DEFINITION uri="cic:/Coq/Init/Logic/IF_then_else.con" as="Definition" line="237"/>
+
+<a name="lab2"></a><h1 class="section">First-order quantifiers</h1>
+
+<div class="paragraph"> </div>
+
+ <span class="inlinecode"><span class="id" title="var">ex</span></span> <span class="inlinecode"><span class="id" title="var">P</span></span>, or simply <span class="inlinecode"><span class="id" title="tactic">exists</span></span> <span class="inlinecode"><span class="id" title="var">x</span>,</span> <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span>, or also <span class="inlinecode"><span class="id" title="tactic">exists</span></span> <span class="inlinecode"><span class="id" title="var">x</span>:<span class="id" title="var">A</span>,</span> <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span>,
+    expresses the existence of an <span class="inlinecode"><span class="id" title="var">x</span></span> of some type <span class="inlinecode"><span class="id" title="var">A</span></span> in <span class="inlinecode"><span class="id" title="keyword">Set</span></span> which
+    satisfies the predicate <span class="inlinecode"><span class="id" title="var">P</span></span>.  This is existential quantification.
+
+<div class="paragraph"> </div>
+
+    <span class="inlinecode"><span class="id" title="var">ex2</span></span> <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">Q</span></span>, or simply <span class="inlinecode"><span class="id" title="var">exists2</span></span> <span class="inlinecode"><span class="id" title="var">x</span>,</span> <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">&amp;</span> <span class="inlinecode"><span class="id" title="var">Q</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span>, or also
+    <span class="inlinecode"><span class="id" title="var">exists2</span></span> <span class="inlinecode"><span class="id" title="var">x</span>:<span class="id" title="var">A</span>,</span> <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">&amp;</span> <span class="inlinecode"><span class="id" title="var">Q</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span>, expresses the existence of an <span class="inlinecode"><span class="id" title="var">x</span></span> of
+    type <span class="inlinecode"><span class="id" title="var">A</span></span> which satisfies both predicates <span class="inlinecode"><span class="id" title="var">P</span></span> and <span class="inlinecode"><span class="id" title="var">Q</span></span>.
+
+<div class="paragraph"> </div>
+
+    Universal quantification is primitively written <span class="inlinecode"><span class="id" title="keyword">forall</span></span> <span class="inlinecode"><span class="id" title="var">x</span>:<span class="id" title="var">A</span>,</span> <span class="inlinecode"><span class="id" title="var">Q</span></span>. By
+    symmetry with existential quantification, the construction <span class="inlinecode"><span class="id" title="var">all</span></span> <span class="inlinecode"><span class="id" title="var">P</span></span>
+    is provided too.
+ <ht:DEFINITION uri="cic:/Coq/Init/Logic/ex.ind" as="Inductive" line="257"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Logic/ex_ind.con" as="Scheme" line="257"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Logic/ex2.ind" as="Inductive" line="260"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Logic/ex2_ind.con" as="Scheme" line="260"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Logic/all.con" as="Definition" line="263"/>
+
+Derived rules for universal quantification  <ht:SECTION uri="cic:/Coq/Init/Logic/universal_quantification" line="288">
+ <ht:VARIABLE uri="cic:/Coq/Init/Logic/universal_quantification/A.var" as="Assumption" line="290"/>
+
+ <ht:VARIABLE uri="cic:/Coq/Init/Logic/universal_quantification/P.var" as="Assumption" line="291"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/inst.con" as="Theorem" line="296"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/gen.con" as="Theorem" line="301"/>
+
+ </ht:SECTION>
+<a name="lab3"></a><h1 class="section">Equality</h1>
+
+<div class="paragraph"> </div>
+
+ <span class="inlinecode"><span class="id" title="var">eq</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode"><span class="id" title="var">y</span></span>, or simply <span class="inlinecode"><span class="id" title="var">x</span>=<span class="id" title="var">y</span></span> expresses the equality of <span class="inlinecode"><span class="id" title="var">x</span></span> and
+    <span class="inlinecode"><span class="id" title="var">y</span></span>. Both <span class="inlinecode"><span class="id" title="var">x</span></span> and <span class="inlinecode"><span class="id" title="var">y</span></span> must belong to the same type <span class="inlinecode"><span class="id" title="var">A</span></span>.
+    The definition is inductive and states the reflexivity of the equality.
+    The others properties (symmetry, transitivity, replacement of
+    equals by equals) are proved below. The type of <span class="inlinecode"><span class="id" title="var">x</span></span> and <span class="inlinecode"><span class="id" title="var">y</span></span> can be
+    made explicit using the notation <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">=</span> <span class="inlinecode"><span class="id" title="var">y</span></span> <span class="inlinecode">:&gt;</span> <span class="inlinecode"><span class="id" title="var">A</span></span>. This is Leibniz equality
+    as it expresses that <span class="inlinecode"><span class="id" title="var">x</span></span> and <span class="inlinecode"><span class="id" title="var">y</span></span> are equal iff every property on
+    <span class="inlinecode"><span class="id" title="var">A</span></span> which is true of <span class="inlinecode"><span class="id" title="var">x</span></span> is also true of <span class="inlinecode"><span class="id" title="var">y</span></span>  <ht:DEFINITION uri="cic:/Coq/Init/Logic/eq.ind" as="Inductive" line="316"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Logic/eq_rect.con" as="Scheme" line="316"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Logic/eq_ind.con" as="Scheme" line="316"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Logic/eq_rec.con" as="Scheme" line="316"/>
+
+ <ht:SECTION uri="cic:/Coq/Init/Logic/Logic_lemmas" line="336">
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/absurd.con" as="Theorem" line="342"/>
+
+ <ht:SECTION uri="cic:/Coq/Init/Logic/Logic_lemmas/equality" line="344">
+ <ht:VARIABLE uri="cic:/Coq/Init/Logic/Logic_lemmas/equality/A.var" as="Assumption" line="345"/>
+
+ <ht:VARIABLE uri="cic:/Coq/Init/Logic/Logic_lemmas/equality/B.var" as="Assumption" line="345"/>
+
+ <ht:VARIABLE uri="cic:/Coq/Init/Logic/Logic_lemmas/equality/f.var" as="Assumption" line="346"/>
+
+ <ht:VARIABLE uri="cic:/Coq/Init/Logic/Logic_lemmas/equality/x.var" as="Assumption" line="347"/>
+
+ <ht:VARIABLE uri="cic:/Coq/Init/Logic/Logic_lemmas/equality/y.var" as="Assumption" line="347"/>
+
+ <ht:VARIABLE uri="cic:/Coq/Init/Logic/Logic_lemmas/equality/z.var" as="Assumption" line="347"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/eq_sym.con" as="Theorem" line="352"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/eq_trans.con" as="Theorem" line="357"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/f_equal.con" as="Theorem" line="362"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/not_eq_sym.con" as="Theorem" line="367"/>
+
+ </ht:SECTION>
+ <ht:DEFINITION uri="cic:/Coq/Init/Logic/eq_ind_r.con" as="Definition" line="374"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Logic/eq_rec_r.con" as="Definition" line="379"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Logic/eq_rect_r.con" as="Definition" line="384"/>
+
+ </ht:SECTION>
+ <ht:MODULE uri="cic:/Coq/Init/Logic/EqNotations" as="Module" line="387" params="">
+ </ht:MODULE>
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/rew_opp_r.con" as="Lemma" line="414"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/rew_opp_l.con" as="Lemma" line="421"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/f_equal2.con" as="Theorem" line="428"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/f_equal3.con" as="Theorem" line="436"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/f_equal4.con" as="Theorem" line="444"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/f_equal5.con" as="Theorem" line="454"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/f_equal_compose.con" as="Theorem" line="460"/>
+
+ The groupoid structure of equality  <ht:THEOREM uri="cic:/Coq/Init/Logic/eq_trans_refl_l.con" as="Theorem" line="467"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/eq_trans_refl_r.con" as="Theorem" line="472"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/eq_sym_involutive.con" as="Theorem" line="477"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/eq_trans_sym_inv_l.con" as="Theorem" line="482"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/eq_trans_sym_inv_r.con" as="Theorem" line="487"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/eq_trans_assoc.con" as="Theorem" line="493"/>
+
+ Extra properties of equality  <ht:THEOREM uri="cic:/Coq/Init/Logic/eq_id_comm_l.con" as="Theorem" line="505"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/eq_id_comm_r.con" as="Theorem" line="521"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/eq_refl_map_distr.con" as="Lemma" line="526"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/eq_trans_map_distr.con" as="Lemma" line="532"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/eq_sym_map_distr.con" as="Lemma" line="538"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/eq_trans_sym_distr.con" as="Lemma" line="544"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/eq_trans_rew_distr.con" as="Lemma" line="550"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/rew_const.con" as="Lemma" line="556"/>
+
+Basic definitions about relations and properties  <ht:DEFINITION uri="cic:/Coq/Init/Logic/subrelation.con" as="Definition" line="574"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Logic/unique.con" as="Definition" line="577"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Logic/uniqueness.con" as="Definition" line="580"/>
+
+ Unique existence  <ht:THEOREM uri="cic:/Coq/Init/Logic/unique_existence.con" as="Lemma" line="600"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/forall_exists_unique_domain_coincide.con" as="Lemma" line="612"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/forall_exists_coincide_unique_domain.con" as="Lemma" line="624"/>
+
+<a name="lab4"></a><h1 class="section">Being inhabited</h1>
+
+<div class="paragraph"> </div>
+
+ The predicate <span class="inlinecode"><span class="id" title="var">inhabited</span></span> can be used in different contexts. If <span class="inlinecode"><span class="id" title="var">A</span></span> is
+    thought as a type, <span class="inlinecode"><span class="id" title="var">inhabited</span></span> <span class="inlinecode"><span class="id" title="var">A</span></span> states that <span class="inlinecode"><span class="id" title="var">A</span></span> is inhabited. If <span class="inlinecode"><span class="id" title="var">A</span></span> is
+    thought as a computationally relevant proposition, then
+    <span class="inlinecode"><span class="id" title="var">inhabited</span></span> <span class="inlinecode"><span class="id" title="var">A</span></span> weakens <span class="inlinecode"><span class="id" title="var">A</span></span> so as to hide its computational meaning.
+    The so-weakened proof remains computationally relevant but only in
+    a propositional context.
+ <ht:DEFINITION uri="cic:/Coq/Init/Logic/inhabited.ind" as="Inductive" line="636"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Logic/inhabited_ind.con" as="Scheme" line="636"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/exists_inhabited.con" as="Lemma" line="644"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/inhabited_covariant.con" as="Lemma" line="649"/>
+
+ Declaration of stepl and stepr for eq and iff  <ht:THEOREM uri="cic:/Coq/Init/Logic/eq_stepl.con" as="Lemma" line="656"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/iff_stepl.con" as="Lemma" line="664"/>
+
+ Equality for <span class="inlinecode"><span class="id" title="var">ex</span></span>  <ht:SECTION uri="cic:/Coq/Init/Logic/ex" line="677">
+ <ht:DEFINITION uri="cic:/Coq/Init/Logic/eq_ex_uncurried.con" as="Definition" line="686"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Logic/eq_ex.con" as="Definition" line="688"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Logic/eq_ex_hprop.con" as="Definition" line="693"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/rew_ex.con" as="Lemma" line="710"/>
+
+ </ht:SECTION>
+ Equality for <span class="inlinecode"><span class="id" title="var">ex2</span></span>  <ht:SECTION uri="cic:/Coq/Init/Logic/ex2" line="714">
+ <ht:DEFINITION uri="cic:/Coq/Init/Logic/eq_ex2_uncurried.con" as="Definition" line="726"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Logic/eq_ex2.con" as="Definition" line="728"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Logic/eq_ex2_hprop.con" as="Definition" line="736"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic/rew_ex2.con" as="Lemma" line="760"/>
+
+ </ht:SECTION>
+ </body>
+</html>
+

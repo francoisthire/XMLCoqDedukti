@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="latin1"?>
+
+ <!-- <!DOCTYPE html [
+<!ENTITY % xhtml-lat1.ent    SYSTEM "http://helm.cs.unibo.it/dtd/xhtml-lat1.ent">
+<!ENTITY % xhtml-special.ent SYSTEM "http://helm.cs.unibo.it/dtd/xhtml-special.ent">
+<!ENTITY % xhtml-symbol.ent  SYSTEM "http://helm.cs.unibo.it/dtd/xhtml-symbol.ent">
+
+%xhtml-lat1.ent;
+%xhtml-special.ent;
+%xhtml-symbol.ent;
+]> -->
+
+
+ <html xmlns="http://www.w3.org/1999/xhtml" xmlns:ht="http://www.cs.unibo.it/helm/namespaces/helm-theory" xmlns:helm="http://www.cs.unibo.it/helm">
+
+ <head></head>
+<body>
+
+ <ht:TYPESYSTEM impredicative_set="false" check_guarded="true" check_universes="true"/>
+
+
+<br/>
+Basic specifications : sets that may contain logical information  <ht:REQUIRE uri="cic:/Coq/Init/Notations"/>
+ <ht:REQUIRE uri="cic:/Coq/Init/Datatypes"/>
+ <ht:REQUIRE uri="cic:/Coq/Init/Logic"/>
+ Subsets and Sigma-types 
+<div class="paragraph"> </div>
+
+ <span class="inlinecode">(<span class="id" title="var">sig</span></span> <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode"><span class="id" title="var">P</span>)</span>, or more suggestively <span class="inlinecode">{<span class="id" title="var">x</span>:<span class="id" title="var">A</span></span> <span class="inlinecode">|</span> <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">x</span>}</span>, denotes the subset
+    of elements of the type <span class="inlinecode"><span class="id" title="var">A</span></span> which satisfy the predicate <span class="inlinecode"><span class="id" title="var">P</span></span>.
+    Similarly <span class="inlinecode">(<span class="id" title="var">sig2</span></span> <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">Q</span>)</span>, or <span class="inlinecode">{<span class="id" title="var">x</span>:<span class="id" title="var">A</span></span> <span class="inlinecode">|</span> <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">&amp;</span> <span class="inlinecode"><span class="id" title="var">Q</span></span> <span class="inlinecode"><span class="id" title="var">x</span>}</span>, denotes the subset
+    of elements of the type <span class="inlinecode"><span class="id" title="var">A</span></span> which satisfy both <span class="inlinecode"><span class="id" title="var">P</span></span> and <span class="inlinecode"><span class="id" title="var">Q</span></span>.  <ht:DEFINITION uri="cic:/Coq/Init/Specif/sig.ind" as="Inductive" line="27"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/sig_rect.con" as="Scheme" line="27"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/sig_ind.con" as="Scheme" line="27"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/sig_rec.con" as="Scheme" line="27"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/sig2.ind" as="Inductive" line="30"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/sig2_rect.con" as="Scheme" line="30"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/sig2_ind.con" as="Scheme" line="30"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/sig2_rec.con" as="Scheme" line="30"/>
+
+ <span class="inlinecode">(<span class="id" title="var">sigT</span></span> <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode"><span class="id" title="var">P</span>)</span>, or more suggestively <span class="inlinecode">{<span class="id" title="var">x</span>:<span class="id" title="var">A</span></span> <span class="inlinecode">&amp;</span> <span class="inlinecode">(<span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">x</span>)}</span> is a Sigma-type.
+    Similarly for <span class="inlinecode">(<span class="id" title="var">sigT2</span></span> <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">Q</span>)</span>, also written <span class="inlinecode">{<span class="id" title="var">x</span>:<span class="id" title="var">A</span></span> <span class="inlinecode">&amp;</span> <span class="inlinecode">(<span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">x</span>)</span> <span class="inlinecode">&amp;</span> <span class="inlinecode">(<span class="id" title="var">Q</span></span> <span class="inlinecode"><span class="id" title="var">x</span>)}</span>.  <ht:DEFINITION uri="cic:/Coq/Init/Specif/sigT.ind" as="Inductive" line="36"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/sigT_rect.con" as="Scheme" line="36"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/sigT_ind.con" as="Scheme" line="36"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/sigT_rec.con" as="Scheme" line="36"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/sigT2.ind" as="Inductive" line="39"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/sigT2_rect.con" as="Scheme" line="39"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/sigT2_ind.con" as="Scheme" line="39"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/sigT2_rec.con" as="Scheme" line="39"/>
+
+Projections of <span class="inlinecode"><span class="id" title="var">sig</span></span>
+
+<div class="paragraph"> </div>
+
+    An element <span class="inlinecode"><span class="id" title="var">y</span></span> of a subset <span class="inlinecode">{<span class="id" title="var">x</span>:<span class="id" title="var">A</span></span> <span class="inlinecode">|</span> <span class="inlinecode">(<span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">x</span>)}</span> is the pair of an <span class="inlinecode"><span class="id" title="var">a</span></span>
+    of type <span class="inlinecode"><span class="id" title="var">A</span></span> and of a proof <span class="inlinecode"><span class="id" title="var">h</span></span> that <span class="inlinecode"><span class="id" title="var">a</span></span> satisfies <span class="inlinecode"><span class="id" title="var">P</span></span>.  Then
+    <span class="inlinecode">(<span class="id" title="var">proj1_sig</span></span> <span class="inlinecode"><span class="id" title="var">y</span>)</span> is the witness <span class="inlinecode"><span class="id" title="var">a</span></span> and <span class="inlinecode">(<span class="id" title="var">proj2_sig</span></span> <span class="inlinecode"><span class="id" title="var">y</span>)</span> is the
+    proof of <span class="inlinecode">(<span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">a</span>)</span> 
+<br/>
+<ht:SECTION uri="cic:/Coq/Init/Specif/Subset_projections" line="82">
+ <ht:VARIABLE uri="cic:/Coq/Init/Specif/Subset_projections/A.var" as="Assumption" line="84"/>
+
+ <ht:VARIABLE uri="cic:/Coq/Init/Specif/Subset_projections/P.var" as="Assumption" line="85"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/proj1_sig.con" as="Definition" line="87"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/proj2_sig.con" as="Definition" line="91"/>
+
+ </ht:SECTION>
+ <span class="inlinecode"><span class="id" title="var">sig2</span></span> of a predicate can be projected to a <span class="inlinecode"><span class="id" title="var">sig</span></span>.
+
+<div class="paragraph"> </div>
+
+    This allows <span class="inlinecode"><span class="id" title="var">proj1_sig</span></span> and <span class="inlinecode"><span class="id" title="var">proj2_sig</span></span> to be usable with <span class="inlinecode"><span class="id" title="var">sig2</span></span>.
+
+<div class="paragraph"> </div>
+
+    The <span class="inlinecode"><span class="id" title="keyword">let</span></span> statements occur in the body of the <span class="inlinecode"><span class="id" title="var">exist</span></span> so that
+    <span class="inlinecode"><span class="id" title="var">proj1_sig</span></span> of a coerced <span class="inlinecode"><span class="id" title="var">X</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">sig2</span></span> <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">Q</span></span> will unify with <span class="inlinecode"><span class="id" title="keyword">let</span></span> <span class="inlinecode">(<span class="id" title="var">a</span>,</span>
+    <span class="inlinecode"><span class="id" title="var">_</span>,</span> <span class="inlinecode"><span class="id" title="var">_</span>)</span> <span class="inlinecode">:=</span> <span class="inlinecode"><span class="id" title="var">X</span></span> <span class="inlinecode"><span class="id" title="tactic">in</span></span> <span class="inlinecode"><span class="id" title="var">a</span></span>  <ht:DEFINITION uri="cic:/Coq/Init/Specif/sig_of_sig2.con" as="Definition" line="107"/>
+
+ Projections of <span class="inlinecode"><span class="id" title="var">sig2</span></span>
+
+<div class="paragraph"> </div>
+
+    An element <span class="inlinecode"><span class="id" title="var">y</span></span> of a subset <span class="inlinecode">{<span class="id" title="var">x</span>:<span class="id" title="var">A</span></span> <span class="inlinecode">|</span> <span class="inlinecode">(<span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">x</span>)</span> <span class="inlinecode">&amp;</span> <span class="inlinecode">(<span class="id" title="var">Q</span></span> <span class="inlinecode"><span class="id" title="var">x</span>)}</span> is the triple
+    of an <span class="inlinecode"><span class="id" title="var">a</span></span> of type <span class="inlinecode"><span class="id" title="var">A</span></span>, a of a proof <span class="inlinecode"><span class="id" title="var">h</span></span> that <span class="inlinecode"><span class="id" title="var">a</span></span> satisfies <span class="inlinecode"><span class="id" title="var">P</span></span>,
+    and a proof <span class="inlinecode"><span class="id" title="var">h'</span></span> that <span class="inlinecode"><span class="id" title="var">a</span></span> satisfies <span class="inlinecode"><span class="id" title="var">Q</span></span>.  Then
+    <span class="inlinecode">(<span class="id" title="var">proj1_sig</span></span> <span class="inlinecode">(<span class="id" title="var">sig_of_sig2</span></span> <span class="inlinecode"><span class="id" title="var">y</span>))</span> is the witness <span class="inlinecode"><span class="id" title="var">a</span></span>,
+    <span class="inlinecode">(<span class="id" title="var">proj2_sig</span></span> <span class="inlinecode">(<span class="id" title="var">sig_of_sig2</span></span> <span class="inlinecode"><span class="id" title="var">y</span>))</span> is the proof of <span class="inlinecode">(<span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">a</span>)</span>, and
+    <span class="inlinecode">(<span class="id" title="var">proj3_sig</span></span> <span class="inlinecode"><span class="id" title="var">y</span>)</span> is the proof of <span class="inlinecode">(<span class="id" title="var">Q</span></span> <span class="inlinecode"><span class="id" title="var">a</span>)</span>.  <ht:SECTION uri="cic:/Coq/Init/Specif/Subset_projections2" line="121">
+ <ht:VARIABLE uri="cic:/Coq/Init/Specif/Subset_projections2/A.var" as="Assumption" line="123"/>
+
+ <ht:VARIABLE uri="cic:/Coq/Init/Specif/Subset_projections2/P.var" as="Assumption" line="124"/>
+
+ <ht:VARIABLE uri="cic:/Coq/Init/Specif/Subset_projections2/Q.var" as="Assumption" line="124"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/proj3_sig.con" as="Definition" line="126"/>
+
+ </ht:SECTION>
+ Projections of <span class="inlinecode"><span class="id" title="var">sigT</span></span>
+
+<div class="paragraph"> </div>
+
+    An element <span class="inlinecode"><span class="id" title="var">x</span></span> of a sigma-type <span class="inlinecode">{<span class="id" title="var">y</span>:<span class="id" title="var">A</span></span> <span class="inlinecode">&amp;</span> <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">y</span>}</span> is a dependent pair
+    made of an <span class="inlinecode"><span class="id" title="var">a</span></span> of type <span class="inlinecode"><span class="id" title="var">A</span></span> and an <span class="inlinecode"><span class="id" title="var">h</span></span> of type <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">a</span></span>.  Then,
+    <span class="inlinecode">(<span class="id" title="var">projT1</span></span> <span class="inlinecode"><span class="id" title="var">x</span>)</span> is the first projection and <span class="inlinecode">(<span class="id" title="var">projT2</span></span> <span class="inlinecode"><span class="id" title="var">x</span>)</span> is the
+    second projection, the type of which depends on the <span class="inlinecode"><span class="id" title="var">projT1</span></span>.  <ht:SECTION uri="cic:/Coq/Init/Specif/Projections" line="141">
+ <ht:VARIABLE uri="cic:/Coq/Init/Specif/Projections/A.var" as="Assumption" line="143"/>
+
+ <ht:VARIABLE uri="cic:/Coq/Init/Specif/Projections/P.var" as="Assumption" line="144"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/projT1.con" as="Definition" line="146"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/projT2.con" as="Definition" line="150"/>
+
+ </ht:SECTION>
+ <span class="inlinecode"><span class="id" title="var">sigT2</span></span> of a predicate can be projected to a <span class="inlinecode"><span class="id" title="var">sigT</span></span>.
+
+<div class="paragraph"> </div>
+
+    This allows <span class="inlinecode"><span class="id" title="var">projT1</span></span> and <span class="inlinecode"><span class="id" title="var">projT2</span></span> to be usable with <span class="inlinecode"><span class="id" title="var">sigT2</span></span>.
+
+<div class="paragraph"> </div>
+
+    The <span class="inlinecode"><span class="id" title="keyword">let</span></span> statements occur in the body of the <span class="inlinecode"><span class="id" title="var">existT</span></span> so that
+    <span class="inlinecode"><span class="id" title="var">projT1</span></span> of a coerced <span class="inlinecode"><span class="id" title="var">X</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">sigT2</span></span> <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">Q</span></span> will unify with <span class="inlinecode"><span class="id" title="keyword">let</span></span> <span class="inlinecode">(<span class="id" title="var">a</span>,</span>
+    <span class="inlinecode"><span class="id" title="var">_</span>,</span> <span class="inlinecode"><span class="id" title="var">_</span>)</span> <span class="inlinecode">:=</span> <span class="inlinecode"><span class="id" title="var">X</span></span> <span class="inlinecode"><span class="id" title="tactic">in</span></span> <span class="inlinecode"><span class="id" title="var">a</span></span>  <ht:DEFINITION uri="cic:/Coq/Init/Specif/sigT_of_sigT2.con" as="Definition" line="165"/>
+
+ Projections of <span class="inlinecode"><span class="id" title="var">sigT2</span></span>
+
+<div class="paragraph"> </div>
+
+    An element <span class="inlinecode"><span class="id" title="var">x</span></span> of a sigma-type <span class="inlinecode">{<span class="id" title="var">y</span>:<span class="id" title="var">A</span></span> <span class="inlinecode">&amp;</span> <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">y</span></span> <span class="inlinecode">&amp;</span> <span class="inlinecode"><span class="id" title="var">Q</span></span> <span class="inlinecode"><span class="id" title="var">y</span>}</span> is a dependent
+    pair made of an <span class="inlinecode"><span class="id" title="var">a</span></span> of type <span class="inlinecode"><span class="id" title="var">A</span></span>, an <span class="inlinecode"><span class="id" title="var">h</span></span> of type <span class="inlinecode"><span class="id" title="var">P</span></span> <span class="inlinecode"><span class="id" title="var">a</span></span>, and an <span class="inlinecode"><span class="id" title="var">h'</span></span>
+    of type <span class="inlinecode"><span class="id" title="var">Q</span></span> <span class="inlinecode"><span class="id" title="var">a</span></span>.  Then, <span class="inlinecode">(<span class="id" title="var">projT1</span></span> <span class="inlinecode">(<span class="id" title="var">sigT_of_sigT2</span></span> <span class="inlinecode"><span class="id" title="var">x</span>))</span> is the first
+    projection, <span class="inlinecode">(<span class="id" title="var">projT2</span></span> <span class="inlinecode">(<span class="id" title="var">sigT_of_sigT2</span></span> <span class="inlinecode"><span class="id" title="var">x</span>))</span> is the second projection,
+    and <span class="inlinecode">(<span class="id" title="var">projT3</span></span> <span class="inlinecode"><span class="id" title="var">x</span>)</span> is the third projection, the types of which
+    depends on the <span class="inlinecode"><span class="id" title="var">projT1</span></span>.  <ht:SECTION uri="cic:/Coq/Init/Specif/Projections2" line="179">
+ <ht:VARIABLE uri="cic:/Coq/Init/Specif/Projections2/A.var" as="Assumption" line="181"/>
+
+ <ht:VARIABLE uri="cic:/Coq/Init/Specif/Projections2/P.var" as="Assumption" line="182"/>
+
+ <ht:VARIABLE uri="cic:/Coq/Init/Specif/Projections2/Q.var" as="Assumption" line="182"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/projT3.con" as="Definition" line="184"/>
+
+ </ht:SECTION>
+ <span class="inlinecode"><span class="id" title="var">sigT</span></span> of a predicate is equivalent to <span class="inlinecode"><span class="id" title="var">sig</span></span>  <ht:DEFINITION uri="cic:/Coq/Init/Specif/sig_of_sigT.con" as="Definition" line="191"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/sigT_of_sig.con" as="Definition" line="194"/>
+
+ <span class="inlinecode"><span class="id" title="var">sigT2</span></span> of a predicate is equivalent to <span class="inlinecode"><span class="id" title="var">sig2</span></span>  <ht:DEFINITION uri="cic:/Coq/Init/Specif/sig2_of_sigT2.con" as="Definition" line="199"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/sigT2_of_sig2.con" as="Definition" line="202"/>
+
+ η Principles  <ht:DEFINITION uri="cic:/Coq/Init/Specif/sigT_eta.con" as="Definition" line="208"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/sig_eta.con" as="Definition" line="212"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/sigT2_eta.con" as="Definition" line="216"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/sig2_eta.con" as="Definition" line="220"/>
+
+ <span class="inlinecode"><span class="id" title="tactic">exists</span></span> <span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span>,</span> <span class="inlinecode"><span class="id" title="var">B</span></span> is equivalent to <span class="inlinecode"><span class="id" title="var">inhabited</span></span> <span class="inlinecode">{<span class="id" title="var">x</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span></span> <span class="inlinecode">|</span> <span class="inlinecode"><span class="id" title="var">B</span>}</span>  <ht:THEOREM uri="cic:/Coq/Init/Specif/exists_to_inhabited_sig.con" as="Lemma" line="226"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Specif/inhabited_sig_to_exists.con" as="Lemma" line="231"/>
+
+ Equality of sigma types  Equality for <span class="inlinecode"><span class="id" title="var">sigT</span></span>  <ht:SECTION uri="cic:/Coq/Init/Specif/sigT" line="243">
+ Projecting an equality of a pair to equality of the first components  <ht:DEFINITION uri="cic:/Coq/Init/Specif/projT1_eq.con" as="Definition" line="246"/>
+
+ Projecting an equality of a pair to equality of the second components  <ht:DEFINITION uri="cic:/Coq/Init/Specif/projT2_eq.con" as="Definition" line="251"/>
+
+ Equality of <span class="inlinecode"><span class="id" title="var">sigT</span></span> is itself a <span class="inlinecode"><span class="id" title="var">sigT</span></span> (forwards-reasoning version)  <ht:DEFINITION uri="cic:/Coq/Init/Specif/eq_existT_uncurried.con" as="Definition" line="263"/>
+
+ Equality of <span class="inlinecode"><span class="id" title="var">sigT</span></span> is itself a <span class="inlinecode"><span class="id" title="var">sigT</span></span> (backwards-reasoning version)  <ht:DEFINITION uri="cic:/Coq/Init/Specif/eq_sigT_uncurried.con" as="Definition" line="272"/>
+
+ Curried version of proving equality of sigma types  <ht:DEFINITION uri="cic:/Coq/Init/Specif/eq_sigT.con" as="Definition" line="275"/>
+
+ Equality of <span class="inlinecode"><span class="id" title="var">sigT</span></span> when the property is an hProp  <ht:DEFINITION uri="cic:/Coq/Init/Specif/eq_sigT_hprop.con" as="Definition" line="281"/>
+
+ Equivalence of equality of <span class="inlinecode"><span class="id" title="var">sigT</span></span> with a <span class="inlinecode"><span class="id" title="var">sigT</span></span> of equality  We could actually prove an isomorphism here, and not just <span class="inlinecode">&lt;-&gt;</span>,
+      but for simplicity, we don't.  <ht:DEFINITION uri="cic:/Coq/Init/Specif/eq_sigT_uncurried_iff.con" as="Definition" line="295"/>
+
+ Induction principle for <span class="inlinecode">@<span class="id" title="var">eq</span></span> <span class="inlinecode">(<span class="id" title="var">sigT</span></span> <span class="inlinecode"><span class="id" title="var">_</span>)</span>  <ht:DEFINITION uri="cic:/Coq/Init/Specif/eq_sigT_rect.con" as="Definition" line="301"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/eq_sigT_rec.con" as="Definition" line="302"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/eq_sigT_ind.con" as="Definition" line="303"/>
+
+ Equivalence of equality of <span class="inlinecode"><span class="id" title="var">sigT</span></span> involving hProps with equality of the first components  <ht:DEFINITION uri="cic:/Coq/Init/Specif/eq_sigT_hprop_iff.con" as="Definition" line="306"/>
+
+ Non-dependent classification of equality of <span class="inlinecode"><span class="id" title="var">sigT</span></span>  <ht:DEFINITION uri="cic:/Coq/Init/Specif/eq_sigT_nondep.con" as="Definition" line="312"/>
+
+ Classification of transporting across an equality of <span class="inlinecode"><span class="id" title="var">sigT</span></span>s  <ht:THEOREM uri="cic:/Coq/Init/Specif/rew_sigT.con" as="Lemma" line="326"/>
+
+ </ht:SECTION>
+ Equality for <span class="inlinecode"><span class="id" title="var">sig</span></span>  <ht:SECTION uri="cic:/Coq/Init/Specif/sig" line="330">
+ Projecting an equality of a pair to equality of the first components  <ht:DEFINITION uri="cic:/Coq/Init/Specif/proj1_sig_eq.con" as="Definition" line="333"/>
+
+ Projecting an equality of a pair to equality of the second components  <ht:DEFINITION uri="cic:/Coq/Init/Specif/proj2_sig_eq.con" as="Definition" line="338"/>
+
+ Equality of <span class="inlinecode"><span class="id" title="var">sig</span></span> is itself a <span class="inlinecode"><span class="id" title="var">sig</span></span> (forwards-reasoning version)  <ht:DEFINITION uri="cic:/Coq/Init/Specif/eq_exist_uncurried.con" as="Definition" line="350"/>
+
+ Equality of <span class="inlinecode"><span class="id" title="var">sig</span></span> is itself a <span class="inlinecode"><span class="id" title="var">sig</span></span> (backwards-reasoning version)  <ht:DEFINITION uri="cic:/Coq/Init/Specif/eq_sig_uncurried.con" as="Definition" line="359"/>
+
+ Curried version of proving equality of sigma types  <ht:DEFINITION uri="cic:/Coq/Init/Specif/eq_sig.con" as="Definition" line="362"/>
+
+ Induction principle for <span class="inlinecode">@<span class="id" title="var">eq</span></span> <span class="inlinecode">(<span class="id" title="var">sig</span></span> <span class="inlinecode"><span class="id" title="var">_</span>)</span>  <ht:DEFINITION uri="cic:/Coq/Init/Specif/eq_sig_rect.con" as="Definition" line="371"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/eq_sig_rec.con" as="Definition" line="372"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/eq_sig_ind.con" as="Definition" line="373"/>
+
+ Equality of <span class="inlinecode"><span class="id" title="var">sig</span></span> when the property is an hProp  <ht:DEFINITION uri="cic:/Coq/Init/Specif/eq_sig_hprop.con" as="Definition" line="376"/>
+
+ Equivalence of equality of <span class="inlinecode"><span class="id" title="var">sig</span></span> with a <span class="inlinecode"><span class="id" title="var">sig</span></span> of equality  We could actually prove an isomorphism here, and not just <span class="inlinecode">&lt;-&gt;</span>,
+      but for simplicity, we don't.  <ht:DEFINITION uri="cic:/Coq/Init/Specif/eq_sig_uncurried_iff.con" as="Definition" line="390"/>
+
+ Equivalence of equality of <span class="inlinecode"><span class="id" title="var">sig</span></span> involving hProps with equality of the first components  <ht:DEFINITION uri="cic:/Coq/Init/Specif/eq_sig_hprop_iff.con" as="Definition" line="393"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Specif/rew_sig.con" as="Lemma" line="406"/>
+
+ </ht:SECTION>
+ Equality for <span class="inlinecode"><span class="id" title="var">sigT</span></span>  <ht:SECTION uri="cic:/Coq/Init/Specif/sigT2" line="410">
+Projecting an equality of a pair to equality of the first components  <ht:DEFINITION uri="cic:/Coq/Init/Specif/sigT_of_sigT2_eq.con" as="Definition" line="415"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/projT1_of_sigT2_eq.con" as="Definition" line="418"/>
+
+ Projecting an equality of a pair to equality of the second components  <ht:DEFINITION uri="cic:/Coq/Init/Specif/projT2_of_sigT2_eq.con" as="Definition" line="423"/>
+
+ Projecting an equality of a pair to equality of the third components  <ht:DEFINITION uri="cic:/Coq/Init/Specif/projT3_eq.con" as="Definition" line="428"/>
+
+ Equality of <span class="inlinecode"><span class="id" title="var">sigT2</span></span> is itself a <span class="inlinecode"><span class="id" title="var">sigT2</span></span> (forwards-reasoning version)  <ht:DEFINITION uri="cic:/Coq/Init/Specif/eq_existT2_uncurried.con" as="Definition" line="442"/>
+
+ Equality of <span class="inlinecode"><span class="id" title="var">sigT2</span></span> is itself a <span class="inlinecode"><span class="id" title="var">sigT2</span></span> (backwards-reasoning version)  <ht:DEFINITION uri="cic:/Coq/Init/Specif/eq_sigT2_uncurried.con" as="Definition" line="452"/>
+
+ Curried version of proving equality of sigma types  <ht:DEFINITION uri="cic:/Coq/Init/Specif/eq_sigT2.con" as="Definition" line="455"/>
+
+ Equality of <span class="inlinecode"><span class="id" title="var">sigT2</span></span> when the second property is an hProp  <ht:DEFINITION uri="cic:/Coq/Init/Specif/eq_sigT2_hprop.con" as="Definition" line="463"/>
+
+ Equivalence of equality of <span class="inlinecode"><span class="id" title="var">sigT2</span></span> with a <span class="inlinecode"><span class="id" title="var">sigT2</span></span> of equality  We could actually prove an isomorphism here, and not just <span class="inlinecode">&lt;-&gt;</span>,
+      but for simplicity, we don't.  <ht:DEFINITION uri="cic:/Coq/Init/Specif/eq_sigT2_uncurried_iff.con" as="Definition" line="479"/>
+
+ Induction principle for <span class="inlinecode">@<span class="id" title="var">eq</span></span> <span class="inlinecode">(<span class="id" title="var">sigT2</span></span> <span class="inlinecode"><span class="id" title="var">_</span></span> <span class="inlinecode"><span class="id" title="var">_</span>)</span>  <ht:DEFINITION uri="cic:/Coq/Init/Specif/eq_sigT2_rect.con" as="Definition" line="489"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/eq_sigT2_rec.con" as="Definition" line="490"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/eq_sigT2_ind.con" as="Definition" line="491"/>
+
+ Equivalence of equality of <span class="inlinecode"><span class="id" title="var">sigT2</span></span> involving hProps with equality of the first components  <ht:DEFINITION uri="cic:/Coq/Init/Specif/eq_sigT2_hprop_iff.con" as="Definition" line="494"/>
+
+ Non-dependent classification of equality of <span class="inlinecode"><span class="id" title="var">sigT</span></span>  <ht:DEFINITION uri="cic:/Coq/Init/Specif/eq_sigT2_nondep.con" as="Definition" line="500"/>
+
+ Classification of transporting across an equality of <span class="inlinecode"><span class="id" title="var">sigT2</span></span>s  <ht:THEOREM uri="cic:/Coq/Init/Specif/rew_sigT2.con" as="Lemma" line="518"/>
+
+ </ht:SECTION>
+ Equality for <span class="inlinecode"><span class="id" title="var">sig2</span></span>  <ht:SECTION uri="cic:/Coq/Init/Specif/sig2" line="522">
+Projecting an equality of a pair to equality of the first components  <ht:DEFINITION uri="cic:/Coq/Init/Specif/sig_of_sig2_eq.con" as="Definition" line="527"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/proj1_sig_of_sig2_eq.con" as="Definition" line="530"/>
+
+ Projecting an equality of a pair to equality of the second components  <ht:DEFINITION uri="cic:/Coq/Init/Specif/proj2_sig_of_sig2_eq.con" as="Definition" line="535"/>
+
+ Projecting an equality of a pair to equality of the third components  <ht:DEFINITION uri="cic:/Coq/Init/Specif/proj3_sig_eq.con" as="Definition" line="540"/>
+
+ Equality of <span class="inlinecode"><span class="id" title="var">sig2</span></span> is itself a <span class="inlinecode"><span class="id" title="var">sig2</span></span> (fowards-reasoning version)  <ht:DEFINITION uri="cic:/Coq/Init/Specif/eq_exist2_uncurried.con" as="Definition" line="554"/>
+
+ Equality of <span class="inlinecode"><span class="id" title="var">sig2</span></span> is itself a <span class="inlinecode"><span class="id" title="var">sig2</span></span> (backwards-reasoning version)  <ht:DEFINITION uri="cic:/Coq/Init/Specif/eq_sig2_uncurried.con" as="Definition" line="564"/>
+
+ Curried version of proving equality of sigma types  <ht:DEFINITION uri="cic:/Coq/Init/Specif/eq_sig2.con" as="Definition" line="567"/>
+
+ Equality of <span class="inlinecode"><span class="id" title="var">sig2</span></span> when the second property is an hProp  <ht:DEFINITION uri="cic:/Coq/Init/Specif/eq_sig2_hprop.con" as="Definition" line="575"/>
+
+ Equivalence of equality of <span class="inlinecode"><span class="id" title="var">sig2</span></span> with a <span class="inlinecode"><span class="id" title="var">sig2</span></span> of equality  We could actually prove an isomorphism here, and not just <span class="inlinecode">&lt;-&gt;</span>,
+      but for simplicity, we don't.  <ht:DEFINITION uri="cic:/Coq/Init/Specif/eq_sig2_uncurried_iff.con" as="Definition" line="591"/>
+
+ Induction principle for <span class="inlinecode">@<span class="id" title="var">eq</span></span> <span class="inlinecode">(<span class="id" title="var">sig2</span></span> <span class="inlinecode"><span class="id" title="var">_</span></span> <span class="inlinecode"><span class="id" title="var">_</span>)</span>  <ht:DEFINITION uri="cic:/Coq/Init/Specif/eq_sig2_rect.con" as="Definition" line="601"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/eq_sig2_rec.con" as="Definition" line="602"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/eq_sig2_ind.con" as="Definition" line="603"/>
+
+ Equivalence of equality of <span class="inlinecode"><span class="id" title="var">sig2</span></span> involving hProps with equality of the first components  <ht:DEFINITION uri="cic:/Coq/Init/Specif/eq_sig2_hprop_iff.con" as="Definition" line="606"/>
+
+ Non-dependent classification of equality of <span class="inlinecode"><span class="id" title="var">sig</span></span>  <ht:DEFINITION uri="cic:/Coq/Init/Specif/eq_sig2_nondep.con" as="Definition" line="612"/>
+
+ Classification of transporting across an equality of <span class="inlinecode"><span class="id" title="var">sig2</span></span>s  <ht:THEOREM uri="cic:/Coq/Init/Specif/rew_sig2.con" as="Lemma" line="630"/>
+
+ </ht:SECTION>
+ <span class="inlinecode"><span class="id" title="var">sumbool</span></span> is a boolean type equipped with the justification of
+    their value  <ht:DEFINITION uri="cic:/Coq/Init/Specif/sumbool.ind" as="Inductive" line="637"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/sumbool_rect.con" as="Scheme" line="637"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/sumbool_ind.con" as="Scheme" line="637"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/sumbool_rec.con" as="Scheme" line="637"/>
+
+ <span class="inlinecode"><span class="id" title="var">sumor</span></span> is an option type equipped with the justification of why
+    it may not be a regular value  <ht:DEFINITION uri="cic:/Coq/Init/Specif/sumor.ind" as="Inductive" line="650"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/sumor_rect.con" as="Scheme" line="650"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/sumor_ind.con" as="Scheme" line="650"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/sumor_rec.con" as="Scheme" line="650"/>
+
+
+<br/>
+Various forms of the axiom of choice for specifications  <ht:SECTION uri="cic:/Coq/Init/Specif/Choice_lemmas" line="664">
+ <ht:VARIABLE uri="cic:/Coq/Init/Specif/Choice_lemmas/S.var" as="Assumption" line="666"/>
+
+ <ht:VARIABLE uri="cic:/Coq/Init/Specif/Choice_lemmas/S'.var" as="Assumption" line="666"/>
+
+ <ht:VARIABLE uri="cic:/Coq/Init/Specif/Choice_lemmas/R.var" as="Assumption" line="667"/>
+
+ <ht:VARIABLE uri="cic:/Coq/Init/Specif/Choice_lemmas/R'.var" as="Assumption" line="668"/>
+
+ <ht:VARIABLE uri="cic:/Coq/Init/Specif/Choice_lemmas/R1.var" as="Assumption" line="669"/>
+
+ <ht:VARIABLE uri="cic:/Coq/Init/Specif/Choice_lemmas/R2.var" as="Assumption" line="669"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Specif/Choice.con" as="Lemma" line="677"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Specif/Choice2.con" as="Lemma" line="685"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Specif/bool_choice.con" as="Lemma" line="694"/>
+
+ </ht:SECTION>
+ <ht:SECTION uri="cic:/Coq/Init/Specif/Dependent_choice_lemmas" line="698">
+ <ht:VARIABLE uri="cic:/Coq/Init/Specif/Dependent_choice_lemmas/X.var" as="Assumption" line="700"/>
+
+ <ht:VARIABLE uri="cic:/Coq/Init/Specif/Dependent_choice_lemmas/R.var" as="Assumption" line="701"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Specif/dependent_choice.con" as="Lemma" line="712"/>
+
+ </ht:SECTION>
+ A result of type <span class="inlinecode">(<span class="id" title="var">Exc</span></span> <span class="inlinecode"><span class="id" title="var">A</span>)</span> is either a normal value of type <span class="inlinecode"><span class="id" title="var">A</span></span> or
+     an <span class="inlinecode"><span class="id" title="var">error</span></span> :
+
+<div class="paragraph"> </div>
+
+     <span class="inlinecode"><span class="id" title="keyword">Inductive</span></span> <span class="inlinecode"><span class="id" title="var">Exc</span></span> <span class="inlinecode">[<span class="id" title="var">A</span>:<span class="id" title="keyword">Type</span>]</span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="keyword">Type</span></span> <span class="inlinecode">:=</span> <span class="inlinecode"><span class="id" title="var">value</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><span class="id" title="var">A</span>-&gt;(<span class="id" title="var">Exc</span></span> <span class="inlinecode"><span class="id" title="var">A</span>)</span> <span class="inlinecode">|</span> <span class="inlinecode"><span class="id" title="var">error</span></span> <span class="inlinecode">:</span> <span class="inlinecode">(<span class="id" title="var">Exc</span></span> <span class="inlinecode"><span class="id" title="var">A</span>)</span>.
+
+<div class="paragraph"> </div>
+
+     It is implemented using the option type.  <ht:SECTION uri="cic:/Coq/Init/Specif/Exc" line="723">
+ <ht:VARIABLE uri="cic:/Coq/Init/Specif/Exc/A.var" as="Assumption" line="724"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/Exc.con" as="Definition" line="726"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/value.con" as="Definition" line="727"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/error.con" as="Definition" line="728"/>
+
+ </ht:SECTION>
+ <ht:DEFINITION uri="cic:/Coq/Init/Specif/except.con" as="Definition" line="732"/>
+
+<ht:THEOREM uri="cic:/Coq/Init/Specif/absurd_set.con" as="Theorem" line="741"/>
+
+</body>
+</html>
+

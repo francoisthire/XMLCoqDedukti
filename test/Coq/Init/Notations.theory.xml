@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="latin1"?>
+
+ <!-- <!DOCTYPE html [
+<!ENTITY % xhtml-lat1.ent    SYSTEM "http://helm.cs.unibo.it/dtd/xhtml-lat1.ent">
+<!ENTITY % xhtml-special.ent SYSTEM "http://helm.cs.unibo.it/dtd/xhtml-special.ent">
+<!ENTITY % xhtml-symbol.ent  SYSTEM "http://helm.cs.unibo.it/dtd/xhtml-symbol.ent">
+
+%xhtml-lat1.ent;
+%xhtml-special.ent;
+%xhtml-symbol.ent;
+]> -->
+
+
+ <html xmlns="http://www.w3.org/1999/xhtml" xmlns:ht="http://www.cs.unibo.it/helm/namespaces/helm-theory" xmlns:helm="http://www.cs.unibo.it/helm">
+
+ <head></head>
+<body>
+
+ <ht:TYPESYSTEM impredicative_set="false" check_guarded="true" check_universes="true"/>
+
+
+<br/>
+ML Tactic Notations These are the notations whose level and associativity are imposed by Coq 
+<div class="paragraph"> </div>
+
+ Notations for propositional connectives  Notations for equality and inequalities  Arithmetical notations (also used for type constructors)  Notations for booleans  Notations for pairs  Notation "{ x }" is reserved and has a special status as component
+    of other notations such as "{ A } + { B }" and "A + { B }" (which
+    are at the same level as "x + y");
+    "{ x }" is at level 0 to factor with "{ x : A | P }"  Notations for sigma-types or subsets  Support for Gonthier-Ssreflect's "if c is pat then u else v"  <ht:MODULE uri="cic:/Coq/Init/Notations/IfNotations" as="Module" line="108" params="">
+ </ht:MODULE>
+ Scopes  </body>
+</html>
+

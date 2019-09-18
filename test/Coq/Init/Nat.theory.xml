@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="latin1"?>
+
+ <!-- <!DOCTYPE html [
+<!ENTITY % xhtml-lat1.ent    SYSTEM "http://helm.cs.unibo.it/dtd/xhtml-lat1.ent">
+<!ENTITY % xhtml-special.ent SYSTEM "http://helm.cs.unibo.it/dtd/xhtml-special.ent">
+<!ENTITY % xhtml-symbol.ent  SYSTEM "http://helm.cs.unibo.it/dtd/xhtml-symbol.ent">
+
+%xhtml-lat1.ent;
+%xhtml-special.ent;
+%xhtml-symbol.ent;
+]> -->
+
+
+ <html xmlns="http://www.w3.org/1999/xhtml" xmlns:ht="http://www.cs.unibo.it/helm/namespaces/helm-theory" xmlns:helm="http://www.cs.unibo.it/helm">
+
+ <head></head>
+<body>
+
+ <ht:TYPESYSTEM impredicative_set="false" check_guarded="true" check_universes="true"/>
+
+<ht:REQUIRE uri="cic:/Coq/Init/Notations"/>
+ <ht:REQUIRE uri="cic:/Coq/Init/Logic"/>
+ <ht:REQUIRE uri="cic:/Coq/Init/Datatypes"/>
+ <ht:REQUIRE uri="cic:/Coq/Init/Decimal"/>
+<a name="lab1"></a><h1 class="section">Peano natural numbers, definitions of operations</h1>
+
+<div class="paragraph"> </div>
+
+ This file is meant to be used as a whole module,
+    without importing it, leading to qualified definitions
+    (e.g. Nat.pred)  <ht:DEFINITION uri="cic:/Coq/Init/Nat/t.con" as="Definition" line="23"/>
+
+<a name="lab2"></a><h2 class="section">Constants</h2>
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/zero.con" as="Definition" line="31"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/one.con" as="Definition" line="32"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/two.con" as="Definition" line="33"/>
+
+<a name="lab3"></a><h2 class="section">Basic operations</h2>
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/succ.con" as="Definition" line="37"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/pred.con" as="Definition" line="39"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/add.con" as="Fixpoint" line="45"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/double.con" as="Definition" line="53"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/mul.con" as="Fixpoint" line="55"/>
+
+ Truncated subtraction: <span class="inlinecode"><span class="id" title="var">n</span>-<span class="id" title="var">m</span></span> is <span class="inlinecode">0</span> if <span class="inlinecode"><span class="id" title="var">n</span>&lt;=<span class="id" title="var">m</span></span>  <ht:DEFINITION uri="cic:/Coq/Init/Nat/sub.con" as="Fixpoint" line="65"/>
+
+<a name="lab4"></a><h2 class="section">Comparisons</h2>
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/eqb.con" as="Fixpoint" line="75"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/leb.con" as="Fixpoint" line="83"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/ltb.con" as="Definition" line="90"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/compare.con" as="Fixpoint" line="96"/>
+
+<a name="lab5"></a><h2 class="section">Minimum, maximum</h2>
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/max.con" as="Fixpoint" line="108"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/min.con" as="Fixpoint" line="115"/>
+
+<a name="lab6"></a><h2 class="section">Parity tests</h2>
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/even.con" as="Fixpoint" line="124"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/odd.con" as="Definition" line="131"/>
+
+<a name="lab7"></a><h2 class="section">Power</h2>
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/pow.con" as="Fixpoint" line="135"/>
+
+<a name="lab8"></a><h2 class="section">Tail-recursive versions of <span class="inlinecode"><span class="id" title="var">add</span></span> and <span class="inlinecode"><span class="id" title="var">mul</span></span></h2>
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/tail_add.con" as="Fixpoint" line="145"/>
+
+ <span class="inlinecode"><span class="id" title="var">tail_addmul</span></span> <span class="inlinecode"><span class="id" title="var">r</span></span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode"><span class="id" title="var">m</span></span> is <span class="inlinecode"><span class="id" title="var">r</span></span> <span class="inlinecode">+</span> <span class="inlinecode"><span class="id" title="var">n</span></span> <span class="inlinecode">*</span> <span class="inlinecode"><span class="id" title="var">m</span></span>.  <ht:DEFINITION uri="cic:/Coq/Init/Nat/tail_addmul.con" as="Fixpoint" line="153"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/tail_mul.con" as="Definition" line="159"/>
+
+<a name="lab9"></a><h2 class="section">Conversion with a decimal representation for printing/parsing</h2>
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/of_uint_acc.con" as="Fixpoint" line="165"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/of_uint.con" as="Definition" line="180"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/to_little_uint.con" as="Fixpoint" line="182"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/to_uint.con" as="Definition" line="188"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/of_int.con" as="Definition" line="191"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/to_int.con" as="Definition" line="197"/>
+
+<a name="lab10"></a><h2 class="section">Euclidean division</h2>
+
+<div class="paragraph"> </div>
+
+ This division is linear and tail-recursive.
+    In <span class="inlinecode"><span class="id" title="var">divmod</span></span>, <span class="inlinecode"><span class="id" title="var">y</span></span> is the predecessor of the actual divisor,
+    and <span class="inlinecode"><span class="id" title="var">u</span></span> is <span class="inlinecode"><span class="id" title="var">y</span></span> minus the real remainder
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/divmod.con" as="Fixpoint" line="206"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/div.con" as="Definition" line="215"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/modulo.con" as="Definition" line="221"/>
+
+<a name="lab11"></a><h2 class="section">Greatest common divisor</h2>
+
+<div class="paragraph"> </div>
+
+ We use Euclid algorithm, which is normally not structural,
+    but Coq is now clever enough to accept this (behind modulo
+    there is a subtraction, which now preserves being a subterm)
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/gcd.con" as="Fixpoint" line="238"/>
+
+<a name="lab12"></a><h2 class="section">Square</h2>
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/square.con" as="Definition" line="246"/>
+
+<a name="lab13"></a><h2 class="section">Square root</h2>
+
+<div class="paragraph"> </div>
+
+ The following square root function is linear (and tail-recursive).
+  With Peano representation, we can't do better. For faster algorithm,
+  see Psqrt/Zsqrt/Nsqrt...
+
+<div class="paragraph"> </div>
+
+  We search the square root of n = k + p^2 + (q - r)
+  with q = 2p and 0&lt;=r&lt;=q. We start with p=q=r=0, hence
+  looking for the square root of n = k. Then we progressively
+  decrease k and r. When k = S k' and r=0, it means we can use (S p)
+  as new sqrt candidate, since (S k')+p^2+2p = k'+(S p)^2.
+  When k reaches 0, we have found the biggest p^2 square contained
+  in n, hence the square root of n is p.
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/sqrt_iter.con" as="Fixpoint" line="263"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/sqrt.con" as="Definition" line="272"/>
+
+<a name="lab14"></a><h2 class="section">Log2</h2>
+
+<div class="paragraph"> </div>
+
+ This base-2 logarithm is linear and tail-recursive.
+
+<div class="paragraph"> </div>
+
+  In <span class="inlinecode"><span class="id" title="var">log2_iter</span></span>, we maintain the logarithm <span class="inlinecode"><span class="id" title="var">p</span></span> of the counter <span class="inlinecode"><span class="id" title="var">q</span></span>,
+  while <span class="inlinecode"><span class="id" title="var">r</span></span> is the distance between <span class="inlinecode"><span class="id" title="var">q</span></span> and the next power of 2,
+  more precisely <span class="inlinecode"><span class="id" title="var">q</span></span> <span class="inlinecode">+</span> <span class="inlinecode"><span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">r</span></span> <span class="inlinecode">=</span> <span class="inlinecode">2^(<span class="id" title="var">S</span></span> <span class="inlinecode"><span class="id" title="var">p</span>)</span> and <span class="inlinecode"><span class="id" title="var">r</span>&lt;2^<span class="id" title="var">p</span></span>. At each
+  recursive call, <span class="inlinecode"><span class="id" title="var">q</span></span> goes up while <span class="inlinecode"><span class="id" title="var">r</span></span> goes down. When <span class="inlinecode"><span class="id" title="var">r</span></span>
+  is 0, we know that <span class="inlinecode"><span class="id" title="var">q</span></span> has almost reached a power of 2,
+  and we increase <span class="inlinecode"><span class="id" title="var">p</span></span> at the next call, while resetting <span class="inlinecode"><span class="id" title="var">r</span></span>
+  to <span class="inlinecode"><span class="id" title="var">q</span></span>.
+
+<div class="paragraph"> </div>
+
+  Graphically (numbers are <span class="inlinecode"><span class="id" title="var">q</span></span>, stars are <span class="inlinecode"><span class="id" title="var">r</span></span>) :
+
+<div class="paragraph"> </div>
+
+<pre>
+                    10
+                  9
+                8
+              7   *
+            6       *
+          5           ...
+        4
+      3   *
+    2       *
+  1   *       *
+0   *   *       *
+</pre>
+
+<div class="paragraph"> </div>
+
+  We stop when <span class="inlinecode"><span class="id" title="var">k</span></span>, the global downward counter reaches 0.
+  At that moment, <span class="inlinecode"><span class="id" title="var">q</span></span> is the number we're considering (since
+  <span class="inlinecode"><span class="id" title="var">k</span>+<span class="id" title="var">q</span></span> is invariant), and <span class="inlinecode"><span class="id" title="var">p</span></span> its logarithm.
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/log2_iter.con" as="Fixpoint" line="307"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/log2.con" as="Definition" line="316"/>
+
+ Iterator on natural numbers  <ht:DEFINITION uri="cic:/Coq/Init/Nat/iter.con" as="Definition" line="320"/>
+
+ Bitwise operations 
+<div class="paragraph"> </div>
+
+ We provide here some bitwise operations for unary numbers.
+  Some might be really naive, they are just there for fullfiling
+  the same interface as other for natural representations. As
+  soon as binary representations such as NArith are available,
+  it is clearly better to convert to/from them and use their ops.
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/div2.con" as="Fixpoint" line="332"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/testbit.con" as="Fixpoint" line="339"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/shiftl.con" as="Definition" line="345"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/shiftr.con" as="Definition" line="346"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/bitwise.con" as="Fixpoint" line="348"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/land.con" as="Definition" line="356"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/lor.con" as="Definition" line="357"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/ldiff.con" as="Definition" line="358"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Nat/lxor.con" as="Definition" line="359"/>
+
+ </body>
+</html>
+

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="latin1"?>
+
+ <!-- <!DOCTYPE html [
+<!ENTITY % xhtml-lat1.ent    SYSTEM "http://helm.cs.unibo.it/dtd/xhtml-lat1.ent">
+<!ENTITY % xhtml-special.ent SYSTEM "http://helm.cs.unibo.it/dtd/xhtml-special.ent">
+<!ENTITY % xhtml-symbol.ent  SYSTEM "http://helm.cs.unibo.it/dtd/xhtml-symbol.ent">
+
+%xhtml-lat1.ent;
+%xhtml-special.ent;
+%xhtml-symbol.ent;
+]> -->
+
+
+ <html xmlns="http://www.w3.org/1999/xhtml" xmlns:ht="http://www.cs.unibo.it/helm/namespaces/helm-theory" xmlns:helm="http://www.cs.unibo.it/helm">
+
+ <head></head>
+<body>
+
+ <ht:TYPESYSTEM impredicative_set="false" check_guarded="true" check_universes="true"/>
+
+
+<br/>
+This module defines type constructors for types in <span class="inlinecode"><span class="id" title="keyword">Type</span></span>
+    (<span class="inlinecode"><span class="id" title="var">Datatypes.v</span></span> and <span class="inlinecode"><span class="id" title="var">Logic.v</span></span> defined them for types in <span class="inlinecode"><span class="id" title="keyword">Set</span></span>)  <ht:REQUIRE uri="cic:/Coq/Init/Datatypes"/>
+ <ht:REQUIRE uri="cic:/Coq/Init/Logic"/>
+ Negation of a type in <span class="inlinecode"><span class="id" title="keyword">Type</span></span>  <ht:DEFINITION uri="cic:/Coq/Init/Logic_Type/notT.con" as="Definition" line="21"/>
+
+ Properties of <span class="inlinecode"><span class="id" title="var">identity</span></span>  <ht:SECTION uri="cic:/Coq/Init/Logic_Type/identity_is_a_congruence" line="25">
+ <ht:VARIABLE uri="cic:/Coq/Init/Logic_Type/identity_is_a_congruence/A.var" as="Assumption" line="27"/>
+
+ <ht:VARIABLE uri="cic:/Coq/Init/Logic_Type/identity_is_a_congruence/B.var" as="Assumption" line="27"/>
+
+ <ht:VARIABLE uri="cic:/Coq/Init/Logic_Type/identity_is_a_congruence/f.var" as="Assumption" line="28"/>
+
+ <ht:VARIABLE uri="cic:/Coq/Init/Logic_Type/identity_is_a_congruence/x.var" as="Assumption" line="30"/>
+
+ <ht:VARIABLE uri="cic:/Coq/Init/Logic_Type/identity_is_a_congruence/y.var" as="Assumption" line="30"/>
+
+ <ht:VARIABLE uri="cic:/Coq/Init/Logic_Type/identity_is_a_congruence/z.var" as="Assumption" line="30"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic_Type/identity_sym.con" as="Lemma" line="35"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic_Type/identity_trans.con" as="Lemma" line="40"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic_Type/identity_congr.con" as="Lemma" line="45"/>
+
+ <ht:THEOREM uri="cic:/Coq/Init/Logic_Type/not_identity_sym.con" as="Lemma" line="50"/>
+
+ </ht:SECTION>
+ <ht:DEFINITION uri="cic:/Coq/Init/Logic_Type/identity_ind_r.con" as="Definition" line="57"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Logic_Type/identity_rec_r.con" as="Definition" line="62"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Logic_Type/identity_rect_r.con" as="Definition" line="67"/>
+
+ </body>
+</html>
+

@@ -25,6 +25,15 @@ let conbodypathname uri =
 let indpathname uri =
  basepathname uri ^ "/" ^ UriManager.name_of_uri uri ^ ".ind.xml.gz"
 
+let varpathname uri =
+ basepathname uri ^ "/" ^ UriManager.name_of_uri uri ^ ".var.xml.gz"
+
+let pathnames uri =
+ match UriManager.ext_of_uri uri with
+    ".con" -> conpathname uri, Some (conbodypathname uri)
+  | ".var" -> varpathname uri, None
+  | ".ind" -> indpathname uri, None
+  | _ -> assert false
 
 (*** Loading ***)
 

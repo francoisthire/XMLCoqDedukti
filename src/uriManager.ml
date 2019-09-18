@@ -56,6 +56,13 @@ let name_of_uri (uri, _) =
   let index2 = String.rindex uri '.' in
   String.sub uri index1 (index2 - index1)
 
+let ext_of_uri (uri, _) = 
+  let xpointer_offset,mah = 
+    try String.rindex uri '#', 0 with Not_found -> String.length uri - 1, 1
+  in
+  let index2 = String.rindex uri '.' in
+  String.sub uri index2 (xpointer_offset - index2 + 1)
+
 let nameext_of_uri (uri, _) = 
   let xpointer_offset, mah = 
     try String.rindex uri '#', 0 with Not_found -> String.length uri - 1, 1

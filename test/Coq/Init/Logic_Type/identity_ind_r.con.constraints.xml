@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="latin1"?>
+<CONSTRAINTS>
+ <CONSTRAINT lhs="Coq.Init.Logic_Type.3" rel="le" rhs="Coq.Init.Datatypes.80"/>
+ <CONSTRAINT lhs="Coq.Init.Logic_Type.3" rel="le" rhs="Coq.Init.Logic_Type.2"/>
+</CONSTRAINTS>

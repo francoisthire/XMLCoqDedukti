@@ -34,6 +34,7 @@ val uri_of_string : string -> uri
 
 val string_of_uri : uri -> string  (* complete uri *)
 val name_of_uri   : uri -> string  (* name only (without extension)*)
+val ext_of_uri   : uri -> string  (* name only (without extension)*)
 val nameext_of_uri   : uri -> string  (* name only (with extension)*)
 val buri_of_uri   : uri -> string  (* base uri only, without trailing '/' *)
 

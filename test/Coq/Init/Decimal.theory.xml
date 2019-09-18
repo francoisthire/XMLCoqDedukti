@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="latin1"?>
+
+ <!-- <!DOCTYPE html [
+<!ENTITY % xhtml-lat1.ent    SYSTEM "http://helm.cs.unibo.it/dtd/xhtml-lat1.ent">
+<!ENTITY % xhtml-special.ent SYSTEM "http://helm.cs.unibo.it/dtd/xhtml-special.ent">
+<!ENTITY % xhtml-symbol.ent  SYSTEM "http://helm.cs.unibo.it/dtd/xhtml-symbol.ent">
+
+%xhtml-lat1.ent;
+%xhtml-special.ent;
+%xhtml-symbol.ent;
+]> -->
+
+
+ <html xmlns="http://www.w3.org/1999/xhtml" xmlns:ht="http://www.cs.unibo.it/helm/namespaces/helm-theory" xmlns:helm="http://www.cs.unibo.it/helm">
+
+ <head></head>
+<body>
+
+ <ht:TYPESYSTEM impredicative_set="false" check_guarded="true" check_universes="true"/>
+
+
+<br/>
+<a name="lab1"></a><h1 class="section">Decimal numbers</h1>
+
+<div class="paragraph"> </div>
+
+ These numbers coded in base 10 will be used for parsing and printing
+    other Coq numeral datatypes in an human-readable way.
+    See the <span class="inlinecode"><span class="id" title="var">Numeral</span></span> <span class="inlinecode"><span class="id" title="keyword">Notation</span></span> command.
+    We represent numbers in base 10 as lists of decimal digits,
+    in big-endian order (most significant digit comes first). 
+<div class="paragraph"> </div>
+
+ Unsigned integers are just lists of digits.
+    For instance, ten is (D1 (D0 Nil))  <ht:DEFINITION uri="cic:/Coq/Init/Decimal/uint.ind" as="Inductive" line="22"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Decimal/uint_rect.con" as="Scheme" line="22"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Decimal/uint_ind.con" as="Scheme" line="22"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Decimal/uint_rec.con" as="Scheme" line="22"/>
+
+ <span class="inlinecode"><span class="id" title="var">Nil</span></span> is the number terminator. Taken alone, it behaves as zero,
+    but rather use <span class="inlinecode"><span class="id" title="var">D0</span></span> <span class="inlinecode"><span class="id" title="var">Nil</span></span> instead, since this form will be denoted
+    as <span class="inlinecode">0</span>, while <span class="inlinecode"><span class="id" title="var">Nil</span></span> will be printed as <span class="inlinecode"><span class="id" title="var">Nil</span></span>.  For signed integers, we use two constructors <span class="inlinecode"><span class="id" title="var">Pos</span></span> and <span class="inlinecode"><span class="id" title="var">Neg</span></span>.  <ht:DEFINITION uri="cic:/Coq/Init/Decimal/int.ind" as="Inductive" line="43"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Decimal/int_rect.con" as="Scheme" line="43"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Decimal/int_ind.con" as="Scheme" line="43"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Decimal/int_rec.con" as="Scheme" line="43"/>
+
+ This representation favors simplicity over canonicity.
+    For normalizing numbers, we need to remove head zero digits,
+    and choose our canonical representation of 0 (here <span class="inlinecode"><span class="id" title="var">D0</span></span> <span class="inlinecode"><span class="id" title="var">Nil</span></span>
+    for unsigned numbers and <span class="inlinecode"><span class="id" title="var">Pos</span></span> <span class="inlinecode">(<span class="id" title="var">D0</span></span> <span class="inlinecode"><span class="id" title="var">Nil</span>)</span> for signed numbers). 
+<div class="paragraph"> </div>
+
+ <span class="inlinecode"><span class="id" title="var">nzhead</span></span> removes all head zero digits  <ht:DEFINITION uri="cic:/Coq/Init/Decimal/nzhead.con" as="Fixpoint" line="57"/>
+
+ <span class="inlinecode"><span class="id" title="var">unorm</span></span> : normalization of unsigned integers  <ht:DEFINITION uri="cic:/Coq/Init/Decimal/unorm.con" as="Definition" line="65"/>
+
+ <span class="inlinecode"><span class="id" title="var">norm</span></span> : normalization of signed integers  <ht:DEFINITION uri="cic:/Coq/Init/Decimal/norm.con" as="Definition" line="73"/>
+
+ A few easy operations. For more advanced computations, use the conversions
+    with other Coq numeral datatypes (e.g. Z) and the operations on them.  <ht:DEFINITION uri="cic:/Coq/Init/Decimal/opp.con" as="Definition" line="86"/>
+
+ For conversions with binary numbers, it is easier to operate
+    on little-endian numbers.  <ht:DEFINITION uri="cic:/Coq/Init/Decimal/revapp.con" as="Fixpoint" line="95"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Decimal/rev.con" as="Definition" line="110"/>
+
+ <ht:MODULE uri="cic:/Coq/Init/Decimal/Little" as="Module" line="112" params="">
+ Successor of little-endian numbers  <ht:DEFINITION uri="cic:/Coq/Init/Decimal/Little/succ.con" as="Fixpoint" line="116"/>
+
+ Doubling little-endian numbers  <ht:DEFINITION uri="cic:/Coq/Init/Decimal/Little/double.con" as="Fixpoint" line="133"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Decimal/Little/succ_double.con" as="Fixpoint" line="133"/>
+
+ </ht:MODULE>
+ Pseudo-conversion functions used when declaring
+    Numeral Notations on <span class="inlinecode"><span class="id" title="var">uint</span></span> and <span class="inlinecode"><span class="id" title="var">int</span></span>.  <ht:DEFINITION uri="cic:/Coq/Init/Decimal/uint_of_uint.con" as="Definition" line="168"/>
+
+ <ht:DEFINITION uri="cic:/Coq/Init/Decimal/int_of_int.con" as="Definition" line="169"/>
+
+ </body>
+</html>
+
