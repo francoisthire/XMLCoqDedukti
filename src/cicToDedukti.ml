@@ -171,9 +171,7 @@ let rec of_term : string list -> Cic.annterm -> Dkprint.term = fun ctx ->
  function
   | ARel(_,_,n,_) -> D.Var (List.nth ctx (n-1))
   | AVar(_,uri,_ens) -> D.Var (UriManager.name_of_uri uri) (* TODO ens *)
-  | AMeta _ -> assert false
   | ASort(_,_) -> D.apps (meta "univ") [fake_sort;fake_sort; meta "I"]
-  | AImplicit _ -> assert false
   | ACast(_,te,_) -> of_term ctx te
   | AProd(_,name,ty,te,s) ->
      let name = match name with Anonymous -> "_" | Name n -> n in
@@ -193,15 +191,15 @@ let rec of_term : string list -> Cic.annterm -> Dkprint.term = fun ctx ->
   | AAppl(_,[]) -> assert false
   | AAppl(_,(hd::tl)) ->
     D.apps (of_term ctx hd) (List.map (of_term ctx) tl)
-  | AConst(_,uri,_ens,_univs) ->
-     prerr_endline "[TODO] AConst ens univs";
-     dkname_of_const uri
-  | AMutInd(_,uri,tyno,_ens,_univs) ->
-     prerr_endline "[TODO] AMutInd ens univs";
-     dkname_of_mutind uri tyno
-  | AMutConstruct(_,uri,tyno,consno,_ens,_univs) ->
-     prerr_endline "[TODO] AMutConstruct ens univs";
-    dkname_of_mutconstr uri tyno consno
+  | AConst(_,uri,ens,_univs) ->
+    Log.todo "AConst ens univs";
+    use_ens ctx (dkname_of_const uri) ens
+  | AMutInd(_,uri,tyno,ens,_univs) ->
+    Log.todo "AMutInd ens univs";
+     use_ens ctx (dkname_of_mutind uri tyno) ens
+  | AMutConstruct(_,uri,tyno,consno,ens,_univs) ->
+    Log.todo "AMutConstruct ens univs";
+    use_ens ctx (dkname_of_mutconstr uri tyno consno) ens
   | AMutCase(_,uri,tyno,outtype,te,pl) ->
      let s = fake_sort in
      D.apps
@@ -244,10 +242,13 @@ let rec of_term : string list -> Cic.annterm -> Dkprint.term = fun ctx ->
       ]
   | ACoFix _ -> failwith "TODO cofix"
 
+and use_ens ctx t ens =
+ D.apps t (List.map (fun (_,t) -> of_term ctx t) ens)
+
 and of_type names sort ty =
   match sort with
   | None ->
-    Format.eprintf "[WARNING] Handle sorts@.";
+    Log.todo "Handle sorts@.";
     D.apps (meta "Term") [fake_sort ; of_term names ty]
   | Some _ -> D.apps (meta "Term") [fake_sort; of_term names ty]
 

@@ -6,6 +6,7 @@ XML -> Dedukti
 - coinductives
 
 Coq -> XML
+- There are def elements without types!
 - Every type should be annotated by their sort
 - approximated sorts ==> precise sorts
 - more sorts for products
