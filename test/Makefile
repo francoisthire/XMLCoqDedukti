@@ -3,7 +3,7 @@ DKDEP=dkdep
 
 DIR=Dedukti
 
-FILES=$(shell $(DKDEP) -s $(DIR)/*)
+FILES=$(shell $(DKDEP) -I Dedukti -s $(DIR)/*.dk)
 
 .PHONY: default
 default: dedukti
@@ -11,3 +11,7 @@ default: dedukti
 .PHONY: dedukti
 dedukti:
 	$(DKCHECK) -e -I Dedukti $(FILES)
+
+.PHONY: debug
+debug:
+	$(FILES)

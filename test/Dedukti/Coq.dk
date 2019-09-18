@@ -207,7 +207,7 @@ s : Nat -> Nat.
 prop : Sort.
 set  : Sort.
 type : Nat -> Sort.
-
+star : Sort.
 (;
 Coqine prop = prop
 Coqine set = set
@@ -225,8 +225,8 @@ Coqine uMax   = max    (; Nat representation of Type@{max(i,j)} ;)
 [   ] Axiom prop         (type z    ) --> true
 [   ] Axiom set          (type z    ) --> true
 [   ] Axiom (type z    ) (type (s z)) --> true
-[i,j] Axiom (type (s i)) (type (s j)) --> Axiom (type i) (type j).
-
+[i,j] Axiom (type (s i)) (type (s j)) --> Axiom (type i) (type j)
+[   ] Axiom star         star         --> true.
 
 (;-----------------------  CTS Rule definition  -------------------;)
 
@@ -237,8 +237,8 @@ Coqine uMax   = max    (; Nat representation of Type@{max(i,j)} ;)
 [i    ] Rule (type i    ) set          (type i    ) --> true
 [i    ] Rule (type i    ) (type z    ) (type i    ) --> true
 [j    ] Rule (type z    ) (type j    ) (type j    ) --> true
-[i,j,k] Rule (type (s i)) (type (s j)) (type (s k)) --> Rule (type i) (type j) (type k).
-
+[i,j,k] Rule (type (s i)) (type (s j)) (type (s k)) --> Rule (type i) (type j) (type k)
+[     ] Rule star         star         star         --> true.
 
 (;-------------------  CTS Cumulativity definition  ---------------;)
 
@@ -249,7 +249,7 @@ Coqine uMax   = max    (; Nat representation of Type@{max(i,j)} ;)
 [i  ] Cumul set          (type i    ) --> true
 [i  ] Cumul (type z)     (type i    ) --> true
 [i,j] Cumul (type (s i)) (type (s j)) --> Cumul (type i) (type j).
-
+[   ] Cumul star         star         --> true.
 
 (;-----------------------  LUB wrt Cumulativity  ------------------;)
 
@@ -289,6 +289,7 @@ def rule : Sort -> Sort -> Sort.
 [i  ] rule set      (type i) --> type i
 [i  ] rule (type i) set      --> type i
 [i,j] rule (type i) (type j) --> type (max i j).
+[   ] rule star     star     --> star.
 (;  Coqine rule = rule  ;)
 
 [s1,s2] Rule s1 s2 (rule s1 s2) --> true.
