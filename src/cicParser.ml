@@ -340,6 +340,8 @@ let mk_univs _ =
  prerr_endline "[TODO] univ substitution" ;
  []
 
+exception TODO
+
 let end_element ctxt tag =
 (*  debug_print (lazy (sprintf "</%s>" tag));*)
 (*  debug_print (lazy (string_of_stack ctxt));*)
@@ -397,13 +399,12 @@ let end_element ctxt tag =
         | _ -> attribute_error ())
   | "def" ->  (* same as "decl" above *)
       let ty,source =
-       (*CSC: hack to parse Coq files where the LetIn is not typed *)
        let ty = pop_cic ctxt in
        try
         let source = pop_cic ctxt in
          ty,source
        with
-        Parser_failure _ -> assert false
+        Parser_failure _ -> raise TODO,ty
       in
       push ctxt
         (match pop_tag_attrs ctxt with

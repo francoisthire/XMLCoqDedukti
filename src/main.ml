@@ -16,8 +16,8 @@ let do_theory filename =
      match CicToDedukti.nonvar_pathnames uri with
        None -> res
      | Some (p1,p2) ->
-        let obj = CicParser.annobj_of_xml uri p1 p2 in
         (try
+         let obj = CicParser.annobj_of_xml uri p1 p2 in
          CicToDedukti.dedukti_of_obj obj
         with
          exn ->
