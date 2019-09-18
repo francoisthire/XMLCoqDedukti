@@ -144,7 +144,9 @@ let rec of_term : string list -> Cic.annterm -> Dkprint.term = fun ctx ->
   | ALambda(_,name,ty,te,s) ->
      let name = dkname_of_name name in
      D.lam (name,of_type ctx s ty) (of_term (name::ctx) te)
-  | ALetIn _ -> failwith "TODO LetIn"
+  | ALetIn(_,name,ty,a,b) -> (* TODO: FALSE LET IN *)
+    let name' = dkname_of_name name in
+    LetIn( (name', of_term ctx ty, of_term ctx a), of_term (name'::ctx) b)
   | AAppl(_,[]) -> assert false
   | AAppl(_,(hd::tl)) ->
     D.apps (of_term ctx hd) (List.map (of_term ctx) tl)
