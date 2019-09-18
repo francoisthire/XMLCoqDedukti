@@ -86,10 +86,7 @@ type attribute =
 (* a metasenv is a list of declarations of metas in declarations *)
 (* order (i.e. [oldest ; ... ; newest]). Older variables can not *)
 (* depend on new ones.                                           *)
-type annconjecture = id * int * anncontext * annterm
-and annmetasenv = annconjecture list
-
-and annterm =
+type annterm =
    ARel of id * id * int *                          (* idref, DeBrujin index, *)
     string                                          (*  binder                *)
  | AVar of id * UriManager.uri *                    (* uri,                   *)
@@ -128,10 +125,6 @@ and annobj =
  | AVariable of id *
     string * annterm option * annterm *             (* name, body, type *)
     UriManager.uri list * attribute list            (*  parameters      *)
- | ACurrentProof of id * id *
-    string * annmetasenv *                          (*  name, conjectures,    *)
-    annterm * annterm * UriManager.uri list *       (*  body,type,parameters  *)
-    attribute list
  | AInductiveDefinition of id *
     anninductiveType list *                         (* inductive types ,      *)
     UriManager.uri list * int * attribute list      (*  parameters,n ind. pars*)
@@ -146,20 +139,3 @@ and anncoInductiveFun =
  id * string * annterm * annterm              (* name, type, body *)
 and annotation =
  string
-
-and anncontext_entry =                         (* A declaration or definition *)
-   ADecl of annterm
- | ADef of annterm * annterm
-
-and annhypothesis =
- id * (name * anncontext_entry) option       (* None means no more accessible *)
-
-and anncontext = annhypothesis list
-;;
-
-type anntarget =
-   Object of annobj         (* if annobj is a Constant, this is its type *)
- | ConstantBody of annobj
- | Term of annterm
- | Conjecture of annconjecture
- | Hypothesis of annhypothesis
