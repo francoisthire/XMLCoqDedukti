@@ -20,9 +20,9 @@ let indpathname uri =
 (*** Loading ***)
 
 let getind uri =
- let obj = CicParser.obj_of_xml uri (indpathname uri) None in
+ let obj = CicParser.annobj_of_xml uri (indpathname uri) None in
  match obj with
- | InductiveDefinition(il,_params,_,_) -> il
+ | AInductiveDefinition(_,il,_params,_,_) -> il
  | _ -> assert false
 
 (*** Translation ***)
@@ -55,19 +55,19 @@ let dkname_of_const uri =
 (* name of the tyno^{th} inductive type *)
 let dkname_of_mutind uri tyno =
  let il = getind uri in
- let name,_,_,_ = List.nth il tyno in
+ let _,name,_,_,_ = List.nth il tyno in
  D.Const (dkmod_of_uri uri, name)
 
 (* constrno^{th} constructor name of the tyno^{th} inductive type *)
 let dkname_of_mutconstr uri tyno constrno =
  let il = getind uri in
- let _,_,_,kl = List.nth il tyno in
+ let _,_,_,_,kl = List.nth il tyno in
  let name,_ = List.nth kl (constrno - 1) in
  D.Const (dkmod_of_uri uri, name)
 
 let dkname_of_match uri tyno =
  let il = getind uri in
- let name,_,_,_ = List.nth il tyno in
+ let _,name,_,_,_ = List.nth il tyno in
  D.Const (dkmod_of_uri uri, "match__" ^ name)
 
 let of_sort = function

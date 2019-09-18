@@ -83,67 +83,10 @@ type attribute =
   | `Generated
   ]
 
-type term =
-   Rel of int                                       (* DeBrujin index, 1 based*)
- | Var of UriManager.uri *                          (* uri,                   *)
-     term explicit_named_substitution               (*  explicit named subst. *)
- | Meta of int * (term option) list                 (* numeric id,    *)
-                                                    (*  local context *)
- | Sort of sort                                     (* sort *)
- | Implicit of implicit_annotation option           (* *)
- | Cast of term * term                              (* value, type *)
- | Prod of name * term * term                       (* binder, source, target *)
- | Lambda of name * term * term                     (* binder, source, target *)
- | LetIn of name * term * term * term               (* binder, term, type, target *)
- | Appl of term list                                (* arguments *)
- | Const of UriManager.uri *                        (* uri,                   *)
-     term explicit_named_substitution               (*  explicit named subst. *)
- | MutInd of UriManager.uri * int *                 (* uri, typeno, *)
-     term explicit_named_substitution               (*  explicit named subst. *)
-                                                    (* typeno is 0 based      *)
- | MutConstruct of UriManager.uri *                 (* uri,                   *)
-    int * int *                                     (*  typeno, consno        *)
-     term explicit_named_substitution               (*  explicit named subst. *)
-                                                    (* typeno is 0 based      *)
-                                                    (* consno is 1 based      *)
- | MutCase of UriManager.uri *                      (* ind. uri,             *)
-    int *                                           (*  ind. typeno,         *)
-    term * term *                                   (*  outtype, ind. term   *)
-    term list                                       (*  patterns             *)
- | Fix of int * inductiveFun list                   (* funno (0 based), funs *)
- | CoFix of int * coInductiveFun list               (* funno (0 based), funs *)
-and obj =
-   Constant of string * term option * term *      (* id, body, type,          *)
-    UriManager.uri list * attribute list          (*  parameters              *)
- | Variable of string * term option * term *      (* name, body, type         *)
-    UriManager.uri list * attribute list          (* parameters               *)
- | CurrentProof of string * metasenv * term *     (* name, conjectures, body, *)
-    term * UriManager.uri list * attribute list   (*  type, parameters        *)
- | InductiveDefinition of inductiveType list *    (* inductive types,         *)
-    UriManager.uri list * int * attribute list    (*  params, left params no  *)
-and inductiveType =
- string * bool * term *                       (* typename, inductive, arity *)
-  constructor list                            (*  constructors              *)
-and constructor =
- string * term                                (* id, type *)
-and inductiveFun =
- string * int * term * term                   (* name, ind. index, type, body *)
-and coInductiveFun =
- string * term * term                         (* name, type, body *)
-
 (* a metasenv is a list of declarations of metas in declarations *)
 (* order (i.e. [oldest ; ... ; newest]). Older variables can not *)
 (* depend on new ones.                                           *)
-and conjecture = int * context * term
-and metasenv = conjecture list
-and substitution = (int * (context * term * term)) list
-
-
-
-(* a metasenv is a list of declarations of metas in declarations *)
-(* order (i.e. [oldest ; ... ; newest]). Older variables can not *)
-(* depend on new ones.                                           *)
-and annconjecture = id * int * anncontext * annterm
+type annconjecture = id * int * anncontext * annterm
 and annmetasenv = annconjecture list
 
 and annterm =
@@ -204,15 +147,6 @@ and anncoInductiveFun =
 and annotation =
  string
 
-and context_entry =                            (* A declaration or definition *)
-   Decl of term
- | Def of term * term                          (* body, type *)
-
-and hypothesis =
- (name * context_entry) option               (* None means no more accessible *)
-
-and context = hypothesis list
-
 and anncontext_entry =                         (* A declaration or definition *)
    ADecl of annterm
  | ADef of annterm * annterm
@@ -223,22 +157,9 @@ and annhypothesis =
 and anncontext = annhypothesis list
 ;;
 
-type lazy_term =
- context -> metasenv -> CicUniv.universe_graph ->
-  term * metasenv * CicUniv.universe_graph
-
 type anntarget =
    Object of annobj         (* if annobj is a Constant, this is its type *)
  | ConstantBody of annobj
  | Term of annterm
  | Conjecture of annconjecture
  | Hypothesis of annhypothesis
-
-module CicHash =
- Hashtbl.Make
-  (struct
-    type t = term
-    let equal = (==)
-    let hash = Hashtbl.hash_param 100 1000
-   end)
-;;
