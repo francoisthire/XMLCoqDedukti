@@ -73,6 +73,10 @@ let dkmod_of_uri uri =
  let buri = UriManager.buri_of_uri uri in
  String.sub (sanitize_mod_name buri) 5 (String.length buri - 5)
 
+let dkmod_of_theory_uri uri =
+ let uri = UriManager.string_of_uri uri in
+ String.sub (sanitize_mod_name uri) 5 (String.length uri - 5)
+
 let dkname_of_const uri =
  D.Const(dkmod_of_uri uri, UriManager.name_of_uri uri)
 
@@ -125,9 +129,8 @@ let fake_sort = meta "star"
 
 let rec of_term : string list -> Cic.annterm -> Dkprint.term = fun ctx ->
  function
-  | ARel(_,_,n,_) ->
-    D.Var (List.nth ctx (n-1))
-  | AVar _ -> failwith "TODO Avar"
+  | ARel(_,_,n,_) -> D.Var (List.nth ctx (n-1))
+  | AVar(_,uri,_ens) -> D.Var (UriManager.name_of_uri uri) (* TODO ens *)
   | AMeta _ -> assert false
   | ASort(_,_) -> D.apps (meta "univ") [fake_sort;fake_sort; meta "I"]
   | AImplicit _ -> assert false
