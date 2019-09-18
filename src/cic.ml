@@ -98,10 +98,8 @@ type annterm =
             string                                          (*  binder                *)
   | AVar of id * UriManager.uri *                    (* uri,                   *)
             annterm explicit_named_substitution             (*  explicit named subst. *)
-  | AMeta of id * int * (annterm option) list        (* numeric id,    *)
   (*  local context *)
   | ASort of id * sort                               (* sort *)
-  | AImplicit of id * implicit_annotation option     (* *)
   | ACast of id * annterm * annterm                  (* value, type *)
   | AProd of id * name * annterm * annterm *         (* binder, source, target *)
              sort option

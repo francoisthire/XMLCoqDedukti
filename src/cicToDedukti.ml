@@ -171,9 +171,7 @@ let rec of_term : string list -> Cic.annterm -> Dkprint.term = fun ctx ->
  function
   | ARel(_,_,n,_) -> D.Var (List.nth ctx (n-1))
   | AVar(_,uri,_ens) -> D.Var (UriManager.name_of_uri uri) (* TODO ens *)
-  | AMeta _ -> assert false
   | ASort(_,_) -> D.apps (meta "univ") [fake_sort;fake_sort; meta "I"]
-  | AImplicit _ -> assert false
   | ACast(_,te,_) -> of_term ctx te
   | AProd(_,name,ty,te,s) ->
      let name = match name with Anonymous -> "_" | Name n -> n in
