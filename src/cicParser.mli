@@ -39,3 +39,8 @@ exception Parser_failure of string
 val annobj_of_xml: UriManager.uri -> string -> string option -> Cic.annobj
 
 val impredicative_set : bool ref
+
+module Theories : sig
+ (* filename -> requires * objs *)
+ val theory_of_xml: string -> UriManager.uri list * UriManager.uri list
+end

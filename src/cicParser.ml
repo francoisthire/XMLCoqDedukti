@@ -812,3 +812,28 @@ let annobj_of_xml uri filename filenamebody =
      | _ ->
        raise (Parser_failure (sprintf "no constant found in %s, %s"
                                 filename filenamebody)))
+
+module Theories = struct
+ let start_element_get_parsed () =
+  let requires = ref [] in
+  let uris = ref [] in
+  let start_element tag attrs =
+   match tag,attrs with
+      "ht:REQUIRE",["uri",uri] ->
+        requires := UriManager.uri_of_string uri::!requires
+    | "ht:DEFINITION",["as",_ ; "line",_ ; "uri",uri] ->
+        uris := UriManager.uri_of_string uri::!uris
+    | _,_ -> prerr_endline ("[IGNORED ELEMENT] " ^ tag)
+  in
+   start_element,fun () -> List.rev !requires, List.rev !uris
+
+ let theory_of_xml filename =
+  let start_element,get_parsed = start_element_get_parsed () in 
+  let callbacks =
+   {XmlPushParser.default_callbacks
+    with start_element = Some(start_element) } in
+  let parse = XmlPushParser.create_parser callbacks in
+  XmlPushParser.parse parse (`File filename) ;
+  get_parsed ()
+  
+end
