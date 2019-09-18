@@ -90,18 +90,18 @@ let rec of_term : string list -> Cic.annterm -> Dkprint.term = fun ctx ->
      let name = match name with Anonymous -> "_" | Name n -> n in
      let s1 = D.Type in (* TODO *)
      let s2 = D.Type in (* TODO *)
-     D.App(meta "prod",
-      [ s1 ; s2 ; D.App(meta "rule",[s1;s2]) ; meta "I" ;
+     D.apps (meta "prod")
+      [ s1 ; s2 ; D.apps (meta "rule") [s1;s2] ; meta "I" ;
         of_term ctx ty ;
-        D.Lam(name, of_type ctx None ty, of_term (name::ctx) te)
-      ])
+        D.lam (name, of_type ctx None ty) (of_term (name::ctx) te)
+      ]
   | ALambda(_,name,ty,te,s) ->
      let name = dkname_of_name name in
-     D.Lam(name,of_type ctx s ty,of_term (name::ctx) te)
+     D.lam (name,of_type ctx s ty) (of_term (name::ctx) te)
   | ALetIn _ -> failwith "TODO LetIn"
   | AAppl(_,[]) -> assert false
   | AAppl(_,(hd::tl)) ->
-    D.App(of_term ctx hd, List.map (of_term ctx) tl)
+    D.apps (of_term ctx hd) (List.map (of_term ctx) tl)
   | AConst(_,uri,_ens) ->
      dkname_of_const uri
   | AMutInd(_,uri,tyno,_ens) ->
@@ -110,20 +110,20 @@ let rec of_term : string list -> Cic.annterm -> Dkprint.term = fun ctx ->
     dkname_of_mutconstr uri tyno consno
   | AMutCase(_,uri,tyno,outtype,te,pl) ->
      let s = D.Type in (* TODO *)
-     D.App
-      (dkname_of_match uri tyno,
-       [ s ; of_term ctx outtype ]
-       @ List.map (of_term ctx) pl
-       @ [of_term ctx te])
+     D.apps
+      (dkname_of_match uri tyno)
+      ( [ s ; of_term ctx outtype ]
+        @ List.map (of_term ctx) pl
+        @ [of_term ctx te] )
   | AFix(_,funno,funs) ->
      let tyl =
       List.map
        (fun (_,_name,recno,ty,_bo) ->
          let s = D.Type in (* TODO *)
-         D.App(meta "SA",
+         D.apps (meta "SA")
           [ dkint_of_int recno
           ; s
-          ; of_term ctx ty ])
+          ; of_term ctx ty ]
        ) funs in
      let bol =
       List.map
@@ -132,42 +132,39 @@ let rec of_term : string list -> Cic.annterm -> Dkprint.term = fun ctx ->
           function
              [] -> of_term (List.rev newnamesrev @ ctx) bo
            | (_,name,_,_,_)::tl ->
-             D.Lam(name,
-              D.Type (* ??? *),
-              aux (name::newnamesrev) tl)
+             D.lam (name, D.Type) (* ??? *)
+              (aux (name::newnamesrev) tl)
          in
           aux [] funs
        ) funs in
      let s = D.Type in (* TODO *)
      let c = dkname_of_name Anonymous in
-     D.App(meta "fixproj",
+     D.apps (meta "fixproj")
       [ s
       ; dkint_of_int (List.length funs)
-      ; D.Lam(c,
-         D.Type, (* ??? *)
-         D.App(D.Var c, tyl))
-      ; D.Lam(c,
-         D.Type, (* ??? *)
-         D.App(D.Var c, bol))
+      ; D.lam(c, D.Type) (* ??? *)
+         (D.apps (D.Var c) tyl)
+      ; D.lam(c,D.Type) (* ??? *)
+         (D.apps (D.Var c) bol)
       ; dkint_of_int funno
-      ])
+      ]
   | ACoFix _ -> failwith "TODO cofix"
 
 and of_type names sort ty =
   match sort with
   | None ->
     Format.eprintf "[WARNING] Handle sorts@.";
-    D.App(meta "Term", [meta "Set"; of_term names ty])
-  | Some s -> D.App(meta "Term", [of_sort s; of_term names ty])
+    D.apps (meta "Term") [meta "Set"; of_term names ty]
+  | Some s -> D.apps (meta "Term") [of_sort s; of_term names ty]
 
 let dedukti_of_obj =
  function
  | AConstant(_,_,name,bo,ty,_vars,_) ->
     (match bo with
         None ->
-         D.Decl(name,false,of_term [] ty)
+         D.Declaration (false,name,of_term [] ty)
       | Some te ->
-         D.Def(name,Some (of_term [] ty),of_term [] te))
+         D.Definition(false,name,of_term [] ty,of_term [] te))
  | ACurrentProof _ -> assert false (* It will never happen *)
  | _ -> assert false
 (*
