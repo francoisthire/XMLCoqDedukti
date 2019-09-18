@@ -29,12 +29,11 @@ let do_theory filename =
  let oc = open_out file in
  let fmt = Format.formatter_of_out_channel oc in
  List.iter
-   (fun uri ->
-      prerr_endline ("UUU " ^ UriManager.string_of_uri uri);
-      let modpath,innermodpath = CicToDedukti.dkmod_of_theory_uri uri in
-      if innermodpath = "" then
-        Format.fprintf fmt "#REQUIRE %s.@." modpath
-   ) requires;
+  (fun uri ->
+    let modpath,innermodpath = CicToDedukti.dkmod_of_theory_uri uri in
+    if innermodpath = "" then
+     Format.fprintf fmt "#REQUIRE %s.@." modpath
+  ) requires;
  Format.fprintf fmt "@.";
  List.iter (Format.fprintf fmt "%a@.@." Dkprint.print) objs;
  close_out oc
