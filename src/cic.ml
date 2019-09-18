@@ -40,8 +40,6 @@
 (* STUFF TO MANAGE IDENTIFIERS *)
 type id = string  (* the abstract type of the (annotated) node identifiers *)
 type 'term explicit_named_substitution = (UriManager.uri * 'term) list
-type univ_substitution = unit list
-
 type implicit_annotation = [ `Closed | `Type | `Hole ]
 
 (* INTERNAL REPRESENTATION OF CIC OBJECTS AND TERMS *)
@@ -51,6 +49,8 @@ type sort =
  | Set
  | Type of CicUniv.universe
  | CProp of CicUniv.universe
+
+type univ_substitution = sort list
 
 type name =
  | Name of string
@@ -134,7 +134,7 @@ and annobj =
       id * id option * string *               (*  name  *)
       annterm option * annterm *              (*  body, type,  *)
       UriManager.uri list *                   (*  section variables parameters  *)
-      sort list *                             (*  universe parameters *)
+      CicUniv.universe list *                 (*  universe parameters *)
       attribute list                          (*  parameters   *)
   | AVariable of
       id * string * annterm option *          (*  name, body  *)

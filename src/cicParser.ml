@@ -41,7 +41,7 @@ type stack_entry =
   | Cic_constant_body of string * string * UriManager.uri list * Cic.annterm
       * Cic.attribute list
       (* id, for, params, body, object attributes *)
-  | Cic_constant_type of string * string * UriManager.uri list * Cic.annterm
+  | Cic_constant_type of string * string * UriManager.uri list * CicUniv.universe list * Cic.annterm
       * Cic.attribute list
       (* id, name, params, type, object attributes *)
   | Cic_term of Cic.annterm (* term *)
@@ -80,7 +80,7 @@ let string_of_stack ctxt =
       | Cic_attributes _ -> "Cic_attributes"
       | Cic_constant_body (id, name, _, _, _) ->
           sprintf "Cic_constant_body %s (id=%s)" name id
-      | Cic_constant_type (id, name, _, _, _) ->
+      | Cic_constant_type (id, name, _, _, _, _) ->
           sprintf "Cic_constant_type %s (id=%s)" name id
       | Cic_term _ -> "Cic_term"
       | Cic_obj _ -> "Cic_obj"
@@ -608,20 +608,21 @@ let end_element ctxt tag =
   | "InductiveDefinition" ->
       let inductive_types = pop_inductive_types ctxt in
       let obj_attributes = pop_obj_attributes ctxt in
-      let sort_list = assert false in
       push ctxt (Cic_obj
         (match pop_tag_attrs ctxt with
-        | ["id", id; "noParams", noParams; "params", params; "univparams", _univparams] ->
+        | ["id", id; "noParams", noParams; "params", params; "univparams", univparams] ->
+            let univparams = mk_univparams univparams in
             Cic.AInductiveDefinition (id, inductive_types,
-              uri_list_of_string params, sort_list, int_of_string noParams, obj_attributes)
+              uri_list_of_string params, univparams, int_of_string noParams, obj_attributes)
         | _ -> attribute_error ()))
   | "ConstantType" ->
       let typ = pop_cic ctxt in
       let obj_attributes = pop_obj_attributes ctxt in
       push ctxt
         (match pop_tag_attrs ctxt with
-        | ["id", id; "name", name; "params", params; "univparams", _univparams] ->
-            Cic_constant_type (id, name, uri_list_of_string params, typ,
+        | ["id", id; "name", name; "params", params; "univparams", univparams] ->
+            let univparams = mk_univparams univparams in
+            Cic_constant_type (id, name, uri_list_of_string params, univparams, typ,
               obj_attributes)
         | _ -> attribute_error ())
   | "ConstantBody" ->
@@ -798,16 +799,14 @@ let annobj_of_xml uri filename filenamebody =
   match filenamebody with
   | None ->
       (match parse uri filename with
-      | Cic_constant_type (id, name, params, typ, obj_attributes) ->
-        let univparams = assert false in
+      | Cic_constant_type (id, name, params, univparams, typ, obj_attributes) ->
         Cic.AConstant (id, None, name, None, typ, params, univparams, obj_attributes)
       | Cic_obj obj -> obj
       | _ -> raise (Parser_failure ("no object found in " ^ filename)))
   | Some filenamebody ->
     (match parse uri filename, parse uri filenamebody with
-     | Cic_constant_type (type_id, name, params, typ, obj_attributes),
+     | Cic_constant_type (type_id, name, params, univparams, typ, obj_attributes),
        Cic_constant_body (body_id, _, _, body, _) ->
-       let univparams = assert false in
        Cic.AConstant (type_id, Some body_id, name, Some body, typ,
                       params, univparams, obj_attributes)
      | _ ->
