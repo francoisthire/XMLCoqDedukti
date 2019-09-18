@@ -78,7 +78,6 @@ let typed_rewrite (context, left, right) = rewrite (List.map fst context, left, 
 let apply_context a context = apps a (List.map var (List.map fst context))
 
 
-
 (** Print anonymous variables as "__". The name "_" is not accepted by Dedukti. *)
 let print_var out = function
   | ""    -> Format.fprintf out "__"

@@ -54,12 +54,12 @@ let dkint_of_int n =
   meta (string_of_int n)
 
 let dkname_of_name =
- let n = ref 0 in
- function
-    Name s -> s
+  let n = ref 0 in
+  function
+  | Name s -> s
   | Anonymous ->
-     incr n ;
-     "_" ^ string_of_int !n
+    incr n ;
+    "_" ^ string_of_int !n
 
 let sanitize_mod_name md = Str.global_replace (Str.regexp "/") "_" md
 
@@ -83,14 +83,20 @@ let dkname_of_mutconstr uri tyno constrno =
  let name,_ = List.nth kl (constrno - 1) in
  D.Const (dkmod_of_uri uri, name)
 
+let name_of_match name = "match__" ^ name
+
 let dkname_of_match uri tyno =
  let il = getind uri in
  let _,name,_,_,_ = List.nth il tyno in
- D.Const (dkmod_of_uri uri, "match__" ^ name)
+ D.Const (dkmod_of_uri uri, name_of_match name)
 
 let dkname_of_univ = function
   | _, Some uri -> D.var (dkmod_of_uri uri)
   | i, None -> dkint_of_int i
+
+let name_of_univ = function
+  | _, Some uri -> dkmod_of_uri uri
+  | i, None -> assert false
 
 let coq_Nat = meta "Nat"
 let coq_Sort = meta "Sort"
@@ -218,26 +224,66 @@ let translate_constructor add uparams (consname, typ) =
   let typ' = add_sort_params (map_some upoly_params uparams) typ' in
   add (D.Declaration (true,consname,typ'))
 
+let template_params = function
+  | (_, Some name), Template -> Some (dkmod_of_uri name)
+  | _ -> None
+
+
+
+let translate_match add uparams name ind arity nind cons =
+  let match_name = name_of_match name in
+  let return_sort = ("s", coq_Sort) in
+  let uparams_ctxt =
+    List.map
+      (fun (univ, t) -> (name_of_univ univ,
+                         match t with Template -> coq_Sort | _ -> coq_Nat))
+      uparams in
+  let params, real_arity = Cic.dest_prod_n nind arity in
+  let translate_decl (name, typ) = dkname_of_name name, of_type [] None typ in
+  let params_ctxt = List.map translate_decl params in
+
+  let arguments, ret_sort = Cic.dest_prod real_arity in
+  let args_ctxt = List.map translate_decl arguments in
+  let applied_ind =
+    D.apps (D.Var name)
+      (List.map D.var
+         (List.map fst
+            (uparams_ctxt @ params_ctxt @ args_ctxt))) in
+  let type_P =
+    D.pies (args_ctxt @ [ ( "_", applied_ind) ])
+      (of_sort (Type (0,Some (UriManager.uri_of_string "s"))))
+  in
+  let decl_P = ("P", type_P) in
+
+  let cases_names = List.map (fun (name,_) -> "case_" ^ name) cons in
+  let f (name, typ) =
+    assert false
+  in
+  let cases_types = List.map f cons in
+  let cases_ctxt = List.map2 (fun a b -> a,b) cases_names cases_types in
+  let return_type = D.var "TODO" in
+  let match_type =
+    D.pies
+      (return_sort :: uparams_ctxt @ args_ctxt @ decl_P :: cases_ctxt) return_type in
+  add (D.Declaration (true,match_name,match_type))
+
+
+let translate_single_inductive add uparams nind (_,name,ind,arity,cons) =
+  assert ind;
+  let arity' = of_type [] None arity in
+  let arity' = add_sort_params (map_some template_params uparams) arity' in
+  add (D.Declaration (true,name,arity'));
+  List.iter (translate_constructor add uparams) cons;
+  translate_match add uparams name ind arity nind cons
+
 let translate_inductive types vars uparams nind =
-      let res = ref [] in
-      let add d = res := d :: !res in
-      let of_inductive_type (_,name,ind,arity,cons) =
-        assert ind;
-        let arity' = of_type [] None arity in
-        let template_params = function
-          | (_, Some name), Template -> Some (dkmod_of_uri name)
-          | _ -> None in
-        let arity' = add_sort_params (map_some template_params uparams) arity' in
-        add (D.Declaration (true,name,arity'));
-        List.iter (translate_constructor add uparams) cons
-      in
-      List.iter (function
-          | (_, Some name), Template ->
-            add (D.Declaration (true,dkmod_of_uri name,coq_Sort))
-          | _ -> ()
-        ) uparams;
-      List.iter of_inductive_type types;
-      List.rev !res
+  let res = ref [] in
+  let add d = res := d :: !res in
+  List.iter
+    (fun name -> add (D.Declaration (true,name,coq_Sort)))
+    (map_some template_params uparams);
+  List.iter (translate_single_inductive add uparams nind) types;
+  List.rev !res
 
 let dedukti_of_obj annobj =
   let _ = flush_global() in

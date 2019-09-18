@@ -4,12 +4,9 @@ include CicToDedukti
 let output_directory = ref None
 
 let do_obj uri =
- let p1,p2 = pathnames uri in
- let obj = CicParser.annobj_of_xml uri p1 p2 in
- List.iter
-   (Format.printf "%a\n" Dkprint.print)
-   (dedukti_of_obj obj)
-
+  let p1,p2 = pathnames uri in
+  let obj = CicParser.annobj_of_xml uri p1 p2 in
+  List.iter (Format.printf "%a\n" Dkprint.print) (dedukti_of_obj obj)
 
 let cmd_options = [
   ( "-o"

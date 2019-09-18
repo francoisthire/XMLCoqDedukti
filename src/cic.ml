@@ -94,40 +94,40 @@ type attribute =
 (* order (i.e. [oldest ; ... ; newest]). Older variables can not *)
 (* depend on new ones.                                           *)
 type annterm =
-   ARel of id * id * int *                          (* idref, DeBrujin index, *)
-    string                                          (*  binder                *)
- | AVar of id * UriManager.uri *                    (* uri,                   *)
-    annterm explicit_named_substitution             (*  explicit named subst. *)
- | AMeta of id * int * (annterm option) list        (* numeric id,    *)
-                                                    (*  local context *)
- | ASort of id * sort                               (* sort *)
- | AImplicit of id * implicit_annotation option     (* *)
- | ACast of id * annterm * annterm                  (* value, type *)
-  | AProd of id * name * annterm * annterm          (* binder, source, target *)
-             * sort option
-  | ALambda of id * name * annterm * annterm       (* binder, source, target *)
-               * sort option
- | ALetIn of id * name * annterm * annterm *  annterm (* binder, term, type, target *)
- | AAppl of id * annterm list                       (* arguments *)
- | AConst of id * UriManager.uri *                  (* uri,                   *)
-    annterm explicit_named_substitution *           (*  explicit named subst. *)
-    univ_substitution
- | AMutInd of id * UriManager.uri * int *           (* uri, typeno            *)
-    annterm explicit_named_substitution *           (*  explicit named subst. *)
+  | ARel of id * id * int *                          (* idref, DeBrujin index, *)
+            string                                          (*  binder                *)
+  | AVar of id * UriManager.uri *                    (* uri,                   *)
+            annterm explicit_named_substitution             (*  explicit named subst. *)
+  | AMeta of id * int * (annterm option) list        (* numeric id,    *)
+  (*  local context *)
+  | ASort of id * sort                               (* sort *)
+  | AImplicit of id * implicit_annotation option     (* *)
+  | ACast of id * annterm * annterm                  (* value, type *)
+  | AProd of id * name * annterm * annterm *         (* binder, source, target *)
+             sort option
+  | ALambda of id * name * annterm * annterm *       (* binder, source, target *)
+               sort option
+  | ALetIn of id * name * annterm * annterm *  annterm (* binder, term, type, target *)
+  | AAppl of id * annterm list                       (* arguments *)
+  | AConst of id * UriManager.uri *                  (* uri,                   *)
+              annterm explicit_named_substitution *           (*  explicit named subst. *)
+              univ_substitution
+  | AMutInd of id * UriManager.uri * int *           (* uri, typeno            *)
+               annterm explicit_named_substitution *           (*  explicit named subst. *)
                                                     (* typeno is 0 based *)
-    univ_substitution
- | AMutConstruct of id * UriManager.uri *           (* uri,                   *)
-    int * int *                                     (*  typeno, consno        *)
+               univ_substitution
+  | AMutConstruct of id * UriManager.uri *          (* uri,                   *)
+                     int * int *                    (*  typeno, consno        *)
     annterm explicit_named_substitution *           (*  explicit named subst. *)
-                                                    (* typeno is 0 based *)
-                                                    (* consno is 1 based *)
-    univ_substitution
- | AMutCase of id * UriManager.uri *                (* ind. uri,             *)
-    int *                                           (*  ind. typeno,         *)
-    annterm * annterm *                             (*  outtype, ind. term   *)
-    annterm list                                    (*  patterns             *)
- | AFix of id * int * anninductiveFun list          (* funno, functions *)
- | ACoFix of id * int * anncoInductiveFun list      (* funno, functions *)
+                                                    (* typeno is 0 based      *)
+                                                    (* consno is 1 based      *)
+                     univ_substitution
+  | AMutCase of id * UriManager.uri *                (* ind. uri,             *)
+                int *                                (*  ind. typeno,         *)
+                annterm * annterm *                  (*  outtype, ind. term   *)
+                annterm list                         (*  patterns             *)
+  | AFix of id * int * anninductiveFun list          (* funno, functions      *)
+  | ACoFix of id * int * anncoInductiveFun list      (* funno, functions      *)
 
 and annobj =
     AConstant of
@@ -146,7 +146,7 @@ and annobj =
       id * anninductiveType list *            (*  inductive types ,   *)
       UriManager.uri list *                   (*  section variables parameters  *)
       (CicUniv.universe * univ_type) list *   (*  universe paramters *)
-      int *                                   (*  n ind. pars*)
+      int *                                   (*  n ind. parameters *)
       attribute list                          (*  parameters   *)
 and anninductiveType =
  id * string * bool * annterm *               (* typename, inductive, arity *)
@@ -159,3 +159,18 @@ and anncoInductiveFun =
  id * string * annterm * annterm              (* name, type, body *)
 and annotation =
  string
+
+
+let dest_prod_n n t =
+  let rec aux acc t n =
+    if n = 0 then (List.rev acc, t)
+    else match t with
+      | AProd (_,x,t',u,_) -> aux ((x,t')::acc) u (n-1)
+      | _ -> assert false
+  in aux [] t n
+
+let dest_prod t =
+  let rec aux acc = function
+    | AProd (_,x,t',u,_) -> aux ((x,t')::acc) u
+    | _ -> (List.rev acc, t)
+  in aux [] t
