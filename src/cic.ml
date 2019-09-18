@@ -57,10 +57,10 @@ type name =
  | Anonymous
 
 type univ_type =
-   | Invariant
-   | Template
-   | Irrelevant
-   | Covariant
+  | Invariant
+  | Template
+  | Irrelevant
+  | Covariant
 
 type object_flavour =
   [ `Definition
