@@ -40,6 +40,7 @@
 (* STUFF TO MANAGE IDENTIFIERS *)
 type id = string  (* the abstract type of the (annotated) node identifiers *)
 type 'term explicit_named_substitution = (UriManager.uri * 'term) list
+type univ_substitution = unit list
 
 type implicit_annotation = [ `Closed | `Type | `Hole ]
 
@@ -109,15 +110,18 @@ type annterm =
  | ALetIn of id * name * annterm * annterm *  annterm (* binder, term, type, target *)
  | AAppl of id * annterm list                       (* arguments *)
  | AConst of id * UriManager.uri *                  (* uri,                   *)
-    annterm explicit_named_substitution             (*  explicit named subst. *)
+    annterm explicit_named_substitution *           (*  explicit named subst. *)
+    univ_substitution
  | AMutInd of id * UriManager.uri * int *           (* uri, typeno            *)
-    annterm explicit_named_substitution             (*  explicit named subst. *)
+    annterm explicit_named_substitution *           (*  explicit named subst. *)
                                                     (* typeno is 0 based *)
+    univ_substitution
  | AMutConstruct of id * UriManager.uri *           (* uri,                   *)
     int * int *                                     (*  typeno, consno        *)
-    annterm explicit_named_substitution             (*  explicit named subst. *)
+    annterm explicit_named_substitution *           (*  explicit named subst. *)
                                                     (* typeno is 0 based *)
                                                     (* consno is 1 based *)
+    univ_substitution
  | AMutCase of id * UriManager.uri *                (* ind. uri,             *)
     int *                                           (*  ind. typeno,         *)
     annterm * annterm *                             (*  outtype, ind. term   *)

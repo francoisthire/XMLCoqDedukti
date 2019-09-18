@@ -241,9 +241,9 @@ let pop_inductive_types ctxt =
    * named substitution and return its URI *)
 let find_base_uri ctxt =
   let rec aux = function
-    | Cic_term (Cic.AConst (_, uri, _)) :: _
-    | Cic_term (Cic.AMutInd (_, uri, _, _)) :: _
-    | Cic_term (Cic.AMutConstruct (_, uri, _, _, _)) :: _
+    | Cic_term (Cic.AConst (_, uri, _, _)) :: _
+    | Cic_term (Cic.AMutInd (_, uri, _, _, _)) :: _
+    | Cic_term (Cic.AMutConstruct (_, uri, _, _, _, _)) :: _
     | Cic_term (Cic.AVar (_, uri, _)) :: _ ->
         uri
     | Arg _ :: tl -> aux tl
@@ -319,11 +319,11 @@ let sort_of_string ctxt = function
       | Invalid_argument _ -> parse_error ctxt "sort expected"
 
 let patch_subst ctxt subst = function
-  | Cic.AConst (id, uri, _) -> Cic.AConst (id, uri, subst)
-  | Cic.AMutInd (id, uri, typeno, _) ->
-      Cic.AMutInd (id, uri, typeno, subst)
-  | Cic.AMutConstruct (id, uri, typeno, consno, _) ->
-      Cic.AMutConstruct (id, uri, typeno, consno, subst)
+  | Cic.AConst (id, uri, _, univs) -> Cic.AConst (id, uri, subst, univs)
+  | Cic.AMutInd (id, uri, typeno, _, univs) ->
+      Cic.AMutInd (id, uri, typeno, subst, univs)
+  | Cic.AMutConstruct (id, uri, typeno, consno, _, univs) ->
+      Cic.AMutConstruct (id, uri, typeno, consno, subst, univs)
   | Cic.AVar (id, uri, _) -> Cic.AVar (id, uri, subst)
   | _ ->
       parse_error ctxt
@@ -355,6 +355,14 @@ let start_element ctxt tag attrs =
 (*  debug_print (lazy (sprintf "<%s%s>" tag (match attrs with | [] -> "" | _ -> " " ^ String.concat " " (List.map (fun (a,v) -> sprintf "%s=\"%s\"" a v) attrs))));*)
   push ctxt (Tag (tag, attrs))
 
+let mk_univparams _ =
+ prerr_endline "[TODO] univparams" ;
+ []
+
+let mk_univs _ =
+ prerr_endline "[TODO] univ substitution" ;
+ []
+
 let end_element ctxt tag =
 (*  debug_print (lazy (sprintf "</%s>" tag));*)
 (*  debug_print (lazy (string_of_stack ctxt));*)
@@ -383,7 +391,8 @@ let end_element ctxt tag =
         (match pop_tag_attrs ctxt with
         | ["id", id; "uri", uri]
         | ["id", id; "sort", _; "uri", uri] ->
-            Cic.AConst (id, uri_of_string uri, [])
+            let univs = mk_univs () in
+            Cic.AConst (id, uri_of_string uri, [], univs)
         | _ -> attribute_error ()))
   | "SORT" ->
       push ctxt (Cic_term
@@ -524,17 +533,19 @@ let end_element ctxt tag =
   | "MUTIND" ->
       push ctxt (Cic_term
         (match pop_tag_attrs ctxt with
-        | ["id", id; "noType", noType; "univparams", _univparams; "uri", uri] ->
-            Cic.AMutInd (id, uri_of_string uri, int_of_string noType, [])
+        | ["id", id; "noType", noType; "univparams", univparams; "uri", uri] ->
+            let univs = mk_univs () in
+            Cic.AMutInd (id, uri_of_string uri, int_of_string noType, [], univs)
         | attrs -> attribute_error' attrs));
   | "MUTCONSTRUCT" ->
       push ctxt (Cic_term
         (match pop_tag_attrs ctxt with
-        | ["id", id; "noConstr", noConstr; "noType", noType; "univparams", _univparams; "uri", uri]
+        | ["id", id; "noConstr", noConstr; "noType", noType; "univparams", univparams; "uri", uri]
         | ["id", id; "noConstr", noConstr; "noType", noType; "sort", _;
-           "univparams", _univparams; "uri", uri ] ->
+           "univparams", univparams; "uri", uri ] ->
+            let univs = mk_univs () in
             Cic.AMutConstruct (id, uri_of_string uri, int_of_string noType,
-              int_of_string noConstr, [])
+              int_of_string noConstr, [], univs)
         | _ -> attribute_error ()));
   | "FixFunction" ->
       let body = pop_cic ctxt in
@@ -631,12 +642,12 @@ let end_element ctxt tag =
         | _ -> parse_error "wrong content for \"Variable\""
       in
       let obj_attributes = pop_obj_attributes ctxt in
-      let univ_list = assert false in
       push ctxt (Cic_obj
         (match pop_tag_attrs ctxt with
-        | ["id", id; "name", name; "params", params] ->
+        | ["id", id; "name", name; "params", params; "univparams", univparams] ->
+            let univparams = mk_univparams univparams in
             Cic.AVariable (id, name, body, typ, uri_list_of_string params,
-              univ_list, obj_attributes)
+            univparams, obj_attributes)
         | _ -> attribute_error ()))
   | "arg" ->
       let term = pop_cic ctxt in
@@ -788,17 +799,17 @@ let annobj_of_xml uri filename filenamebody =
   | None ->
       (match parse uri filename with
       | Cic_constant_type (id, name, params, typ, obj_attributes) ->
-        let univ_list = assert false in
-        Cic.AConstant (id, None, name, None, typ, params, univ_list, obj_attributes)
+        let univparams = assert false in
+        Cic.AConstant (id, None, name, None, typ, params, univparams, obj_attributes)
       | Cic_obj obj -> obj
       | _ -> raise (Parser_failure ("no object found in " ^ filename)))
   | Some filenamebody ->
     (match parse uri filename, parse uri filenamebody with
      | Cic_constant_type (type_id, name, params, typ, obj_attributes),
        Cic_constant_body (body_id, _, _, body, _) ->
-       let univ_list = assert false in
+       let univparams = assert false in
        Cic.AConstant (type_id, Some body_id, name, Some body, typ,
-                      params, univ_list, obj_attributes)
+                      params, univparams, obj_attributes)
      | _ ->
        raise (Parser_failure (sprintf "no constant found in %s, %s"
                                 filename filenamebody)))
