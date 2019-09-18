@@ -159,18 +159,3 @@ and anncoInductiveFun =
  id * string * annterm * annterm              (* name, type, body *)
 and annotation =
  string
-
-
-let dest_prod_n n t =
-  let rec aux acc t n =
-    if n = 0 then (List.rev acc, t)
-    else match t with
-      | AProd (_,x,t',u,_) -> aux ((x,t')::acc) u (n-1)
-      | _ -> assert false
-  in aux [] t n
-
-let dest_prod t =
-  let rec aux acc = function
-    | AProd (_,x,t',u,_) -> aux ((x,t')::acc) u
-    | _ -> (List.rev acc, t)
-  in aux [] t

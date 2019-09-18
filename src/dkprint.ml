@@ -78,6 +78,21 @@ let typed_rewrite (context, left, right) = rewrite (List.map fst context, left, 
 let apply_context a context = apps a (List.map var (List.map fst context))
 
 
+let dest_prod_n n t =
+  let rec aux acc t n =
+    if n = 0 then (List.rev acc, t)
+    else match t with
+      | Pie ((x,t'),u) -> aux ((x,t')::acc) u (n-1)
+      | _ -> assert false
+  in aux [] t n
+
+let dest_prod t =
+  let rec aux acc = function
+    | Pie ((x,t'),u) -> aux ((x,t')::acc) u
+    | _ -> (List.rev acc, t)
+  in aux [] t
+
+
 (** Print anonymous variables as "__". The name "_" is not accepted by Dedukti. *)
 let print_var out = function
   | ""    -> Format.fprintf out "__"

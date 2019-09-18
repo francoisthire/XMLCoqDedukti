@@ -127,7 +127,7 @@ let add_global_univ_decl inst =
 
 let of_sort = function
   | Prop -> meta "prop"
-  | Set -> meta "set"
+  | Set  -> meta "set"
   | Type u -> D.app (meta "type") (dkname_of_univ u)
   | _ -> assert false
 
@@ -232,16 +232,13 @@ let translate_constructor add uparams (consname, typ) =
       | Some uri -> Some (dkmod_of_uri uri)
       | _ -> assert false
   in
-  let typ' = add_sort_params (map_some upoly_params uparams) typ' in
-  add (D.Declaration (true,consname,typ'))
+  (consname, add_sort_params (map_some upoly_params uparams) typ')
 
 let template_params = function
   | (_, Some name), Template -> Some (dkmod_of_uri name)
   | _ -> None
 
-
-
-let translate_match add uparams name ind arity nind cons =
+let translate_match add uparams name params ind_args ind_sort cons =
   let match_name = name_of_match name in
   let return_sort = ("s", coq_Sort) in
   let uparams_ctxt =
@@ -249,33 +246,25 @@ let translate_match add uparams name ind arity nind cons =
       (fun (univ, t) -> (name_of_univ univ,
                          match t with Template -> coq_Sort | _ -> coq_Nat))
       uparams in
-  let params, real_arity = Cic.dest_prod_n nind arity in
-  let translate_decl (name, typ) = dkname_of_name name, of_type [] None typ in
-  let params_ctxt = List.map translate_decl params in
 
-  let arguments, ret_sort = Cic.dest_prod real_arity in
-  let args_ctxt = List.map translate_decl arguments in
   let applied_ind =
     D.apps (D.Var name)
-      (List.map D.var
-         (List.map fst
-            (uparams_ctxt @ params_ctxt @ args_ctxt))) in
+      (List.map D.var (List.map fst (uparams_ctxt @ params @ ind_args))) in
   let type_P =
-    D.pies (args_ctxt @ [ ( "_", applied_ind) ])
-      (of_sort (Type (0,Some (UriManager.uri_of_string "s"))))
+    D.pies (ind_args @ [ ( "_", applied_ind) ]) (D.app (meta "type") (D.var "s"))
   in
   let decl_P = ("P", type_P) in
 
   let cases_names = List.map (fun (name,_) -> "case_" ^ name) cons in
   let f (name, typ) =
-    assert false
+    D.var "TODO"
   in
   let cases_types = List.map f cons in
   let cases_ctxt = List.map2 (fun a b -> a,b) cases_names cases_types in
   let return_type = D.var "TODO" in
   let match_type =
     D.pies
-      (return_sort :: uparams_ctxt @ args_ctxt @ decl_P :: cases_ctxt) return_type in
+      (return_sort :: uparams_ctxt @ ind_args @ decl_P :: cases_ctxt) return_type in
   add (D.Declaration (true,match_name,match_type))
 
 
@@ -283,10 +272,19 @@ let translate_single_inductive add uparams nind (_,name,ind,arity,cons) =
   assert ind;
   Format.eprintf "Translate Inductive: %s@." name;
   let arity' = of_type [] None arity in
-  let arity' = add_sort_params (map_some template_params uparams) arity' in
-  add (D.Declaration (true,name,arity'));
-  List.iter (translate_constructor add uparams) cons;
-  translate_match add uparams name ind arity nind cons
+  let inductive_type = add_sort_params (map_some template_params uparams) arity' in
+  add (D.Declaration (true,name,inductive_type));
+  let constructor_types = List.map (translate_constructor add uparams) cons in
+  List.iter (fun (name,typ') -> add (D.Declaration (true,name,typ')))
+    constructor_types;
+  let dest_arity t =
+    let params, real_arity = D.dest_prod_n nind inductive_type in
+    params, D.dest_prod real_arity
+  in
+  let (params, (ind_args, ind_sort)) = dest_arity inductive_type in
+  let cons =
+    List.map (fun (name,typ) -> (name, snd (dest_arity typ))) constructor_types in
+  translate_match add uparams name params ind_args ind_sort cons
 
 let translate_inductive types vars uparams nind =
   let res = ref [] in
