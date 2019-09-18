@@ -28,11 +28,11 @@ let indpathname uri =
 let varpathname uri =
  basepathname uri ^ "/" ^ UriManager.name_of_uri uri ^ ".var.xml.gz"
 
-let pathnames uri =
+let nonvar_pathnames uri =
  match UriManager.ext_of_uri uri with
-    ".con" -> conpathname uri, Some (conbodypathname uri)
-  | ".var" -> varpathname uri, None
-  | ".ind" -> indpathname uri, None
+    ".con" -> Some (conpathname uri, Some (conbodypathname uri))
+  | ".var" -> None
+  | ".ind" -> Some (indpathname uri, None)
   | _ -> assert false
 
 (*** Loading ***)
@@ -41,6 +41,12 @@ let getind uri =
  let obj = CicParser.annobj_of_xml uri (indpathname uri) None in
  match obj with
  | AInductiveDefinition(_,il,_params,_,_,_) -> il
+ | _ -> assert false
+
+let getvar uri =
+ let obj = CicParser.annobj_of_xml uri (varpathname uri) None in
+ match obj with
+ | AVariable(_,name,body,typ,params,univparams,_) -> (name,body,typ,params,univparams)
  | _ -> assert false
 
 (*** Translation ***)
