@@ -1,3 +1,7 @@
+XML -> Dedukti
+- cooking w.r.t. variables
+- sorts and universe polymorphisms: fix and test
+
 Coq -> XML
 - Every type should be annotated by their sort
 - approximated sorts ==> precise sorts
