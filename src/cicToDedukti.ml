@@ -153,7 +153,7 @@ let rec of_term : string list -> Cic.annterm -> Dkprint.term = fun ctx ->
   | ALambda(_,name,ty,te,s) ->
      let name = dkname_of_name name in
      D.lam (name,of_type ctx s ty) (of_term (name::ctx) te)
-  | ALetIn(_,name,ty,a,b) -> (* TODO: FALSE LET IN *)
+  | ALetIn(_,name,a,ty,b) -> (* TODO: FALSE LET IN *)
     let name' = dkname_of_name name in
     LetIn( (name', of_term ctx ty, of_term ctx a), of_term (name'::ctx) b)
   | AAppl(_,[]) -> assert false
@@ -281,6 +281,7 @@ let translate_match add uparams name ind arity nind cons =
 
 let translate_single_inductive add uparams nind (_,name,ind,arity,cons) =
   assert ind;
+  Format.eprintf "Translate Inductive: %s@." name;
   let arity' = of_type [] None arity in
   let arity' = add_sort_params (map_some template_params uparams) arity' in
   add (D.Declaration (true,name,arity'));
@@ -301,6 +302,7 @@ let dedukti_of_obj annobj =
   let inst =
     match annobj with
     | AConstant(_,_,name,bo,ty,_vars,univs,_) ->
+      Format.eprintf "Translate Constant %s@." name;
       (match bo with
        | None    -> [ D.Declaration (false,name,of_type [] None ty) ]
        | Some te -> [ D.Definition  (false,name,of_type [] None ty,of_term [] te) ] )
