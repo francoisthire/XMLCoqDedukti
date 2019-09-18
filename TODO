@@ -1,6 +1,5 @@
-ML:
-- Use the annotated tree
-
 Coq -> XML
 - Every type should be annotated by their sort
+- approximated sorts ==> precise sorts
+- more sorts for products
 - Cast informations
