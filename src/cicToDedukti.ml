@@ -191,15 +191,15 @@ let rec of_term : string list -> Cic.annterm -> Dkprint.term = fun ctx ->
   | AAppl(_,[]) -> assert false
   | AAppl(_,(hd::tl)) ->
     D.apps (of_term ctx hd) (List.map (of_term ctx) tl)
-  | AConst(_,uri,_ens,_univs) ->
-     prerr_endline "[TODO] AConst ens univs";
-     dkname_of_const uri
-  | AMutInd(_,uri,tyno,_ens,_univs) ->
-     prerr_endline "[TODO] AMutInd ens univs";
-     dkname_of_mutind uri tyno
-  | AMutConstruct(_,uri,tyno,consno,_ens,_univs) ->
+  | AConst(_,uri,ens,_univs) ->
+     prerr_endline "[TODO] AConst univs";
+     use_ens ctx (dkname_of_const uri) ens
+  | AMutInd(_,uri,tyno,ens,_univs) ->
+     prerr_endline "[TODO] AMutInd univs";
+     use_ens ctx (dkname_of_mutind uri tyno) ens
+  | AMutConstruct(_,uri,tyno,consno,ens,_univs) ->
      prerr_endline "[TODO] AMutConstruct ens univs";
-    dkname_of_mutconstr uri tyno consno
+    use_ens ctx (dkname_of_mutconstr uri tyno consno) ens
   | AMutCase(_,uri,tyno,outtype,te,pl) ->
      let s = fake_sort in
      D.apps
@@ -241,6 +241,9 @@ let rec of_term : string list -> Cic.annterm -> Dkprint.term = fun ctx ->
       ; dkint_of_int funno
       ]
   | ACoFix _ -> failwith "TODO cofix"
+
+and use_ens ctx t ens =
+ D.apps t (List.map (fun (_,t) -> of_term ctx t) ens)
 
 and of_type names sort ty =
   match sort with
