@@ -24,7 +24,7 @@ let do_theory filename =
           prerr_endline ("[EXCEPTION] " ^ Printexc.to_string exn);
           [])
         @ res
-   ) [] objs in
+   ) [] (List.rev objs) in
  let file = dkfile_of_file filename in
  let oc = open_out file in
  let fmt = Format.formatter_of_out_channel oc in
@@ -33,7 +33,7 @@ let do_theory filename =
     (CicToDedukti.dkmod_of_theory_uri uri)
   ) requires;
  Format.fprintf fmt "@.";
- List.iter (Format.fprintf fmt "%a@.@." Dkprint.print) (List.rev objs);
+ List.iter (Format.fprintf fmt "%a@.@." Dkprint.print) objs;
  close_out oc
 
 let cmd_options = [
