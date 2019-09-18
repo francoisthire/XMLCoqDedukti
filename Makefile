@@ -13,7 +13,6 @@ xmlcoqdk:
 	@ln -s _build/install/default/bin/xmlcoqdk xmlcoqdk || true
 
 OUTPUT=test/Dedukti
-FILES=Coq/Init/Datatypes.theory.xml Coq/Init/Nat.theory.xml
 XMLCOQDK = $(shell readlink -f _build/install/default/bin/xmlcoqdk)
 
 $(OUTPUT):
@@ -21,7 +20,7 @@ $(OUTPUT):
 
 .PHONY: test
 test: bin $(OUTPUT)
-	@$(XMLCOQDK) -o $(OUTPUT) $(FILES)
+	@$(XMLCOQDK) -o $(OUTPUT) `(cd test && find Coq -name "*.theory.xml")`
 	make -C test dedukti
 
 .PHONY: debug
