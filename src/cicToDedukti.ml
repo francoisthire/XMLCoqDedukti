@@ -167,6 +167,17 @@ let of_sort = function
 
 let fake_sort = meta "star"
 
+let mk_lam name ty_as_ty _ty_as_te te = D.lam (name,ty_as_ty) te
+
+let mk_prod name ty_as_ty ty_as_te te =
+ let s1 = fake_sort in
+ let s2 = fake_sort in
+ D.apps (meta "prod")
+  [ s1 ; s2 ; D.apps (meta "rule") [s1;s2] ; meta "I" ;
+    ty_as_te ;
+    D.lam (name, ty_as_ty) te
+  ]
+
 let rec of_term : string list -> Cic.annterm -> Dkprint.term = fun ctx ->
  function
   | ARel(_,_,n,_) -> D.Var (List.nth ctx (n-1))
@@ -175,16 +186,10 @@ let rec of_term : string list -> Cic.annterm -> Dkprint.term = fun ctx ->
   | ACast(_,te,_) -> of_term ctx te
   | AProd(_,name,ty,te,s) ->
      let name = match name with Anonymous -> "_" | Name n -> n in
-     let s1 = fake_sort in
-     let s2 = fake_sort in
-     D.apps (meta "prod")
-      [ s1 ; s2 ; D.apps (meta "rule") [s1;s2] ; meta "I" ;
-        of_term ctx ty ;
-        D.lam (name, of_type ctx None ty) (of_term (name::ctx) te)
-      ]
+     mk_prod name (of_type ctx None ty) (of_term ctx ty) (of_term (name::ctx) te)
   | ALambda(_,name,ty,te,s) ->
      let name = dkname_of_name name in
-     D.lam (name,of_type ctx s ty) (of_term (name::ctx) te)
+     mk_lam name (of_type ctx s ty) () (of_term (name::ctx) te)
   | ALetIn(_,name,a,ty,b) -> (* TODO: FALSE LET IN *)
     let name' = dkname_of_name name in
     LetIn( (name', of_term ctx ty, of_term ctx a), of_term (name'::ctx) b)
@@ -342,15 +347,41 @@ let translate_inductive types vars uparams nind =
   List.iter (translate_single_inductive add uparams nind) types;
   List.rev !res
 
+let rec use_vars ctx f mk_binder =
+ function
+    [] -> f ctx
+  | uri::tl ->
+     let _,bo,typ,_,_ = getvar uri in
+     if bo <> None then assert false (* TODO *)
+     else
+      let name = UriManager.name_of_uri uri in
+      mk_binder (UriManager.name_of_uri uri)
+       (of_type ctx None typ) (of_term ctx typ)
+       (use_vars (name::ctx) f mk_binder tl)
+
 let dedukti_of_obj annobj =
   let _ = flush_global() in
   let inst =
     match annobj with
-    | AConstant(_,_,name,bo,ty,_vars,univs,_) ->
+    | AConstant(_,_,name,bo,ty,vars,univs,_) ->
       Format.eprintf "Translate Constant %s@." name;
       (match bo with
-       | None    -> [ D.Declaration (false,name,of_type [] None ty) ]
-       | Some te -> [ D.Definition  (false,name,of_type [] None ty,of_term [] te) ] )
+       | None    ->
+          let typ =
+           use_vars []
+            (fun ctx -> of_type ctx None ty)
+            mk_prod vars in
+          [ D.Declaration (false,name,typ) ]
+       | Some te ->
+          let typ =
+           use_vars []
+            (fun ctx -> of_type ctx None ty)
+            mk_prod vars in
+          let te =
+           use_vars []
+            (fun ctx -> of_term ctx te)
+            mk_lam vars in
+          [ D.Definition  (false,name,typ,te) ] )
     | AInductiveDefinition (_,types,vars,uparams,nind,_) ->
       translate_inductive types vars uparams nind
     | AVariable _ -> assert false in
