@@ -352,6 +352,10 @@ let pp_entry fmt = function
 
 let type_of_term t =
   app (app (var "Term") (var "star")) t
+let term_of_type = function
+  | App (_,t) -> t
+  | _ -> assert false
+
 let dest_prod_n n t =
   let rec aux acc t n =
     if n <= 0 then (List.rev acc, t)
@@ -360,11 +364,19 @@ let dest_prod_n n t =
         aux ((x,a)::acc) b (n-1)
       | App (_,App(App(_,a),Lam ((x,_),b))) ->
         aux ((x,type_of_term a)::acc) (type_of_term b) (n-1)
-      | _ -> failwith (Format.asprintf "%a" pp_term t)
+      | _ -> assert false
   in aux [] t n
 
 let dest_prod t =
   let rec aux acc = function
     | Pie ((x,t'),u) -> aux ((x,t')::acc) u
+    | App (_,App(App(_,a),Lam ((x,_),b))) ->
+      aux ((x,type_of_term a)::acc) (type_of_term b)
     | _ -> (List.rev acc, t)
   in aux [] t
+
+let dest_app =
+  let rec aux acc = function
+    | App (t,u) -> aux (u::acc) t
+    | t -> acc, t in
+  aux []

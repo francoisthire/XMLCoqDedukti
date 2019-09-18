@@ -291,24 +291,31 @@ let translate_match add uparams name params ind_args ind_sort cons =
   let decl_P = ("P", type_P) in
 
   let cases_names = List.map (fun (name,_) -> "case_" ^ name) cons in
-  let f (name, typ) =
-    D.var "TODO"
+  let f (name, (args,indcons)) =
+    let argscons,_ = D.dest_app (D.term_of_type indcons) in
+    D.pies args
+      (D.app
+         (D.apps (D.var "P" ) argscons)
+         (D.apps
+            (D.var name)
+            (List.map D.var (List.map fst (uparams_ctxt @ params @ args)))))
   in
   let cases_types = List.map f cons in
   let cases_ctxt = List.map2 (fun a b -> a,b) cases_names cases_types in
-  let return_type = D.var "TODO" in
   let match_type =
     D.pies
-      (return_sort :: uparams_ctxt @ ind_args @ decl_P :: cases_ctxt) return_type in
+      (return_sort :: uparams_ctxt @ params @ decl_P :: cases_ctxt @
+       ind_args @ ["x",applied_ind])
+      (D.apps (D.var "P") ((List.map D.var (List.map fst ind_args)) @ [D.var "x"])) in
   add (D.Declaration (true,match_name,match_type))
-
-let get_term_from_type = function
-  | D.App (_,t) -> t
-  | _ -> failwith "Coucou"
 
 let get_sort_from_univ = function
   | D.App (D.App(D.App(_,t),_),_) -> t
   | _ -> failwith "Coucou"
+
+let dest_arity n t =
+  let params, real_arity = D.dest_prod_n n t in
+  params, D.dest_prod real_arity
 
 let translate_single_inductive add uparams nind (_,name,ind,arity,cons) =
   assert ind;
@@ -319,14 +326,10 @@ let translate_single_inductive add uparams nind (_,name,ind,arity,cons) =
   let constructor_types = List.map (translate_constructor add uparams) cons in
   List.iter (fun (name,typ') -> add (D.Declaration (true,name,typ')))
     constructor_types;
-  let dest_arity t =
-    let params, real_arity = D.dest_prod_n nind inductive_type in
-    params, D.dest_prod real_arity
-  in
-  let (params, (ind_args, ind_return_type)) = dest_arity inductive_type in
-  let ind_sort = get_sort_from_univ (get_term_from_type ind_return_type) in
+  let (params, (ind_args, ind_return_type)) = dest_arity nind inductive_type in
+  let ind_sort = get_sort_from_univ (D.term_of_type ind_return_type) in
   let cons =
-    List.map (fun (name,typ) -> (name, snd (dest_arity typ))) constructor_types in
+    List.map (fun (name,typ) -> (name, snd (dest_arity nind typ))) constructor_types in
   translate_match add uparams name params ind_args ind_sort cons
 
 let translate_inductive types vars uparams nind =
