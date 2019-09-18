@@ -7,8 +7,9 @@ let do_obj uri =
  let obj =
   CicParser.annobj_of_xml uri
    (conpathname uri) (Some (conbodypathname uri)) in
- let d = dedukti_of_obj obj in
- Format.printf "%a\n" Dkprint.print d
+ List.iter
+   (Format.printf "%a\n" Dkprint.print)
+   (dedukti_of_obj obj)
 
 
 let cmd_options = [

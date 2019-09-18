@@ -1,6 +1,15 @@
 module D = Dkprint
 open Cic
 
+
+let global_univs : CicUniv.universe list ref = ref []
+
+let flush_global () = global_univs := []
+let add_global u =
+  if not (List.mem u !global_univs)
+  then global_univs := u::!global_univs
+let process_global f = List.iter f !global_univs
+
 (*** Disk mapping ***)
 
 let basepathname uri =
@@ -70,15 +79,28 @@ let dkname_of_match uri tyno =
  let _,name,_,_,_ = List.nth il tyno in
  D.Const (dkmod_of_uri uri, "match__" ^ name)
 
+let dkname_of_univ = function
+  | _, Some uri -> D.var (dkmod_of_uri uri)
+  | i, None -> dkint_of_int i
+
 let coq_Nat = meta "Nat"
+let coq_Sort = meta "Sort"
 
 let add_univ_params uparams typ =
   List.fold_right (function u -> D.pie (u, coq_Nat)) uparams
 
+let add_global_univ_decl inst =
+  List.fold_left
+    (fun decls u -> match snd u with
+       | Some u -> D.Declaration (false,dkmod_of_uri u,coq_Sort) :: decls
+       | _ -> assert false)
+    [ inst ]
+    !global_univs
+
 let of_sort = function
   | Prop -> meta "prop"
   | Set -> meta "set"
-  | Type _ -> meta "type 0" (* TODO *)
+  | Type u -> D.app (meta "type") (dkname_of_univ u)
   | _ -> assert false
 
 let rec of_term : string list -> Cic.annterm -> Dkprint.term = fun ctx ->
@@ -161,15 +183,18 @@ and of_type names sort ty =
     D.apps (meta "Term") [meta "Set"; of_term names ty]
   | Some s -> D.apps (meta "Term") [of_sort s; of_term names ty]
 
-let dedukti_of_obj =
- function
- | AConstant(_,_,name,bo,ty,_vars,univs,_) ->
-    (match bo with
-        None ->
-         D.Declaration (false,name,of_term [] ty)
-      | Some te ->
-         D.Definition(false,name,of_term [] ty,of_term [] te))
- | _ -> assert false
+
+
+let dedukti_of_obj annobj =
+  let _ = flush_global() in
+  let inst =
+    match annobj with
+    | AConstant(_,_,name,bo,ty,_vars,univs,_) ->
+      (match bo with
+       | None    -> D.Declaration (false,name,of_term [] ty)
+       | Some te -> D.Definition  (false,name,of_term [] ty,of_term [] te))
+    | _ -> assert false in
+  add_global_univ_decl inst
 (*
  | Variable of string * term option * term *      (* name, body, type         *)
     UriManager.uri list * attribute list          (* parameters               *)
