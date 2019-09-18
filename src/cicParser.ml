@@ -55,7 +55,6 @@ type stack_entry =
       (* id, name, ind. index, type, body *)
   | Inductive_type of string * string * bool * Cic.annterm *
       (string * Cic.annterm) list (* id, name, inductive, arity, constructors *)
-  | Meta_subst of Cic.annterm option
   | Obj_class of Cic.object_class
   | Obj_flavour of Cic.object_flavour
   | Obj_field of string (* field name *)
@@ -91,7 +90,6 @@ let string_of_stack ctxt =
       | Fix_fun (id, _, _, _, _) -> sprintf "Fix_fun (id=%s)" id
       | Inductive_type (id, name, _, _, _) ->
           sprintf "Inductive_type %s (id=%s)" name id
-      | Meta_subst _ -> "Meta_subst"
       | Obj_class _ -> "Obj_class"
       | Obj_flavour _ -> "Obj_flavour"
       | Obj_field name -> "Obj_field " ^ name
@@ -99,7 +97,7 @@ let string_of_stack ctxt =
       | Tag (tag, _) -> "Tag " ^ tag)
       ctxt.stack)) ^ "]"
 
-let compare_attrs (a1, v1) (a2, v2) = Pervasives.compare a1 a2
+let compare_attrs (a1, v1) (a2, v2) = compare a1 a2
 let sort_attrs = List.sort compare_attrs
 
 let new_parser_context uri = {
@@ -176,16 +174,6 @@ let pop_class_modifiers ctxt =
     | (Cic_term (Cic.ASort _) as m) :: tl
     | (Obj_field _ as m) :: tl ->
         aux (m :: acc) tl
-    | tl -> acc, tl
-  in
-  let values, new_stack = aux [] ctxt.stack in
-  ctxt.stack <- new_stack;
-  values
-
-let pop_meta_substs ctxt =
-  let rec aux acc stack =
-    match stack with
-    | Meta_subst t :: tl -> aux (t :: acc) tl
     | tl -> acc, tl
   in
   let values, new_stack = aux [] ctxt.stack in
@@ -352,6 +340,8 @@ let mk_univs _ =
  Log.todo "univ substitution" ;
  []
 
+exception TODO
+
 let end_element ctxt tag =
 (*  debug_print (lazy (sprintf "</%s>" tag));*)
 (*  debug_print (lazy (string_of_stack ctxt));*)
@@ -409,13 +399,12 @@ let end_element ctxt tag =
         | _ -> attribute_error ())
   | "def" ->  (* same as "decl" above *)
       let ty,source =
-       (*CSC: hack to parse Coq files where the LetIn is not typed *)
        let ty = pop_cic ctxt in
        try
         let source = pop_cic ctxt in
          ty,source
        with
-        Parser_failure _ -> Cic.AImplicit ("MISSING_def_TYPE",None),ty
+        Parser_failure _ -> raise TODO,ty
       in
       push ctxt
         (match pop_tag_attrs ctxt with
@@ -436,14 +425,6 @@ let end_element ctxt tag =
       let term = pop_cic ctxt in
       pop ctxt; (* pops start tag matching current end tag (e.g. <arity>) *)
       push ctxt (Cic_term term)
-  | "substitution" ->   (* optional transparent elements (i.e. which _may_
-                         * contain a CIC) *)
-      set_top ctxt  (* replace <substitution> *)
-        (match ctxt.stack with
-        | Cic_term term :: tl ->
-            ctxt.stack <- tl;
-            (Meta_subst (Some term))
-        | _ ->  Meta_subst None)
   | "PROD" ->
       let target = pop_cic ctxt in
       let rec add_decl target = function
@@ -496,28 +477,6 @@ let end_element ctxt tag =
         (match pop_tag_attrs ctxt with
           ["id", id]
         | ["id", id; "sort", _] -> Cic.ACast (id, term, typ)
-        | _ -> attribute_error ()));
-  | "IMPLICIT" ->
-      push ctxt (Cic_term
-        (match pop_tag_attrs ctxt with
-        | ["id", id] -> Cic.AImplicit (id, None)
-        | ["annotation", annotation; "id", id] ->
-            let implicit_annotation =
-              match annotation with
-              | "closed" -> `Closed
-              | "hole" -> `Hole
-              | "type" -> `Type
-              | _ -> parse_error "invalid value for \"annotation\" attribute"
-            in
-            Cic.AImplicit (id, Some implicit_annotation)
-        | _ -> attribute_error ()))
-  | "META" ->
-      let meta_substs = pop_meta_substs ctxt in
-      push ctxt (Cic_term
-        (match pop_tag_attrs ctxt with
-        | ["id", id; "no", no]
-        | ["id", id; "no", no; "sort", _] ->
-            Cic.AMeta (id, int_of_string no, meta_substs)
         | _ -> attribute_error ()));
   | "MUTIND" ->
       push ctxt (Cic_term
@@ -772,8 +731,6 @@ let parse uri filename =
     (* assert (List.length ctxt.stack = 1) *)
     List.hd ctxt.stack
   with
-  | Failure "int_of_string" -> parse_error ctxt "integer number expected"
-  | Invalid_argument "bool_of_string" -> parse_error ctxt "boolean expected"
   | P.Parse_error msg -> parse_error ctxt ("parse error: " ^ msg)
   | Sys.Break
   | Parser_failure _
