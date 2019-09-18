@@ -13,7 +13,7 @@ xmlcoqdk:
 	@ln -s _build/install/default/bin/xmlcoqdk xmlcoqdk || true
 
 OUTPUT=/tmp/dkout
-FILES=Coq/Init/Nat/add.con
+FILES=Coq/Init/Nat/add.con Coq/Init/Datatypes/nat.ind
 XMLCOQDK = $(shell readlink -f _build/install/default/bin/xmlcoqdk)
 
 $(OUTPUT):

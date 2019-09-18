@@ -94,7 +94,7 @@ let add_global_univ_decl inst =
     (fun decls u -> match snd u with
        | Some u -> D.Declaration (false,dkmod_of_uri u,coq_Sort) :: decls
        | _ -> assert false)
-    [ inst ]
+    inst
     !global_univs
 
 let of_sort = function
@@ -187,20 +187,19 @@ and of_type names sort ty =
   | Some s -> D.apps (meta "Term") [of_sort s; of_term names ty]
 
 
-
 let dedukti_of_obj annobj =
   let _ = flush_global() in
   let inst =
     match annobj with
     | AConstant(_,_,name,bo,ty,_vars,univs,_) ->
       (match bo with
-       | None    -> D.Declaration (false,name,of_term [] ty)
-       | Some te -> D.Definition  (false,name,of_term [] ty,of_term [] te))
-    | _ -> assert false in
+       | None    -> [ D.Declaration (false,name,of_term [] ty) ]
+       | Some te -> [ D.Definition  (false,name,of_term [] ty,of_term [] te) ] )
+    | AInductiveDefinition (_,types,vars,uparams,nind,_) ->
+      let of_inductive_type uparams (_,name,ind,arity,cons) =
+        assert ind;
+        D.Declaration (false,name,of_term [] arity)
+      in
+      List.map (of_inductive_type uparams) types
+    | AVariable _ -> assert false in
   add_global_univ_decl inst
-(*
- | Variable of string * term option * term *      (* name, body, type         *)
-    UriManager.uri list * attribute list          (* parameters               *)
- | InductiveDefinition of inductiveType list *    (* inductive types,         *)
-    UriManager.uri list * int * attribute list    (*  params, left params no  *)
-*)
