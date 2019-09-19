@@ -1,11 +1,14 @@
 XML -> Dedukti
-- cooking w.r.t. variables
+- cooking: identity explicit named substitutions (tails) are omitted in the
+  XML file, but need to be handled during the translation.
+  See: how Coq/Init/Specif/proj2_sig uses proj1
 - sorts and universe polymorphisms: fix and test
 - let-in
 - match
 - coinductives
 
 Coq -> XML
+- check: variables can never be universe polymorphic?
 - There are def elements without types!
 - Every type should be annotated by their sort
 - approximated sorts ==> precise sorts

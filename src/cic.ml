@@ -138,7 +138,6 @@ and annobj =
       id * string * annterm option *          (*  name, body  *)
       annterm *                               (*  type  *)
       UriManager.uri list *                   (*  section variables parameters  *)
-      CicUniv.universe list *                 (*  universe parameters *)
       attribute list                          (*  parameters      *)
   | AInductiveDefinition of
       id * anninductiveType list *            (*  inductive types ,   *)

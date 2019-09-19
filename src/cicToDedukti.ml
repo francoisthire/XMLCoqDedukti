@@ -48,7 +48,7 @@ let getind uri =
 let getvar uri =
  let obj = CicParser.annobj_of_xml uri (varpathname uri) None in
  match obj with
- | AVariable(_,name,body,typ,params,univparams,_) -> (name,body,typ,params,univparams)
+ | AVariable(_,name,body,typ,params,_) -> (name,body,typ,params)
  | _ -> assert false
 
 (*** Translation ***)
@@ -351,7 +351,7 @@ let rec use_vars ctx f mk_binder =
  function
     [] -> f ctx
   | uri::tl ->
-     let _,bo,typ,_,_ = getvar uri in
+     let _,bo,typ,_ = getvar uri in
      if bo <> None then assert false (* TODO *)
      else
       let name = UriManager.name_of_uri uri in
